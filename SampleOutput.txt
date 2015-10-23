@@ -1,0 +1,11 @@
+Correct Rate For bank 1 : 0.886987
+Correct Rate For bank 2 : 0.887169
+Correct Rate For bank 3 : 0.88723
+Correct Rate For bank 4 : 0.88726
+Correct Rate For bank 5 : 0.887287
+Correct Rate for Adult 1 : 0.863033
+Correct Rate for Adult 2 : 0.846567
+Correct Rate for Adult 3 : 0.834664
+Correct Rate for Adult 4 : 0.825659
+Correct Rate for Adult 5 : 0.81859
+Press any key to continue . . .

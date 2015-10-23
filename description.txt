@@ -1,0 +1,53 @@
+every missing values are represented by '?'
+======================================================================================================================================
+
+Bank Marketing Data Set (Number of Instances:41188,Number of Attributes:19)
+
+Input variables: 
+# bank client data: 
+1 - age (numeric) 
+2 - job : type of job (categorical: 'admin','blue-collar','entrepreneur','housemaid','management','retired','self-employed','services','student','technician','unemployed','?') 
+3 - marital : marital status (categorical: 'divorced','married','single','?'; note: 'divorced' means divorced or widowed) 
+4 - education (categorical: 'basic.4y','basic.6y','basic.9y','high.school','illiterate','professional.course','university.degree','?') 
+5 - default: has credit in default? (categorical: 'no','yes','?') 
+6 - housing: has housing loan? (categorical: 'no','yes','?') 
+7 - loan: has personal loan? (categorical: 'no','yes','?') 
+# related with the last contact of the current campaign: 
+8 - contact: contact communication type (categorical: 'cellular','telephone') 
+9 - month: last contact month of year (categorical: 'jan', 'feb', 'mar', ..., 'nov', 'dec') 
+10 - day_of_week: last contact day of the week (categorical: 'mon','tue','wed','thu','fri')  
+# other attributes: 
+11 - campaign: number of contacts performed during this campaign and for this client (numeric, includes last contact) 
+12 - pdays: number of days that passed by after the client was last contacted from a previous campaign (numeric; 999 means client was not previously contacted) 
+13 - previous: number of contacts performed before this campaign and for this client (numeric) 
+14 - poutcome: outcome of the previous marketing campaign (categorical: 'failure','nonexistent','success') 
+# social and economic context attributes 
+15 - emp.var.rate: employment variation rate - quarterly indicator (numeric) 
+16 - cons.price.idx: consumer price index - monthly indicator (numeric) 
+17 - cons.conf.idx: consumer confidence index - monthly indicator (numeric) 
+18 - euribor3m: euribor 3 month rate - daily indicator (numeric) 
+19 - nr.employed: number of employees - quarterly indicator (numeric) 
+
+Output variable (desired target): 
+20 - y - has the client subscribed a term deposit? (binary: 'yes','no') 
+========================================================================================================================================
+
+Adult Data Set(Number of Instances:48842,Number of Attributes:14)
+
+1 - age: continuous. 
+2 - workclass: Private, Self-emp-not-inc, Self-emp-inc, Federal-gov, Local-gov, State-gov, Without-pay, Never-worked. 
+3 - fnlwgt: continuous. 
+4 - education: Bachelors, Some-college, 11th, HS-grad, Prof-school, Assoc-acdm, Assoc-voc, 9th, 7th-8th, 12th, Masters, 1st-4th, 10th, Doctorate, 5th-6th, Preschool. 
+5 - education-num: continuous. 
+6 - marital-status: Married-civ-spouse, Divorced, Never-married, Separated, Widowed, Married-spouse-absent, Married-AF-spouse. 
+7 - occupation: Tech-support, Craft-repair, Other-service, Sales, Exec-managerial, Prof-specialty, Handlers-cleaners, Machine-op-inspct, Adm-clerical, Farming-fishing, Transport-moving, Priv-house-serv, Protective-serv, Armed-Forces. 
+8 - relationship: Wife, Own-child, Husband, Not-in-family, Other-relative, Unmarried. 
+9 - race: White, Asian-Pac-Islander, Amer-Indian-Eskimo, Other, Black. 
+10 - sex: Female, Male. 
+11 - capital-gain: continuous. 
+12 - capital-loss: continuous. 
+13 - hours-per-week: continuous. 
+14 - native-country: United-States, Cambodia, England, Puerto-Rico, Canada, Germany, Outlying-US(Guam-USVI-etc), India, Japan, Greece, South, China, Cuba, Iran, Honduras, Philippines, Italy, Poland, Jamaica, Vietnam, Mexico, Portugal, Ireland, France, Dominican-Republic, Laos, Ecuador, Taiwan, Haiti, Columbia, Hungary, Guatemala, Nicaragua, Scotland, Thailand, Yugoslavia, El-Salvador, Trinadad&Tobago, Peru, Hong, Holand-Netherlands.
+
+Output variable (desired target):
+15 - income per year: >50K, <=50K. 
