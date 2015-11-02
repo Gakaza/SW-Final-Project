@@ -1,0 +1,211 @@
+Classification/Learning Boundary Test:
+
+			# bank client data: 
+				0 - age (numeric)  (0~29) (30~39) (40~47) (50~64) (65~139)
+					- x = -1, 0, 1, 139, 140, 141
+				1 - job : type of job (categorical: 'admin.','blue-collar','entrepreneur','housemaid','management','retired','self-employed','services','student','technician','unemployed','?') 
+					- 
+				2 - marital : marital status (categorical: 'divorced','married','single','?'; note: 'divorced' means divorced or widowed) 
+					- 
+				3 - education (categorical: 'basic.4y','basic.6y','basic.9y','high.school','illiterate','professional.course','university.degree','?') 
+					- 
+				4 - default: has credit in default? (categorical: 'no','yes','?') 
+					- 
+				5 - housing: has housing loan? (categorical: 'no','yes','?') 
+					- 
+				6 - loan: has personal loan? (categorical: 'no','yes','?') 
+					- 
+			# related with the last contact of the current campaign: 
+				7 - contact: contact communication type (categorical: 'cellular','telephone') 
+					- 
+				8 - month: last contact month of year (categorical: 'jan', 'feb', 'mar', ..., 'nov', 'dec') 
+					- 
+				9 - day_of_week: last contact day of the week (categorical: 'mon','tue','wed','thu','fri')
+					- 
+			# other attributes: 
+				10 - campaign: number of contacts performed during this campaign and for this client (numeric, includes last contact) 
+					- 3 intervals: (0 ~ 3), (4~6), (7+)
+					- x = -1, 0, 7, 8
+				11 - pdays: number of days that passed by after the client was last contacted from a previous campaign (numeric; 999 means client was not previously contacted) 
+					- 4 intervals: (0~11), (12~20), (20 ~ 27), (999) 
+					- x = -1, 0, 27, 28, 999
+				12 - previous: number of contacts performed before this campaign and for this client (numeric) 
+					- intervals: 0, (not 0)
+					- x = 0, 1
+				13 - poutcome: outcome of the previous marketing campaign (categorical: 'failure','nonexistent','success') 
+					- intervals: shown as above.
+					- 
+			# social and economic context attributes 
+				14 - emp.var.rate: employment variation rate - quarterly indicator (numeric) 
+					- 4 intervals: (x>=1.0), (-1.0<= x < 1.0) , (-2.0<= x <-1.0) , (x < -2.0)
+					- 	x = -2.1, 1.0
+				15 - cons.price.idx: consumer price index - monthly indicator (numeric)
+					- 3 intervals: (x>=94.45), (92.8 <= x < 94.45), (x < 92.8)
+					- x = 92.7, 94.45
+				16 - cons.conf.idx: consumer confidence index - monthly indicator (numeric) 
+					- 4 intervals: (x>=-30.0), (-35.0<= x < -30.0), (-45.0< = x < -35.0), ( x < -45.0)
+					- x = -46.0, -30.0
+				17 - euribor3m: euribor 3 month rate - daily indicator (numeric) 
+					- 4 intervals: (x >= 4.86), ( 4.0 <= x < 4.86), ( 1.0 <= x < 4.0), , ( x < 1.0)
+					- x = 0.9, 4.86
+				18 - nr.employed: number of employees - quarterly indicator (numeric) 
+					- 2 intervals: (x > 5200.0), (x <= 5200.0)
+					- x = 5200.0, 5201.0
+				Output variable (desired target): 
+				19 - y - has the client subscribed a term deposit? (binary: 'no','yes') 
+					- 2 intervals: yes or no
+					- 
+						
+Classification/Learning Eq. Classification Test:
+
+			# bank client data: 
+				0 - age (numeric) (0 < x < 140)   (0~29) (30~39) (40~47) (50~64) (65~139)
+					- x = -1, 15, 35, 45, 55, 80, 140
+				1 - job : type of job (categorical: 'admin.','blue-collar','entrepreneur','housemaid','management','retired','self-employed','services','student','technician','unemployed','?') 
+					- test every categories, and invalid input
+				2 - marital : marital st
+				atus (categorical: 'divorced','married','single','?'; note: 'divorced' means divorced or widowed) 
+					- test every categories, and invalid input
+				3 - education (categorical: 'basic.4y','basic.6y','basic.9y','high.school','illiterate','professional.course','university.degree','?') 
+					- test every categories, and invalid input
+				4 - default: has credit in default? (categorical: 'no','yes','?') 
+					- test every categories, and invalid input
+				5 - housing: has housing loan? (categorical: 'no','yes','?') 
+					- test every categories, and invalid input
+				6 - loan: has personal loan? (categorical: 'no','yes','?') 
+					- test every categories, and invalid input
+			# related with the last contact of the current campaign: 
+				7 - contact: contact communication type (categorical: 'cellular','telephone') 
+					- test every categories, and invalid input
+				8 - month: last contact month of year (categorical: 'jan', 'feb', 'mar', ..., 'nov', 'dec') 
+					- test every categories, and invalid input
+				9 - day_of_week: last contact day of the week (categorical: 'mon','tue','wed','thu','fri')
+					- test every categories, and invalid input
+			# other attributes: 
+				10 - campaign: number of contacts performed during this campaign and for this client (numeric, includes last contact) 
+					- 3 intervals: (0 ~ 3), (4~6), (7+)
+					- x = -1, 0, 5, 7
+				11 - pdays: number of days that passed by after the client was last contacted from a previous campaign (numeric; 999 means client was not previously contacted) 
+					- 4 intervals: (0~11), (12~20), (20 ~ 27), (999) 
+					- x = -1, 0, 15, 27, 28, 999
+				12 - previous: number of contacts performed before this campaign and for this client (numeric) 
+					- intervals: 0, (not 0)
+					- x = 0, 1, invalid
+				13 - poutcome: outcome of the previous marketing campaign (categorical: 'failure','nonexistent','success') 
+					- intervals: shown as above.
+					- test every categories, and invalid input
+			# social and economic context attributes 
+				14 - emp.var.rate: employment variation rate - quarterly indicator (numeric) 
+					- 4 intervals: (x>=1.0), (-1.0<= x < 1.0) , (-2.0<= x <-1.0) , (x < -2.0)
+					- 	x = -2.1, -1.5, 0, 1.0, invalid
+				15 - cons.price.idx: consumer price index - monthly indicator (numeric)
+					- 3 intervals: (x>=94.45), (92.8 <= x < 94.45), (x < 92.8)
+					- x = 92.7, 93.0, 94.45, invalid
+				16 - cons.conf.idx: consumer confidence index - monthly indicator (numeric) 
+					- 4 intervals: (x>=-30.0), (-35.0<= x < -30.0), (-45.0< = x < -35.0), ( x < -45.0)
+					- x = -46.0, -40.0, -32.0, -30.0, invalid
+				17 - euribor3m: euribor 3 month rate - daily indicator (numeric) 
+					- 4 intervals: (x >= 4.86), ( 4.0 <= x < 4.86), ( 1.0 <= x < 4.0), , ( x < 1.0)
+					- x = 0.9, 1.0, 4.6, 4.86, invalid
+				18 - nr.employed: number of employees - quarterly indicator (numeric) 
+					- 2 intervals: (x > 5200.0), (x <= 5200.0)
+					- x = 5200.0, 5201.0, invalid
+				Output variable (desired target): 
+				19 - y - has the client subscribed a term deposit? (binary: 'no','yes') 
+					- 2 intervals: yes or no
+					- test every categories, and invalid input
+						
+Classification/Learning Edge Test:
+
+				0 - age (numeric) (0 < x < 140)  (0~29) (30~39) (40~47) (50~64) (65~139)
+					- x = -1, 0, 15, 29, 30, 35, 39, 40, 45, 49, 50, 55, 64, 65, 80, 140
+				1 - job : type of job (categorical: 'admin.','blue-collar','entrepreneur','housemaid','management','retired','self-employed','services','student','technician','unemployed','?') 
+					- test every categories, and invalid input
+				2 - marital : marital st
+				atus (categorical: 'divorced','married','single','?'; note: 'divorced' means divorced or widowed) 
+					- test every categories, and invalid input
+				3 - education (categorical: 'basic.4y','basic.6y','basic.9y','high.school','illiterate','professional.course','university.degree','?') 
+					- test every categories, and invalid input
+				4 - default: has credit in default? (categorical: 'no','yes','?') 
+					- test every categories, and invalid input
+				5 - housing: has housing loan? (categorical: 'no','yes','?') 
+					- test every categories, and invalid input
+				6 - loan: has personal loan? (categorical: 'no','yes','?') 
+					- test every categories, and invalid input
+			# related with the last contact of the current campaign: 
+				7 - contact: contact communication type (categorical: 'cellular','telephone') 
+					- test every categories, and invalid input
+				8 - month: last contact month of year (categorical: 'jan', 'feb', 'mar', ..., 'nov', 'dec') 
+					- test every categories, and invalid input
+				9 - day_of_week: last contact day of the week (categorical: 'mon','tue','wed','thu','fri')
+					- test every categories, and invalid input
+			# other attributes: 
+				10 - campaign: number of contacts performed during this campaign and for this client (numeric, includes last contact) 
+					- 3 intervals: (0 ~ 3), (4~6), (7+)
+					- x = -1, 0, 3, 4, 5, 6, 7
+				11 - pdays: number of days that passed by after the client was last contacted from a previous campaign (numeric; 999 means client was not previously contacted) 
+					- 4 intervals: (0~11), (12~20), (20 ~ 27), (999) 
+					- x = -1, 0, 11, 12, 15, 20, 27, 28, 999
+				12 - previous: number of contacts performed before this campaign and for this client (numeric) 
+					- intervals: 0, (not 0)
+					- x = 0, 1, invalid
+				13 - poutcome: outcome of the previous marketing campaign (categorical: 'failure','nonexistent','success') 
+					- intervals: shown as above.
+					- test every categories, and invalid input
+			# social and economic context attributes 
+				14 - emp.var.rate: employment variation rate - quarterly indicator (numeric) 
+					- 4 intervals: (x>=1.0), (-1.0<= x < 1.0) , (-2.0<= x <-1.0) , (x < -2.0)
+					- 	x = -2.1, -2.0, -1.5, -1.0, 0, 1.0, invalid
+				15 - cons.price.idx: consumer price index - monthly indicator (numeric)
+					- 3 intervals: (x>=94.45), (92.8 <= x < 94.45), (x < 92.8)
+					- x = 92.7, 92.8, 93.0, 94.45, invalid
+				16 - cons.conf.idx: consumer confidence index - monthly indicator (numeric) 
+					- 4 intervals: (x>=-30.0), (-35.0<= x < -30.0), (-45.0< = x < -35.0), ( x < -45.0)
+					- x = -46.0, -45, -40.0, -35, -32.0, -30.0, invalid
+				17 - euribor3m: euribor 3 month rate - daily indicator (numeric) 
+					- 4 intervals: (x >= 4.86), ( 4.0 <= x < 4.86), ( 1.0 <= x < 4.0), , ( x < 1.0)
+					- x = 0.9, 1.0, 4.0, 4.6, 4.86, invalid
+				18 - nr.employed: number of employees - quarterly indicator (numeric) 
+					- 2 intervals: (x > 5200.0), (x <= 5200.0)
+					- x = 5200.0, 5201.0, invalid
+				Output variable (desired target): 
+				19 - y - has the client subscribed a term deposit? (binary: 'no','yes') 
+					- 2 intervals: yes or no
+					- test every categories, and invalid input
+
+
+Classification/Learning Decision table based test:
+				0 - age (numeric) 
+				1 - job : type of job (categorical: 'admin.','blue-collar','entrepreneur','housemaid','management','retired','self-employed','services','student','technician','unemployed','?') 
+				2 - marital : marital status (categorical: 'divorced','married','single','?'; note: 'divorced' means divorced or widowed) 
+				3 - education (categorical: 'basic.4y','basic.6y','basic.9y','high.school','illiterate','professional.course','university.degree','?') 
+				4 - default: has credit in default? (categorical: 'no','yes','?') 
+				5 - housing: has housing loan? (categorical: 'no','yes','?') 
+				6 - loan: has personal loan? (categorical: 'no','yes','?') 
+			# related with the last contact of the current campaign: 
+				7 - contact: contact communication type (categorical: 'cellular','telephone') 
+				8 - month: last contact month of year (categorical: 'jan', 'feb', 'mar', ..., 'nov', 'dec') 
+				9 - day_of_week: last contact day of the week (categorical: 'mon','tue','wed','thu','fri') 
+			# other attributes: 
+				10 - campaign: number of contacts performed during this campaign and for this client (numeric, includes last contact) 
+					- 3 intervals: (0 ~ 3), (4~6), (7+)
+				11 - pdays: number of days that passed by after the client was last contacted from a previous campaign (numeric; 999 means client was not previously contacted) 
+						- 4 intervals: (0~11), (12~20), (20 ~ 27), (999) 
+				12 - previous: number of contacts performed before this campaign and for this client (numeric) 
+						- intervals: 0, (not 0)
+				13 - poutcome: outcome of the previous marketing campaign (categorical: 'failure','nonexistent','success') 
+						- intervals: shown as above.
+			# social and economic context attributes 
+				14 - emp.var.rate: employment variation rate - quarterly indicator (numeric) 
+						- 4 intervals: (x>1.0), (-1.0<= x < 1.0) , (-2.0<= x <-1.0) , (x < -2.0)
+				15 - cons.price.idx: consumer price index - monthly indicator (numeric)
+						- 3 intervals: (x>94.45), (92.8 <= x < 94.45), (x < 92.8)
+				16 - cons.conf.idx: consumer confidence index - monthly indicator (numeric) 
+						- 4 intervals: (x>-30.0), (-35.0<= x < -30.0), (-45.0< = x < -35.0), ( x < -45.0)
+				17 - euribor3m: euribor 3 month rate - daily indicator (numeric) 
+						- 4 intervals: (x > 4.86), ( 4.0 <= x < 4.86), ( 1.0 <= x < 4.0), , ( x < 1.0)
+				18 - nr.employed: number of employees - quarterly indicator (numeric) 
+						- 2 intervals: (x > 5200.0), (x <= 5200.0)
+				Output variable (desired target): 
+				19 - y - has the client subscribed a term deposit? (binary: 'no','yes') 
+						- 2 intervals: yes or no
