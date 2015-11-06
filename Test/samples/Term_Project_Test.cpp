@@ -8,14 +8,23 @@ class Term_Project_Test : public testing::Test{
 //virtual void TearDown();
 void testAgeClass(char age[30],char attr[30],int Age0,int Age1,int CIndexi,int CIndexj);
 void testmaritalClass(char marital[30],char attr[30],int Mat0,int Mat1,int Cindexi,int Cindexj);
+void tessdefaultClass(char Default[30],char attr[30],int Default0,int Default1,int CIndexi,int CIndexj);
+
 char tempAttribute[20][30];
 int num_Age0;
 int num_Age1;
+int numPerAge[2][5];
+
 int num_Mat0;
 int num_Mat1;
-
-int numPerAge[2][5];
 int numPerMat[2][3];
+
+int num_Def0;
+int num_Def1;
+int numPerDefault[2][2];
+
+
+
 };
 
 
@@ -64,10 +73,18 @@ TEST_F(Term_Project_Test,AgeClassEdgeTesting)
 TEST_F(Term_Project_Test,maritalClassEquivalenceClassTesting)
 {
 	testmaritalClass("divorced","no",1,0,0,0);
+	testmaritalClass("married","no",1,0,0,1);
+	testmaritalClass("single","no",1,0,0,2);
 	
 	
 }
 
+TEST_F(Term_Project_Test,DefaultClassEquivalenceClassTesting)
+{
+	tessdefaultClass("no","no",1,0,0,0);
+	tessdefaultClass("yes","no",1,0,0,1);
+	
+}
 
 void  Term_Project_Test::testAgeClass(char age[30],char attr[30],int Age0,int Age1,int CIndexi,int CIndexj)
 {
@@ -112,5 +129,28 @@ void Term_Project_Test::testmaritalClass(char marital[30],char attr[30],int Mat0
 		else
 		{
 			EXPECT_EQ(0,numPerMat[i][j]);
+		}
+}
+void Term_Project_Test::tessdefaultClass(char Default[30],char attr[30],int Default0,int Default1,int CIndexi,int CIndexj)
+{
+
+	num_Def0 = 0;
+	num_Def1 = 0;
+	memset(tempAttribute,0,sizeof(tempAttribute));
+	strcpy(tempAttribute[4],Default);
+	strcpy(tempAttribute[19],attr);
+	memset(numPerDefault,0,sizeof(numPerDefault));
+	defaultClass(tempAttribute, numPerDefault, num_Def0, num_Def1);
+	EXPECT_EQ(Default0,num_Def0);
+	EXPECT_EQ(Default1,num_Def1);
+	for(int i = 0;i<2;i++)
+		for(int j = 0;j<2;j++)
+		if(i==CIndexi&&j==CIndexj)
+		{
+			EXPECT_EQ(1,numPerDefault[i][j]);
+		}
+		else
+		{
+			EXPECT_EQ(0,numPerDefault[i][j]);
 		}
 }
