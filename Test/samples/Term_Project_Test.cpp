@@ -13,6 +13,7 @@ void tessdefaultClass(char Default[30],char attr[30],int Default0,int Default1,i
 void testloanClass(char loan[30], char attr[30],int Loan0, int Loan1,int CIndexi,int CIndexj);
 void testmonthClass(char month[30], char attr[30],int Month0, int Month1,int CIndexi,int CIndexj);
 void testCampaignClass(char campaign[30], char attr[30],int Campaign0,int Campaign1,int CIndexi,int CIndexj);
+void testPreviousClass(char previous[30], char attr[30],int Previous0, int Previous1, int CIndexi, int CIndexj);
 
 char tempAttribute[20][30];
 int num_Age0;
@@ -44,6 +45,11 @@ int num_Campaign0;
 int num_Campaign1;
 int numPerCampaign[2][3];
 	
+
+int num_Previous0;
+int num_Previous1;
+int numPerPrevious[2][2];
+
 
 };
 
@@ -186,6 +192,12 @@ TEST_F(Term_Project_Test,CampaignClassEdgeTesting)
 	testCampaignClass("5","no",1,0,0,1);
 	testCampaignClass("6","no",1,0,0,1);
 	testCampaignClass("7","no",1,0,0,2);
+}
+
+TEST_F(Term_Project_Test,PreviousClassEquivalenceClassTesting)
+{
+	testPreviousClass("0","no",1,0,0,0);
+	testPreviousClass("1","no",1,0,0,1);
 }
 
 void  Term_Project_Test::testAgeClass(char age[30],char attr[30],int Age0,int Age1,int CIndexi,int CIndexj)
@@ -362,3 +374,31 @@ void Term_Project_Test::testCampaignClass(char campaign[30], char attr[30],int C
 			EXPECT_EQ(0,numPerCampaign[i][j]);
 		}
 }
+
+void Term_Project_Test::testPreviousClass(char previous[30], char attr[30],int Previous0, int Previous1, int CIndexi, int CIndexj)
+{
+	
+	num_Previous0 = 0;
+	num_Previous1 = 0;
+	memset(tempAttribute,0,sizeof(tempAttribute));
+	strcpy(tempAttribute[12],previous);
+	strcpy(tempAttribute[19],attr);
+	memset(numPerPrevious,0,sizeof(numPerPrevious));
+	tempPreviousClass(tempAttribute, numPerPrevious, num_Previous0, num_Previous1);
+	EXPECT_EQ(Previous0,num_Previous0);
+	EXPECT_EQ(Previous1,num_Previous1);
+	for(int i = 0;i<2;i++)
+		for(int j = 0;j<2;j++)
+		if(i==CIndexi&&j==CIndexj)
+		{
+			EXPECT_EQ(1,numPerPrevious[i][j]);
+		}
+		else
+		{
+			EXPECT_EQ(0,numPerPrevious[i][j]);
+		}
+}
+
+
+
+
