@@ -12,6 +12,7 @@ void testmaritalClass(char marital[30],char attr[30],int Mat0,int Mat1,int Cinde
 void tessdefaultClass(char Default[30],char attr[30],int Default0,int Default1,int CIndexi,int CIndexj);
 void testloanClass(char loan[30], char attr[30],int Loan0, int Loan1,int CIndexi,int CIndexj);
 void testmonthClass(char month[30], char attr[30],int Month0, int Month1,int CIndexi,int CIndexj);
+void testCampaignClass(char campaign[30], char attr[30],int Campaign0,int Campaign1,int CIndexi,int CIndexj);
 
 char tempAttribute[20][30];
 int num_Age0;
@@ -38,6 +39,11 @@ int num_Month0;
 int num_Month1;
 int numPerMonth[2][12];
 
+
+int num_Campaign0;
+int num_Campaign1;
+int numPerCampaign[2][3];
+	
 
 };
 
@@ -123,6 +129,34 @@ TEST_F(Term_Project_Test,monthClassEquivalenceClassTesting)
 	testmonthClass("dec","no",1,0,0,11);
 }
 
+
+
+TEST_F(Term_Project_Test,CampaignClassBoundaryValueTesting)
+{
+	testCampaignClass("-1","no",0,0,-1,-1);
+	testCampaignClass("0","no",1,0,0,0);
+	testCampaignClass("7","no",1,0,0,2);
+	testCampaignClass("8","no",1,0,0,2);
+}
+
+TEST_F(Term_Project_Test,CampaignClassEquivalenceClassTesting)
+{
+	testCampaignClass("-1","no",0,0,-1,-1);
+	testCampaignClass("0","no",1,0,0,0);
+	testCampaignClass("5","no",1,0,0,1);
+	testCampaignClass("7","no",1,0,0,2);
+}
+
+TEST_F(Term_Project_Test,CampaignClassEdgeTesting)
+{
+	testCampaignClass("-1","no",0,0,-1,-1);
+	testCampaignClass("0","no",1,0,0,0);
+	testCampaignClass("3","no",1,0,0,0);
+	testCampaignClass("4","no",1,0,0,1);
+	testCampaignClass("5","no",1,0,0,1);
+	testCampaignClass("6","no",1,0,0,1);
+	testCampaignClass("7","no",1,0,0,2);
+}
 
 void  Term_Project_Test::testAgeClass(char age[30],char attr[30],int Age0,int Age1,int CIndexi,int CIndexj)
 {
@@ -267,5 +301,33 @@ void Term_Project_Test::testmonthClass(char month[30], char attr[30],int Month0,
 		}
 
 }
+
+void Term_Project_Test::testCampaignClass(char campaign[30], char attr[30],int Campaign0,int Campaign1,int CIndexi,int CIndexj)
+{
+	
+	
+	
+	num_Campaign0 = 0;
+	num_Campaign1 = 0;
+	memset(tempAttribute,0,sizeof(tempAttribute));
+	strcpy(tempAttribute[10],campaign);
+	strcpy(tempAttribute[19],attr);
+	memset(numPerCampaign,0,sizeof(numPerCampaign));
+	tempCampaignClass(tempAttribute, numPerCampaign, num_Campaign0, num_Campaign1);
+	EXPECT_EQ(Campaign0,num_Campaign0);
+	EXPECT_EQ(Campaign1,num_Campaign1);
+	for(int i = 0;i<2;i++)
+		for(int j = 0;j<3;j++)
+		if(i==CIndexi&&j==CIndexj)
+		{
+			EXPECT_EQ(1,numPerCampaign[i][j]);
+		}
+		else
+		{
+			EXPECT_EQ(0,numPerCampaign[i][j]);
+		}
+}
+
+
 
 
