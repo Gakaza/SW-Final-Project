@@ -90,6 +90,36 @@ TEST_F(Term_Project_Test,AgeClassEdgeTesting)
 	testAgeClass("140","no",0,0,-1,-1);
 	
 }
+
+//1 - job : type of job (categorical: 'admin.','blue-collar','entrepreneur','housemaid','management','retired','self-employed','services','student','technician','unemployed','?') 
+TEST_F(Term_Project_Test,JobClassBoundaryValueTesting)
+{
+		
+}
+TEST_F(Term_Project_Test,JobClassEquivalenceClassTesting)
+{
+	
+}
+
+TEST_F(Term_Project_Test,JobClassEdgeTesting)
+{
+	testAgeClass("Invalid_Input.","no",0,0,-1,-1);
+	testAgeClass("admin.","no",1,0,0,0);
+	testAgeClass("blue-collar","no",1,0,0,1);
+	testAgeClass("entrepreneur","no",1,0,0,2);
+	testAgeClass("housemaid","no",1,0,0,3);
+	testAgeClass("management","no",1,0,0,4);
+	testAgeClass("retired","no",1,0,0,5);
+	testAgeClass("self-employed","no",1,0,0,6);
+	testAgeClass("services","no",1,0,0,7);
+	testAgeClass("student","no",1,0,0,8);
+	testAgeClass("technician","no",1,0,0,9);
+	testAgeClass("unemployed","no",1,0,0,10);
+	testAgeClass("?","no",0,0,-1,-1);
+	
+}
+
+
 TEST_F(Term_Project_Test,maritalClassEquivalenceClassTesting)
 {
 	testmaritalClass("divorced","no",1,0,0,0);
@@ -182,6 +212,10 @@ void  Term_Project_Test::testAgeClass(char age[30],char attr[30],int Age0,int Ag
 	
 }
 
+//void testJobClass(char Job[30],char attr[30],int Job0,int Job1,int CIndexi,int CIndexj);
+//int num_job0;
+//int num_job1;
+//int numPerJob[2][11];
 void Term_Project_Test::testJobClass(char Job[30],char attr[30],int Job0,int Job1,int CIndexi,int CIndexj)
 {
 
@@ -190,7 +224,7 @@ void Term_Project_Test::testJobClass(char Job[30],char attr[30],int Job0,int Job
 	memset(tempAttribute,0,sizeof(tempAttribute));
 	strcpy(tempAttribute[4],Job);
 	strcpy(tempAttribute[19],attr);
-	memset(numPerDefault,0,sizeof(numPerDefault));
+	memset(numPerJob,0,sizeof(numPerJob));
 	jobClass(tempAttribute, numPerJob, num_job0, num_job1);
 	EXPECT_EQ(Job0,num_job0);
 	EXPECT_EQ(Job1,num_job1);
@@ -228,6 +262,7 @@ void Term_Project_Test::testmaritalClass(char marital[30],char attr[30],int Mat0
 			EXPECT_EQ(0,numPerMat[i][j]);
 		}
 }
+
 void Term_Project_Test::tessdefaultClass(char Default[30],char attr[30],int Default0,int Default1,int CIndexi,int CIndexj)
 {
 
@@ -327,7 +362,3 @@ void Term_Project_Test::testCampaignClass(char campaign[30], char attr[30],int C
 			EXPECT_EQ(0,numPerCampaign[i][j]);
 		}
 }
-
-
-
-
