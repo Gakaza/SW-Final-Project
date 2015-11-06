@@ -6,18 +6,111 @@ class Term_Project_Test : public testing::Test{
 	protected:
 //virtual void Setup();
 //virtual void TearDown();
+void testAgeClass(char age[30],char attr[30],int Age0,int Age1,int CIndexi,int CIndexj);
+void testmaritalClass(char marital[30],char attr[30],int Mat0,int Mat1,int Cindexi,int Cindexj);
+char tempAttribute[20][30];
+int num_Age0;
+int num_Age1;
+int num_Mat0;
+int num_Mat1;
+
+int numPerAge[2][5];
+int numPerMat[2][3];
 };
 
-TEST_F(Term_Project_Test,TEST)
+
+TEST_F(Term_Project_Test,AgeClassBoundaryValueTesting)
 {
-	char tempAttribute[20][30];
-        int num_Age0 = 0;
-	int num_Age1 = 0;
-        int numPerAge[2][5];
-	strcpy(tempAttribute[0],"29");
-	strcpy(tempAttribute[19],"no");
+	
+	testAgeClass("0","no",0,0,-1,-1);
+	testAgeClass("1","no",1,0,0,0);
+	testAgeClass("139","no",1,0,0,4);
+	testAgeClass("140","no",0,0,-1,-1);
+	testAgeClass("35","no",1,0,0,1);
+	
+	
+}
+TEST_F(Term_Project_Test,AgeClassEquivalenceClassTesting)
+{
+	testAgeClass("-1","no",0,0,-1,-1);
+	testAgeClass("15","no",1,0,0,0);
+	testAgeClass("35","no",1,0,0,1);
+	testAgeClass("45","no",1,0,0,2);
+	testAgeClass("55","no",1,0,0,3);
+	testAgeClass("80","no",1,0,0,4);
+	testAgeClass("140","no",0,0,-1,-1);
+	
+}
+TEST_F(Term_Project_Test,AgeClassEdgeTesting)
+{
+	
+	testAgeClass("-1","no",0,0,-1,-1);
+	testAgeClass("15","no",1,0,0,0);
+	testAgeClass("29","no",1,0,0,0);
+	testAgeClass("30","no",1,0,0,1);
+	testAgeClass("35","no",1,0,0,1);
+	testAgeClass("39","no",1,0,0,1);
+	testAgeClass("40","no",1,0,0,2);
+	testAgeClass("45","no",1,0,0,2);
+	testAgeClass("49","no",1,0,0,2);
+	testAgeClass("50","no",1,0,0,3);
+	testAgeClass("55","no",1,0,0,3);
+	testAgeClass("64","no",1,0,0,3);
+	testAgeClass("65","no",1,0,0,4);
+	testAgeClass("80","no",1,0,0,4);
+	testAgeClass("140","no",0,0,-1,-1);
+	
+}
+TEST_F(Term_Project_Test,maritalClassEquivalenceClassTesting)
+{
+	testmaritalClass("divorced","no",1,0,0,0);
+	
+	
+}
+
+
+void  Term_Project_Test::testAgeClass(char age[30],char attr[30],int Age0,int Age1,int CIndexi,int CIndexj)
+{
+	num_Age0 = 0;
+	num_Age1 = 0;
+        memset(tempAttribute,0,sizeof(tempAttribute));
+	strcpy(tempAttribute[0],age);
+	strcpy(tempAttribute[19],attr);
 	memset(numPerAge,0,sizeof(numPerAge));
 	ageClass(tempAttribute, numPerAge, num_Age0, num_Age1);
-		
-	EXPECT_EQ(1,num_Age0);
+	EXPECT_EQ(Age0,num_Age0);
+	EXPECT_EQ(Age1,num_Age1);
+	for(int i = 0;i<2;i++)
+		for(int j = 0;j<5;j++)
+		if(i==CIndexi&&j==CIndexj)
+		{
+			EXPECT_EQ(1,numPerAge[i][j]);
+		}
+		else
+		{
+			EXPECT_EQ(0,numPerAge[i][j]);
+		}
+	
+}
+void Term_Project_Test::testmaritalClass(char marital[30],char attr[30],int Mat0,int Mat1,int CIndexi,int CIndexj)
+{
+	num_Mat0 = 0;
+        num_Mat1 = 0;
+	memset(tempAttribute,0,sizeof(tempAttribute));
+	strcpy(tempAttribute[2],marital);
+	strcpy(tempAttribute[19],attr);
+	memset(numPerMat,0,sizeof(numPerMat));
+	maritalClass(tempAttribute, numPerMat, num_Mat0, num_Mat1);
+	EXPECT_EQ(Mat0,num_Mat0);
+	EXPECT_EQ(Mat1,num_Mat1);
+	for(int i = 0;i<2;i++)
+		for(int j = 0;j<3;j++)
+		if(i==CIndexi&&j==CIndexj)
+		{
+			EXPECT_EQ(1,numPerMat[i][j]);
+		}
+		else
+		{
+			EXPECT_EQ(0,numPerMat[i][j]);
+		}
 }
