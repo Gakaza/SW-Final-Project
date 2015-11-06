@@ -102,6 +102,7 @@ TEST_F(Term_Project_Test,JobClassBoundaryValueTesting)
 {
 		
 }
+
 TEST_F(Term_Project_Test,JobClassEquivalenceClassTesting)
 {
 	
@@ -109,30 +110,50 @@ TEST_F(Term_Project_Test,JobClassEquivalenceClassTesting)
 
 TEST_F(Term_Project_Test,JobClassEdgeTesting)
 {
-	testAgeClass("Invalid_Input.","no",0,0,-1,-1);
-	testAgeClass("admin.","no",1,0,0,0);
-	testAgeClass("blue-collar","no",1,0,0,1);
-	testAgeClass("entrepreneur","no",1,0,0,2);
-	testAgeClass("housemaid","no",1,0,0,3);
-	testAgeClass("management","no",1,0,0,4);
-	testAgeClass("retired","no",1,0,0,5);
-	testAgeClass("self-employed","no",1,0,0,6);
-	testAgeClass("services","no",1,0,0,7);
-	testAgeClass("student","no",1,0,0,8);
-	testAgeClass("technician","no",1,0,0,9);
-	testAgeClass("unemployed","no",1,0,0,10);
-	testAgeClass("?","no",0,0,-1,-1);
+	testJobClass("Invalid_Input.","no",0,0,-1,-1);
+	testJobClass("admin.","no",1,0,0,0);
+	testJobClass("blue-collar","no",1,0,0,1);
+	testJobClass("entrepreneur","no",1,0,0,2);
+	testJobClass("housemaid","no",1,0,0,3);
+	testJobClass("management","no",1,0,0,4);
+	testJobClass("retired","no",1,0,0,5);
+	testJobClass("self-employed","no",1,0,0,6);
+	testJobClass("services","no",1,0,0,7);
+	testJobClass("student","no",1,0,0,8);
+	testJobClass("technician","no",1,0,0,9);
+	testJobClass("unemployed","no",1,0,0,10);
+	testJobClass("?","no",0,0,-1,-1);
 	
 }
-
 
 TEST_F(Term_Project_Test,maritalClassEquivalenceClassTesting)
 {
 	testmaritalClass("divorced","no",1,0,0,0);
 	testmaritalClass("married","no",1,0,0,1);
 	testmaritalClass("single","no",1,0,0,2);
+}
+
+//3 - education (categorical: 'basic.4y','basic.6y','basic.9y','high.school','illiterate','professional.course','university.degree','?') 
+TEST_F(Term_Project_Test,EduClassBoundaryValueTesting)
+{
+		
+}
+
+TEST_F(Term_Project_Test,EduClassEquivalenceClassTesting)
+{
 	
-	
+}
+
+TEST_F(Term_Project_Test,EduClassEdgeTesting)
+{
+	testEduClass("Invalid_Input.","no",0,0,-1,-1);
+	testEduClass("basic.4y.","no",1,0,0,0);
+	testEduClass("basic.6y","no",1,0,0,1);
+	testEduClass("high.school","no",1,0,0,2);
+	testEduClass("illiterate","no",1,0,0,3);
+	testEduClass("professional.course","no",1,0,0,4);
+	testEduClass("university.degree","no",1,0,0,5);
+	testEduClass("?","no",0,0,-1,-1);
 }
 
 TEST_F(Term_Project_Test,DefaultClassEquivalenceClassTesting)
@@ -140,6 +161,29 @@ TEST_F(Term_Project_Test,DefaultClassEquivalenceClassTesting)
 	tessdefaultClass("no","no",1,0,0,0);
 	tessdefaultClass("yes","no",1,0,0,1);
 	
+}
+
+//5 - housing: has housing loan? (categorical: 'no','yes','?') 
+TEST_F(Term_Project_Test, HouseClassBoundaryValueTesting)
+{
+	testHouseClass("no","no",1,0,0,0);
+	testHouseClass("yes","no",1,0,0,1);
+	testHouseClass("Invalid_Input.","no",0,0,-1,-1);
+	testHouseClass("???","no",0,0,-1,-1);
+	testHouseClass("!!!","no",0,0,-1,-1);
+}
+
+TEST_F(Term_Project_Test, HouseClassEquivalenceClassTesting)
+{
+	testHouseClass("no","no",1,0,0,0);
+	testHouseClass("yes","no",1,0,0,1);
+}
+
+TEST_F(Term_Project_Test, HouseClassEdgeTesting)
+{
+	testHouseClass("Invalid_Input.","no",0,0,-1,-1);
+	testHouseClass("no","no",1,0,0,0);
+	testHouseClass("yes","no",1,0,0,1);
 }
 
 TEST_F(Term_Project_Test,loanClassEquivalenceClassTesting)
@@ -224,17 +268,16 @@ void  Term_Project_Test::testAgeClass(char age[30],char attr[30],int Age0,int Ag
 	
 }
 
-//void testJobClass(char Job[30],char attr[30],int Job0,int Job1,int CIndexi,int CIndexj);
-//int num_job0;
-//int num_job1;
-//int numPerJob[2][11];
 void Term_Project_Test::testJobClass(char Job[30],char attr[30],int Job0,int Job1,int CIndexi,int CIndexj)
 {
-
+	//void testJobClass(char Job[30],char attr[30],int Job0,int Job1,int CIndexi,int CIndexj);
+	//int num_job0;
+	//int num_job1;
+	//int numPerJob[2][11];
 	num_job0 = 0;
 	num_job1 = 0;
 	memset(tempAttribute,0,sizeof(tempAttribute));
-	strcpy(tempAttribute[4],Job);
+	strcpy(tempAttribute[1],Job);
 	strcpy(tempAttribute[19],attr);
 	memset(numPerJob,0,sizeof(numPerJob));
 	jobClass(tempAttribute, numPerJob, num_job0, num_job1);
@@ -275,9 +318,35 @@ void Term_Project_Test::testmaritalClass(char marital[30],char attr[30],int Mat0
 		}
 }
 
+void Term_Project_Test::testEduClass(char Edu[30],char attr[30],int Edu0,int Edu1,int CIndexi,int CIndexj)
+{
+	//void testJobClass(char Edu[30],char attr[30],int Edu0,int Edu1,int CIndexi,int CIndexj);
+	//int num_edu0;
+	//int num_edu1;
+	//int numPerEdu[2][7];
+	num_edu0 = 0;
+	num_edu1 = 0;
+	memset(tempAttribute,0,sizeof(tempAttribute));
+	strcpy(tempAttribute[3],Edu);
+	strcpy(tempAttribute[19],attr);
+	memset(numPerEdu,0,sizeof(numPerEdu));
+	jobClass(tempAttribute, numPerEdu, num_edu0, num_edu1);
+	EXPECT_EQ(Edu0,num_edu0);
+	EXPECT_EQ(Edu1,num_edu1);
+	for(int i = 0;i<2;i++)
+		for(int j = 0;j<7;j++)
+		if(i==CIndexi&&j==CIndexj)
+		{
+			EXPECT_EQ(1,numPerEdu[i][j]);
+		}
+		else
+		{
+			EXPECT_EQ(0,numPerEdu[i][j]);
+		}
+}
+
 void Term_Project_Test::tessdefaultClass(char Default[30],char attr[30],int Default0,int Default1,int CIndexi,int CIndexj)
 {
-
 	num_Def0 = 0;
 	num_Def1 = 0;
 	memset(tempAttribute,0,sizeof(tempAttribute));
@@ -299,9 +368,33 @@ void Term_Project_Test::tessdefaultClass(char Default[30],char attr[30],int Defa
 		}
 }
 
+void Term_Project_Test::testHouseClass(char House[30],char attr[30],int House0,int House1,int CIndexi,int CIndexj)
+{
+	//void testHouseClass(char House[30],char attr[30],int House0,int House1,int CIndexi,int CIndexj);
+	//int numPerHouse[2][2] = {0}, num_House0 = 0, num_House1 = 0;
+	num_house0 = 0;
+	num_house1 = 0;
+	memset(tempAttribute,0,sizeof(tempAttribute));
+	strcpy(tempAttribute[5],House);
+	strcpy(tempAttribute[19],attr);
+	memset(numPerHouse,0,sizeof(numPerHouse));
+	jobClass(tempAttribute, numPerHouse, num_house0, num_house1);
+	EXPECT_EQ(House0,num_house0);
+	EXPECT_EQ(House1,num_house1);
+	for(int i = 0;i<2;i++)
+		for(int j = 0;j<2;j++)
+		if(i==CIndexi&&j==CIndexj)
+		{
+			EXPECT_EQ(1,numPerHouse[i][j]);
+		}
+		else
+		{
+			EXPECT_EQ(0,numPerHouse[i][j]);
+		}
+}
+
 void Term_Project_Test::testloanClass(char loan[30], char attr[30],int Loan0, int Loan1,int CIndexi,int CIndexj)
 {
-	
 	num_Loan0 = 0;
 	num_Loan1 = 0;
 	memset(tempAttribute,0,sizeof(tempAttribute));
@@ -326,7 +419,6 @@ void Term_Project_Test::testloanClass(char loan[30], char attr[30],int Loan0, in
 
 void Term_Project_Test::testmonthClass(char month[30], char attr[30],int Month0, int Month1,int CIndexi,int CIndexj)
 {
-	
 	num_Month0 = 0;
 	num_Month1 = 0;
 	memset(tempAttribute,0,sizeof(tempAttribute));
@@ -351,9 +443,6 @@ void Term_Project_Test::testmonthClass(char month[30], char attr[30],int Month0,
 
 void Term_Project_Test::testCampaignClass(char campaign[30], char attr[30],int Campaign0,int Campaign1,int CIndexi,int CIndexj)
 {
-	
-	
-	
 	num_Campaign0 = 0;
 	num_Campaign1 = 0;
 	memset(tempAttribute,0,sizeof(tempAttribute));
@@ -377,7 +466,6 @@ void Term_Project_Test::testCampaignClass(char campaign[30], char attr[30],int C
 
 void Term_Project_Test::testPreviousClass(char previous[30], char attr[30],int Previous0, int Previous1, int CIndexi, int CIndexj)
 {
-	
 	num_Previous0 = 0;
 	num_Previous1 = 0;
 	memset(tempAttribute,0,sizeof(tempAttribute));
@@ -398,7 +486,3 @@ void Term_Project_Test::testPreviousClass(char previous[30], char attr[30],int P
 			EXPECT_EQ(0,numPerPrevious[i][j]);
 		}
 }
-
-
-
-
