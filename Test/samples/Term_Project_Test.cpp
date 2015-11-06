@@ -7,13 +7,19 @@ class Term_Project_Test : public testing::Test{
 //virtual void Setup();
 //virtual void TearDown();
 void testAgeClass(char age[30],char attr[30],int Age0,int Age1,int CIndexi,int CIndexj);
+void testJobClass(char Job[30],char attr[30],int Job0,int Job1,int CIndexi,int CIndexj);
 void testmaritalClass(char marital[30],char attr[30],int Mat0,int Mat1,int Cindexi,int Cindexj);
 void tessdefaultClass(char Default[30],char attr[30],int Default0,int Default1,int CIndexi,int CIndexj);
+
 
 char tempAttribute[20][30];
 int num_Age0;
 int num_Age1;
 int numPerAge[2][5];
+
+int num_job0;
+int num_job1;
+int numPerJob[2][11];
 
 int num_Mat0;
 int num_Mat1;
@@ -90,7 +96,7 @@ void  Term_Project_Test::testAgeClass(char age[30],char attr[30],int Age0,int Ag
 {
 	num_Age0 = 0;
 	num_Age1 = 0;
-        memset(tempAttribute,0,sizeof(tempAttribute));
+    memset(tempAttribute,0,sizeof(tempAttribute));
 	strcpy(tempAttribute[0],age);
 	strcpy(tempAttribute[19],attr);
 	memset(numPerAge,0,sizeof(numPerAge));
@@ -109,10 +115,35 @@ void  Term_Project_Test::testAgeClass(char age[30],char attr[30],int Age0,int Ag
 		}
 	
 }
+
+void Term_Project_Test::testJobClass(char Job[30],char attr[30],int Job0,int Job1,int CIndexi,int CIndexj)
+{
+
+	num_job0 = 0;
+	num_job1 = 0;
+	memset(tempAttribute,0,sizeof(tempAttribute));
+	strcpy(tempAttribute[4],Job);
+	strcpy(tempAttribute[19],attr);
+	memset(numPerDefault,0,sizeof(numPerDefault));
+	jobClass(tempAttribute, numPerJob, num_job0, num_job1);
+	EXPECT_EQ(Job0,num_job0);
+	EXPECT_EQ(Job1,num_job1);
+	for(int i = 0;i<2;i++)
+		for(int j = 0;j<11;j++)
+		if(i==CIndexi&&j==CIndexj)
+		{
+			EXPECT_EQ(1,numPerJob[i][j]);
+		}
+		else
+		{
+			EXPECT_EQ(0,numPerJob[i][j]);
+		}
+}
+
 void Term_Project_Test::testmaritalClass(char marital[30],char attr[30],int Mat0,int Mat1,int CIndexi,int CIndexj)
 {
 	num_Mat0 = 0;
-        num_Mat1 = 0;
+    num_Mat1 = 0;
 	memset(tempAttribute,0,sizeof(tempAttribute));
 	strcpy(tempAttribute[2],marital);
 	strcpy(tempAttribute[19],attr);
