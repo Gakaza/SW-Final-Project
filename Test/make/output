@@ -1,0 +1,29 @@
+Running main() from gtest_main.cc
+[==========] Running 4 tests from 1 test case.
+[----------] Global test environment set-up.
+[----------] 4 tests from TriangleTest
+[ RUN      ] TriangleTest.BoundaryValueTesting
+../samples/triangle_test.cpp:13: Failure
+Value of: "Not a Triangle"
+Expected: IsTriangle(0,1,1)
+Which is: "Invalid Input"
+../samples/triangle_test.cpp:16: Failure
+Value of: "Isosceles"
+Expected: IsTriangle(100,200,100)
+Which is: "Not a Triangle"
+[  FAILED  ] TriangleTest.BoundaryValueTesting (0 ms)
+[ RUN      ] TriangleTest.EquivalenceClassTesting
+[       OK ] TriangleTest.EquivalenceClassTesting (0 ms)
+[ RUN      ] TriangleTest.EdgeTesing
+[       OK ] TriangleTest.EdgeTesing (0 ms)
+[ RUN      ] TriangleTest.DecistionTableTest
+[       OK ] TriangleTest.DecistionTableTest (0 ms)
+[----------] 4 tests from TriangleTest (0 ms total)
+
+[----------] Global test environment tear-down
+[==========] 4 tests from 1 test case ran. (1 ms total)
+[  PASSED  ] 3 tests.
+[  FAILED  ] 1 test, listed below:
+[  FAILED  ] TriangleTest.BoundaryValueTesting
+
+ 1 FAILED TEST
