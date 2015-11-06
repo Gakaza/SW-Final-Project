@@ -15,32 +15,54 @@ void testmonthClass(char month[30], char attr[30],int Month0, int Month1,int CIn
 void testCampaignClass(char campaign[30], char attr[30],int Campaign0,int Campaign1,int CIndexi,int CIndexj);
 void testPreviousClass(char previous[30], char attr[30],int Previous0, int Previous1, int CIndexi, int CIndexj);
 
+//0
 char tempAttribute[20][30];
 int num_Age0;
 int num_Age1;
 int numPerAge[2][5];
 
+//1
 int num_job0;
 int num_job1;
 int numPerJob[2][11];
 
+//2
 int num_Mat0;
 int num_Mat1;
 int numPerMat[2][3];
 
+//3
+int num_edu0;
+int num_edu1;
+int numPerEdu[2][7];
+
+//4
 int num_Def0;
 int num_Def1;
 int numPerDefault[2][2];
 
+//5
+int numPerHouse[2][2];
+int num_house0;
+int num_house1;
+
+//6
 int num_Loan0;
 int num_Loan1;
 int numPerLoan[2][2];
 
+//7
+
+
+//8
 int num_Month0;
 int num_Month1;
 int numPerMonth[2][12];
 
+//9
 
+
+//10
 int num_Campaign0;
 int num_Campaign1;
 int numPerCampaign[2][3];
