@@ -9,6 +9,7 @@ class Term_Project_Test : public testing::Test{
 void testAgeClass(char age[30],char attr[30],int Age0,int Age1,int CIndexi,int CIndexj);
 void testmaritalClass(char marital[30],char attr[30],int Mat0,int Mat1,int Cindexi,int Cindexj);
 void tessdefaultClass(char Default[30],char attr[30],int Default0,int Default1,int CIndexi,int CIndexj);
+void testloanClass(char loan[30], char attr[30],int Loan0, int Loan1,int CIndexi,int CIndexj);
 
 char tempAttribute[20][30];
 int num_Age0;
@@ -23,6 +24,9 @@ int num_Def0;
 int num_Def1;
 int numPerDefault[2][2];
 
+int num_Loan0;
+int num_Loan1;
+int numPerLoan[2][2];
 
 
 };
@@ -83,6 +87,13 @@ TEST_F(Term_Project_Test,DefaultClassEquivalenceClassTesting)
 {
 	tessdefaultClass("no","no",1,0,0,0);
 	tessdefaultClass("yes","no",1,0,0,1);
+	
+}
+
+TEST_F(Term_Project_Test,loanClassEquivalenceClassTesting)
+{
+	testloanClass("no","no",1,0,0,0);
+	testloanClass("yes","no",1,0,0,1);
 	
 }
 
@@ -154,3 +165,32 @@ void Term_Project_Test::tessdefaultClass(char Default[30],char attr[30],int Defa
 			EXPECT_EQ(0,numPerDefault[i][j]);
 		}
 }
+
+void Term_Project_Test::testloanClass(char loan[30], char attr[30],int Loan0, int Loan1,int CIndexi,int CIndexj)
+{
+	
+	num_Loan0 = 0;
+	num_Loan1 = 0;
+	memset(tempAttribute,0,sizeof(tempAttribute));
+	strcpy(tempAttribute[6],loan);
+	strcpy(tempAttribute[19],attr);
+	memset(numPerLoan,0,sizeof(numPerLoan));
+	loanClass(tempAttribute, numPerLoan, num_Loan0, num_Loan1);
+	EXPECT_EQ(Loan0,num_Loan0);
+	EXPECT_EQ(Loan1,num_Loan1);
+	for(int i = 0;i<2;i++)
+		for(int j = 0;j<2;j++)
+		if(i==CIndexi&&j==CIndexj)
+		{
+			EXPECT_EQ(1,numPerLoan[i][j]);
+		}
+		else
+		{
+			EXPECT_EQ(0,numPerLoan[i][j]);
+		}
+
+}
+
+
+
+
