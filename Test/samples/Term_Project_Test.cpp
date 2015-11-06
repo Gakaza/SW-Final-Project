@@ -11,7 +11,7 @@ void testJobClass(char Job[30],char attr[30],int Job0,int Job1,int CIndexi,int C
 void testmaritalClass(char marital[30],char attr[30],int Mat0,int Mat1,int Cindexi,int Cindexj);
 void tessdefaultClass(char Default[30],char attr[30],int Default0,int Default1,int CIndexi,int CIndexj);
 void testloanClass(char loan[30], char attr[30],int Loan0, int Loan1,int CIndexi,int CIndexj);
-
+void testmonthClass(char month[30], char attr[30],int Month0, int Month1,int CIndexi,int CIndexj);
 
 char tempAttribute[20][30];
 int num_Age0;
@@ -33,6 +33,10 @@ int numPerDefault[2][2];
 int num_Loan0;
 int num_Loan1;
 int numPerLoan[2][2];
+
+int num_Month0;
+int num_Month1;
+int numPerMonth[2][12];
 
 
 };
@@ -102,6 +106,23 @@ TEST_F(Term_Project_Test,loanClassEquivalenceClassTesting)
 	testloanClass("yes","no",1,0,0,1);
 	
 }
+
+TEST_F(Term_Project_Test,monthClassEquivalenceClassTesting)
+{
+	testmonthClass("jan","no",1,0,0,0);
+	testmonthClass("feb","no",1,0,0,1);
+	testmonthClass("mar","no",1,0,0,2);
+	testmonthClass("apr","no",1,0,0,3);
+	testmonthClass("may","no",1,0,0,4);
+	testmonthClass("jun","no",1,0,0,5);
+	testmonthClass("jul","no",1,0,0,6);
+	testmonthClass("aug","no",1,0,0,7);
+	testmonthClass("sep","no",1,0,0,8);
+	testmonthClass("oct","no",1,0,0,9);
+	testmonthClass("nov","no",1,0,0,10);
+	testmonthClass("dec","no",1,0,0,11);
+}
+
 
 void  Term_Project_Test::testAgeClass(char age[30],char attr[30],int Age0,int Age1,int CIndexi,int CIndexj)
 {
@@ -222,6 +243,29 @@ void Term_Project_Test::testloanClass(char loan[30], char attr[30],int Loan0, in
 
 }
 
+void Term_Project_Test::testmonthClass(char month[30], char attr[30],int Month0, int Month1,int CIndexi,int CIndexj)
+{
+	
+	num_Month0 = 0;
+	num_Month1 = 0;
+	memset(tempAttribute,0,sizeof(tempAttribute));
+	strcpy(tempAttribute[8],month);
+	strcpy(tempAttribute[19],attr);
+	memset(numPerMonth,0,sizeof(numPerMonth));
+	monthClass(tempAttribute, numPerMonth, num_Month0, num_Month1);
+	EXPECT_EQ(Month0,num_Month0);
+	EXPECT_EQ(Month1,num_Month1);
+	for(int i = 0;i<2;i++)
+		for(int j = 0;j<12;j++)
+		if(i==CIndexi&&j==CIndexj)
+		{
+			EXPECT_EQ(1,numPerMonth[i][j]);
+		}
+		else
+		{
+			EXPECT_EQ(0,numPerMonth[i][j]);
+		}
 
+}
 
 
