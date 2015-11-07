@@ -16,6 +16,7 @@ void testCampaignClass(char campaign[30], char attr[30],int Campaign0,int Campai
 void testPreviousClass(char previous[30], char attr[30],int Previous0, int Previous1, int CIndexi, int CIndexj);
 void testEmpClass(char emp[30], char attr[30],int Emp0, int Emp1, int CIndexi, int CIndexj);
 void testConfClass(char conf[30], char attr[30],int Conf0, int Conf1, int CIndexi, int CIndexj);
+void testNrClass(char nr[30], char attr[30],int Nr0, int Nr1, int CIndexi, int CIndexj);
 
 char tempAttribute[20][30];
 int num_Age0;
@@ -62,6 +63,10 @@ int num_Conf0;
 int num_Conf1;
 int numPerConf[2][4];
 
+
+int num_Nr0;
+int num_Nr1;
+int numPerNr[2][2];
 
 };
 
@@ -260,6 +265,13 @@ TEST_F(Term_Project_Test,ConfClassEdgeTesting)
 	testConfClass("-35.0","no",1,0,0,1);
 	testConfClass("-32.0","no",1,0,0,1);
 	testConfClass("-30.0","no",1,0,0,0);
+}
+
+TEST_F(Term_Project_Test,NrClassBoundaryValueTesting)
+{
+	testNrClass("5200","no",1,0,0,1);
+	testNrClass("5201","no",1,0,0,0);
+	
 }
 
 void  Term_Project_Test::testAgeClass(char age[30],char attr[30],int Age0,int Age1,int CIndexi,int CIndexj)
@@ -508,4 +520,29 @@ void Term_Project_Test::testConfClass(char conf[30], char attr[30],int Conf0, in
 			EXPECT_EQ(0,numPerConf[i][j]);
 		}
 
+}
+
+void Term_Project_Test::testNrClass(char nr[30], char attr[30],int Nr0, int Nr1, int CIndexi, int CIndexj)
+{
+
+	
+	num_Nr0 = 0;
+	num_Nr1 = 0;
+	memset(tempAttribute,0,sizeof(tempAttribute));
+	strcpy(tempAttribute[18],nr);
+	strcpy(tempAttribute[19],attr);
+	memset(numPerNr,0,sizeof(numPerNr));
+	tempNrClass(tempAttribute, numPerNr, num_Nr0, num_Nr1);
+	EXPECT_EQ(Nr0,num_Nr0);
+	EXPECT_EQ(Nr1,num_Nr1);
+	for(int i = 0;i<2;i++)
+		for(int j = 0;j<2;j++)
+		if(i==CIndexi&&j==CIndexj)
+		{
+			EXPECT_EQ(1,numPerNr[i][j]);
+		}
+		else
+		{
+			EXPECT_EQ(0,numPerNr[i][j]);
+		}
 }
