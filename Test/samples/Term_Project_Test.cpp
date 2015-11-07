@@ -9,9 +9,13 @@ class Term_Project_Test : public testing::Test{
 void testAgeClass(char age[30],char attr[30],int Age0,int Age1,int CIndexi,int CIndexj);
 void testJobClass(char Job[30],char attr[30],int Job0,int Job1,int CIndexi,int CIndexj);
 void testmaritalClass(char marital[30],char attr[30],int Mat0,int Mat1,int Cindexi,int Cindexj);
+void testEduClass(char Edu[30],char attr[30],int Edu0,int Edu1,int CIndexi,int CIndexj);
 void tessdefaultClass(char Default[30],char attr[30],int Default0,int Default1,int CIndexi,int CIndexj);
+void testHouseClass(char House[30],char attr[30],int House0,int House1,int CIndexi,int CIndexj);
 void testloanClass(char loan[30], char attr[30],int Loan0, int Loan1,int CIndexi,int CIndexj);
+void testConctactClass(char Contact[30],char attr[30],int Contact0,int Contact1,int CIndexi,int CIndexj);
 void testmonthClass(char month[30], char attr[30],int Month0, int Month1,int CIndexi,int CIndexj);
+void testDayClass(char Day[30],char attr[30],int Day0,int Day1,int CIndexi,int CIndexj);
 void testCampaignClass(char campaign[30], char attr[30],int Campaign0,int Campaign1,int CIndexi,int CIndexj);
 void testPreviousClass(char previous[30], char attr[30],int Previous0, int Previous1, int CIndexi, int CIndexj);
 
@@ -52,7 +56,9 @@ int num_Loan1;
 int numPerLoan[2][2];
 
 //7
-
+int num_contact0;
+int num_contact1;
+int numPerContact[2][2];
 
 //8
 int num_Month0;
@@ -60,7 +66,9 @@ int num_Month1;
 int numPerMonth[2][12];
 
 //9
-
+int num_day0;
+int num_day1;
+int numPerDay[2][5];
 
 //10
 int num_Campaign0;
@@ -169,13 +177,13 @@ TEST_F(Term_Project_Test,EduClassEquivalenceClassTesting)
 TEST_F(Term_Project_Test,EduClassEdgeTesting)
 {
 	testEduClass("Invalid_Input.","no",0,0,-1,-1);
-	testEduClass("basic.4y.","no",1,0,0,0);
+	testEduClass("basic.4y","no",1,0,0,0);
 	testEduClass("basic.6y","no",1,0,0,1);
-	testEduClass("high.school","no",1,0,0,2);
-	testEduClass("illiterate","no",1,0,0,3);
-	testEduClass("professional.course","no",1,0,0,4);
-	testEduClass("university.degree","no",1,0,0,5);
-	testEduClass("?","no",0,0,-1,-1);
+	testEduClass("basic.9y","no",1,0,0,2);
+	testEduClass("high.school","no",1,0,0,3);
+	testEduClass("illiterate","no",1,0,0,4);
+	testEduClass("professional.course","no",1,0,0,5);
+	testEduClass("university.degree","no",1,0,0,6);
 }
 
 TEST_F(Term_Project_Test,DefaultClassEquivalenceClassTesting)
@@ -215,6 +223,29 @@ TEST_F(Term_Project_Test,loanClassEquivalenceClassTesting)
 	
 }
 
+//7 - contact: contact communication type (categorical: 'cellular','telephone') 
+TEST_F(Term_Project_Test, ContactClassBoundaryValueTesting)
+{
+	testConctactClass("Invalid_Input.","no",0,0,-1,-1);
+	testConctactClass("???","no",0,0,-1,-1);
+	testConctactClass("!!!","no",0,0,-1,-1);
+	testConctactClass("cellular","no",1,0,0,0);
+	testConctactClass("telephone","no",1,0,0,1);
+}
+
+TEST_F(Term_Project_Test, ContactClassEquivalenceClassTesting)
+{
+	testConctactClass("cellular","no",1,0,0,0);
+	testConctactClass("telephone","no",1,0,0,1);
+}
+
+TEST_F(Term_Project_Test, ContactClassEdgeTesting)
+{
+	testConctactClass("Invalid_Input.","no",0,0,-1,-1);
+	testConctactClass("cellular","no",1,0,0,0);
+	testConctactClass("telephone","no",1,0,0,1);
+}
+
 TEST_F(Term_Project_Test,monthClassEquivalenceClassTesting)
 {
 	testmonthClass("jan","no",1,0,0,0);
@@ -231,7 +262,36 @@ TEST_F(Term_Project_Test,monthClassEquivalenceClassTesting)
 	testmonthClass("dec","no",1,0,0,11);
 }
 
+//9 - day_of_week: last contact day of the week (categorical: 'mon','tue','wed','thu','fri')
+TEST_F(Term_Project_Test, DayClassBoundaryValueTesting)
+{
+	testDayClass("Invalid_Input.","no",0,0,-1,-1);
+	testDayClass("???","no",0,0,-1,-1);
+	testDayClass("!!!","no",0,0,-1,-1);
+	testDayClass("wed","no",1,0,0,2);
+	testDayClass("thu","no",1,0,0,3);
+	testDayClass("fri","no",1,0,0,4);
+}
 
+TEST_F(Term_Project_Test, DayClassEquivalenceClassTesting)
+{
+	testDayClass("cellular","no",0,0,-1,-1);
+	testDayClass("mon","no",1,0,0,0);
+	testDayClass("tue","no",1,0,0,1);
+	testDayClass("wed","no",1,0,0,2);
+	testDayClass("thu","no",1,0,0,3);
+	testDayClass("fri","no",1,0,0,4);
+}
+
+TEST_F(Term_Project_Test, DayClassEdgeTesting)
+{
+	testDayClass("Invalid_Input.","no",0,0,-1,-1);
+	testDayClass("mon","no",1,0,0,0);
+	testDayClass("tue","no",1,0,0,1);
+	testDayClass("wed","no",1,0,0,2);
+	testDayClass("thu","no",1,0,0,3);
+	testDayClass("fri","no",1,0,0,4);
+}
 
 TEST_F(Term_Project_Test,CampaignClassBoundaryValueTesting)
 {
@@ -352,7 +412,7 @@ void Term_Project_Test::testEduClass(char Edu[30],char attr[30],int Edu0,int Edu
 	strcpy(tempAttribute[3],Edu);
 	strcpy(tempAttribute[19],attr);
 	memset(numPerEdu,0,sizeof(numPerEdu));
-	jobClass(tempAttribute, numPerEdu, num_edu0, num_edu1);
+	eduClass(tempAttribute, numPerEdu, num_edu0, num_edu1);
 	EXPECT_EQ(Edu0,num_edu0);
 	EXPECT_EQ(Edu1,num_edu1);
 	for(int i = 0;i<2;i++)
@@ -400,7 +460,7 @@ void Term_Project_Test::testHouseClass(char House[30],char attr[30],int House0,i
 	strcpy(tempAttribute[5],House);
 	strcpy(tempAttribute[19],attr);
 	memset(numPerHouse,0,sizeof(numPerHouse));
-	jobClass(tempAttribute, numPerHouse, num_house0, num_house1);
+	houseClass(tempAttribute, numPerHouse, num_house0, num_house1);
 	EXPECT_EQ(House0,num_house0);
 	EXPECT_EQ(House1,num_house1);
 	for(int i = 0;i<2;i++)
@@ -439,6 +499,30 @@ void Term_Project_Test::testloanClass(char loan[30], char attr[30],int Loan0, in
 
 }
 
+void Term_Project_Test::testConctactClass(char Contact[30],char attr[30],int Contact0,int Contact1,int CIndexi,int CIndexj)
+{
+	//void contactClass(char tempAttribute[ ][30], int (&numPerCon)[2][2], int &num_Con0, int &num_Con1){
+	num_contact0 = 0;
+	num_contact1 = 0;
+	memset(tempAttribute,0,sizeof(tempAttribute));
+	strcpy(tempAttribute[7],Contact);
+	strcpy(tempAttribute[19],attr);
+	memset(numPerContact,0,sizeof(numPerContact));
+	contactClass(tempAttribute, numPerContact, num_contact0, num_contact1);
+	EXPECT_EQ(Contact0,num_contact0);
+	EXPECT_EQ(Contact1,num_contact1);
+	for(int i = 0;i<2;i++)
+		for(int j = 0;j<2;j++)
+		if(i==CIndexi&&j==CIndexj)
+		{
+			EXPECT_EQ(1,numPerContact[i][j]);
+		}
+		else
+		{
+			EXPECT_EQ(0,numPerContact[i][j]);
+		}
+}
+
 void Term_Project_Test::testmonthClass(char month[30], char attr[30],int Month0, int Month1,int CIndexi,int CIndexj)
 {
 	num_Month0 = 0;
@@ -461,6 +545,33 @@ void Term_Project_Test::testmonthClass(char month[30], char attr[30],int Month0,
 			EXPECT_EQ(0,numPerMonth[i][j]);
 		}
 
+}
+
+void Term_Project_Test::testDayClass(char Day[30],char attr[30],int Day0,int Day1,int CIndexi,int CIndexj)
+{
+	//void dayClass(char tempAttribute[ ][30], int (&numPerDay)[2][5], int &num_Day0, int &num_Day1){
+	//int num_day0;
+	//int num_day1;
+	//int numPerDay[2][5];
+	num_day0 = 0;
+	num_day1 = 0;
+	memset(tempAttribute,0,sizeof(tempAttribute));
+	strcpy(tempAttribute[9],Day);
+	strcpy(tempAttribute[19],attr);
+	memset(numPerDay,0,sizeof(numPerDay));
+	dayClass(tempAttribute, numPerDay, num_day0, num_day1);
+	EXPECT_EQ(Day0,num_day0);
+	EXPECT_EQ(Day1,num_day1);
+	for(int i = 0;i<2;i++)
+		for(int j = 0;j<5;j++)
+		if(i==CIndexi&&j==CIndexj)
+		{
+			EXPECT_EQ(1,numPerDay[i][j]);
+		}
+		else
+		{
+			EXPECT_EQ(0,numPerDay[i][j]);
+		}
 }
 
 void Term_Project_Test::testCampaignClass(char campaign[30], char attr[30],int Campaign0,int Campaign1,int CIndexi,int CIndexj)
