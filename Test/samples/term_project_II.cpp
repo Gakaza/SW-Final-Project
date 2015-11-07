@@ -1086,7 +1086,7 @@ void tempCampaignClass(char tempAttribute[ ][30], int (&numPerCampaign)[2][3], i
 //11 - pdays: number of days that passed by after the client was last contacted from a previous campaign (numeric; 999 means client was not previously contacted) 
 //			- 4 intervals: (0~11), (12~20), (21 ~ 27), (999) 
 void tempPDaysClass(char tempAttribute[ ][30], int (&numPerPDays)[2][4], int &num_PDays0, int &num_PDays1){		
-	//int tempPDays, numPerPDays[2][5] = {0}, num_PDays0 = 0, num_PDays1 = 0;
+	//int tempPDays, numPerPDays[2][4] = {0}, num_PDays0 = 0, num_PDays1 = 0;
 	int tempPDays = atoi(tempAttribute[11]);
 	if(tempPDays <= 11 && tempPDays >= 0){
 		if(strcmp(tempAttribute[19],"no") == 0){

@@ -17,6 +17,7 @@ void testConctactClass(char Contact[30],char attr[30],int Contact0,int Contact1,
 void testmonthClass(char month[30], char attr[30],int Month0, int Month1,int CIndexi,int CIndexj);
 void testDayClass(char Day[30],char attr[30],int Day0,int Day1,int CIndexi,int CIndexj);
 void testCampaignClass(char campaign[30], char attr[30],int Campaign0,int Campaign1,int CIndexi,int CIndexj);
+void testPDaysClass(char PDays[30],char attr[30],int PDays0,int PDays1,int CIndexi,int CIndexj);
 void testPreviousClass(char previous[30], char attr[30],int Previous0, int Previous1, int CIndexi, int CIndexj);
 
 //0
@@ -75,7 +76,12 @@ int num_Campaign0;
 int num_Campaign1;
 int numPerCampaign[2][3];
 	
+//11
+int num_pdays0;
+int num_pdays1;
+int numPerPDays[2][4];
 
+//12
 int num_Previous0;
 int num_Previous1;
 int numPerPrevious[2][2];
@@ -166,12 +172,21 @@ TEST_F(Term_Project_Test,maritalClassEquivalenceClassTesting)
 //3 - education (categorical: 'basic.4y','basic.6y','basic.9y','high.school','illiterate','professional.course','university.degree','?') 
 TEST_F(Term_Project_Test,EduClassBoundaryValueTesting)
 {
-		
+	testEduClass("illiterate","no",1,0,0,4);
+	testEduClass("professional.course","no",1,0,0,5);
+	testEduClass("university.degree","no",1,0,0,6);
 }
 
 TEST_F(Term_Project_Test,EduClassEquivalenceClassTesting)
 {
-	
+	testEduClass("Invalid_Input.","no",0,0,-1,-1);
+	testEduClass("basic.4y","no",1,0,0,0);
+	testEduClass("basic.6y","no",1,0,0,1);
+	testEduClass("basic.9y","no",1,0,0,2);
+	testEduClass("high.school","no",1,0,0,3);
+	testEduClass("illiterate","no",1,0,0,4);
+	testEduClass("professional.course","no",1,0,0,5);
+	testEduClass("university.degree","no",1,0,0,6);
 }
 
 TEST_F(Term_Project_Test,EduClassEdgeTesting)
@@ -318,6 +333,44 @@ TEST_F(Term_Project_Test,CampaignClassEdgeTesting)
 	testCampaignClass("5","no",1,0,0,1);
 	testCampaignClass("6","no",1,0,0,1);
 	testCampaignClass("7","no",1,0,0,2);
+}
+
+//11 - pdays: number of days that passed by after the client was last contacted from a previous campaign (numeric; 999 means client was not previously contacted) 
+//			- 4 intervals: (0~11), (12~20), (21 ~ 28), (999)
+TEST_F(Term_Project_Test, PDaysClassBoundaryValueTesting)
+{
+	testPDaysClass("-1","no",0,0,-1,-1);
+	testPDaysClass("0","no",1,0,0,0);
+	testPDaysClass("5","no",1,0,0,0);
+	testPDaysClass("11","no",1,0,0,0);
+	testPDaysClass("12","no",1,0,0,1);
+	testPDaysClass("15","no",1,0,0,1);
+	testPDaysClass("20","no",1,0,0,1);
+}
+
+TEST_F(Term_Project_Test, PDaysClassEquivalenceClassTesting)
+{
+	testPDaysClass("-1","no",0,0,-1,-1);
+	testPDaysClass("0","no",1,0,0,0);
+	testPDaysClass("12","no",1,0,0,1);
+	testPDaysClass("21","no",1,0,0,2);
+	testPDaysClass("999","no",1,0,0,3);
+}
+
+TEST_F(Term_Project_Test, PDaysClassEdgeTesting)
+{
+	testPDaysClass("-1","no",0,0,-1,-1);
+	testPDaysClass("0","no",1,0,0,0);
+	testPDaysClass("5","no",1,0,0,0);
+	testPDaysClass("11","no",1,0,0,0);
+	testPDaysClass("12","no",1,0,0,1);
+	testPDaysClass("15","no",1,0,0,1);
+	testPDaysClass("20","no",1,0,0,1);
+	testPDaysClass("21","no",1,0,0,2);
+	testPDaysClass("25","no",1,0,0,2);
+	testPDaysClass("28","no",1,0,0,2);
+	testPDaysClass("29","no",0,0,-1,-1);
+	testPDaysClass("999","no",1,0,0,3);
 }
 
 TEST_F(Term_Project_Test,PreviousClassEquivalenceClassTesting)
@@ -594,6 +647,34 @@ void Term_Project_Test::testCampaignClass(char campaign[30], char attr[30],int C
 		else
 		{
 			EXPECT_EQ(0,numPerCampaign[i][j]);
+		}
+}
+
+void Term_Project_Test::testPDaysClass(char PDays[30],char attr[30],int PDays0,int PDays1,int CIndexi,int CIndexj)
+{
+	//void tempPDaysClass(char tempAttribute[ ][30], int (&numPerPDays)[2][4], int &num_PDays0, int &num_PDays1)
+	////int tempPDays, numPerPDays[2][4] = {0}, num_PDays0 = 0, num_PDays1 = 0;
+	//int num_pdays0;
+	//int num_pdays1;
+	//int numPerPDays[2][4];
+	num_pdays0 = 0;
+	num_pdays1 = 0;
+	memset(tempAttribute,0,sizeof(tempAttribute));
+	strcpy(tempAttribute[11],PDays);
+	strcpy(tempAttribute[19],attr);
+	memset(numPerPDays,0,sizeof(numPerPDays));
+	tempPDaysClass(tempAttribute, numPerPDays, num_pdays0, num_pdays1);
+	EXPECT_EQ(PDays0,num_pdays0);
+	EXPECT_EQ(PDays1,num_pdays1);
+	for(int i = 0;i<2;i++)
+		for(int j = 0;j<4;j++)
+		if(i==CIndexi&&j==CIndexj)
+		{
+			EXPECT_EQ(1,numPerPDays[i][j]);
+		}
+		else
+		{
+			EXPECT_EQ(0,numPerPDays[i][j]);
 		}
 }
 
