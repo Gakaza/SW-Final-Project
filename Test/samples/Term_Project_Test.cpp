@@ -15,7 +15,7 @@ void testmonthClass(char month[30], char attr[30],int Month0, int Month1,int CIn
 void testCampaignClass(char campaign[30], char attr[30],int Campaign0,int Campaign1,int CIndexi,int CIndexj);
 void testPreviousClass(char previous[30], char attr[30],int Previous0, int Previous1, int CIndexi, int CIndexj);
 void testEmpClass(char emp[30], char attr[30],int Emp0, int Emp1, int CIndexi, int CIndexj);
-
+void testConfClass(char conf[30], char attr[30],int Conf0, int Conf1, int CIndexi, int CIndexj);
 
 char tempAttribute[20][30];
 int num_Age0;
@@ -56,6 +56,13 @@ int numPerPrevious[2][2];
 int num_Emp0;
 int num_Emp1;
 int numPerEmp[2][6];
+
+
+int num_Conf0; 
+int num_Conf1;
+int numPerConf[2][4];
+
+
 };
 
 
@@ -230,6 +237,30 @@ TEST_F(Term_Project_Test,EmpClassEdgeTesting)
 	
 }
 
+TEST_F(Term_Project_Test,ConfClassBoundaryValueTesting)
+{
+	testConfClass("-46.0","no",1,0,0,3);
+	testConfClass("-45.0","no",1,0,0,2);
+	testConfClass("-30.0","no",1,0,0,0);
+}
+
+TEST_F(Term_Project_Test,ConfClassEquivalenceClassTesting)
+{
+	testConfClass("-46.0","no",1,0,0,3);
+	testConfClass("-40.0","no",1,0,0,2);
+	testConfClass("-32.0","no",1,0,0,1);
+	testConfClass("-30.0","no",1,0,0,0);
+}
+
+TEST_F(Term_Project_Test,ConfClassEdgeTesting)
+{
+	testConfClass("-46.0","no",1,0,0,3);
+	testConfClass("-45.0","no",1,0,0,2);
+	testConfClass("-40.0","no",1,0,0,2);
+	testConfClass("-35.0","no",1,0,0,1);
+	testConfClass("-32.0","no",1,0,0,1);
+	testConfClass("-30.0","no",1,0,0,0);
+}
 
 void  Term_Project_Test::testAgeClass(char age[30],char attr[30],int Age0,int Age1,int CIndexi,int CIndexj)
 {
@@ -454,4 +485,27 @@ void Term_Project_Test::testEmpClass(char emp[30], char attr[30],int Emp0, int E
 			EXPECT_EQ(0,numPerEmp[i][j]);
 		}
 }
+void Term_Project_Test::testConfClass(char conf[30], char attr[30],int Conf0, int Conf1, int CIndexi, int CIndexj)
+{
+	
+	num_Conf0 = 0;
+	num_Conf1 = 0;
+	memset(tempAttribute,0,sizeof(tempAttribute));
+	strcpy(tempAttribute[16],conf);
+	strcpy(tempAttribute[19],attr);
+	memset(numPerConf,0,sizeof(numPerConf));
+	tempConfClass(tempAttribute, numPerConf, num_Conf0, num_Conf1);
+	EXPECT_EQ(Conf0,num_Conf0);
+	EXPECT_EQ(Conf1,num_Conf1);
+	for(int i = 0;i<2;i++)
+		for(int j = 0;j<4;j++)
+		if(i==CIndexi&&j==CIndexj)
+		{
+			EXPECT_EQ(1,numPerConf[i][j]);
+		}
+		else
+		{
+			EXPECT_EQ(0,numPerConf[i][j]);
+		}
 
+}
