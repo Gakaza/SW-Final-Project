@@ -1,6 +1,8 @@
 #include "term_project_II.h"
 #include "gtest/gtest.h"
 #include<cstring>
+#include <iostream>
+using namespace std;
 
 class Term_Project_Test : public testing::Test{
 	protected:
@@ -19,7 +21,13 @@ void testDayClass(char Day[30],char attr[30],int Day0,int Day1,int CIndexi,int C
 void testCampaignClass(char campaign[30], char attr[30],int Campaign0,int Campaign1,int CIndexi,int CIndexj);
 void testPDaysClass(char PDays[30],char attr[30],int PDays0,int PDays1,int CIndexi,int CIndexj);
 void testPreviousClass(char previous[30], char attr[30],int Previous0, int Previous1, int CIndexi, int CIndexj);
+void testPOutcomeClass(char POutcome[30],char attr[30],int POutcome0,int POutcome1,int CIndexi,int CIndexj);
 
+void testPriceClass(char Price[30],char attr[30],int Price0,int Price1,int CIndexi,int CIndexj);
+
+void testEuribor3mClass(char Euribor3m[30],char attr[30],int Euribor3m0,int Euribor3m1,int CIndexi,int CIndexj);
+
+//void testOutputClass(char Output[30],int CIndexi);
 //0
 char tempAttribute[20][30];
 int num_Age0;
@@ -86,7 +94,30 @@ int num_Previous0;
 int num_Previous1;
 int numPerPrevious[2][2];
 
+//13
+int num_poutcome0;
+int num_poutcome1;
+int numPerPOutcome[2][3];
 
+//14
+
+
+//15
+int num_price0;
+int num_price1;
+int numPerPrice[2][3];
+
+//16
+
+//17
+int num_euribor3m0;
+int num_euribor3m1;
+int numPerEuribor3m[2][4];
+
+//18
+
+//19
+//int numPerOutput[2];
 };
 
 
@@ -136,12 +167,31 @@ TEST_F(Term_Project_Test,AgeClassEdgeTesting)
 //1 - job : type of job (categorical: 'admin.','blue-collar','entrepreneur','housemaid','management','retired','self-employed','services','student','technician','unemployed','?') 
 TEST_F(Term_Project_Test,JobClassBoundaryValueTesting)
 {
-		
+	testJobClass("Invalid_Input.","no",0,0,-1,-1);
+	testJobClass("!!.","no",0,0,-1,-1);
+	testJobClass("!???!.","no",0,0,-1,-1);
+	testJobClass("admin.","no",1,0,0,0);
+	testJobClass("blue-collar","no",1,0,0,1);
+	testJobClass("entrepreneur","no",1,0,0,2);
+	testJobClass("housemaid","no",1,0,0,3);
+	testJobClass("management","no",1,0,0,4);
 }
 
 TEST_F(Term_Project_Test,JobClassEquivalenceClassTesting)
 {
-	
+	testJobClass("Invalid_Input.","no",0,0,-1,-1);
+	testJobClass("admin.","no",1,0,0,0);
+	testJobClass("blue-collar","no",1,0,0,1);
+	testJobClass("entrepreneur","no",1,0,0,2);
+	testJobClass("housemaid","no",1,0,0,3);
+	testJobClass("management","no",1,0,0,4);
+	testJobClass("retired","no",1,0,0,5);
+	testJobClass("self-employed","no",1,0,0,6);
+	testJobClass("services","no",1,0,0,7);
+	testJobClass("student","no",1,0,0,8);
+	testJobClass("technician","no",1,0,0,9);
+	testJobClass("unemployed","no",1,0,0,10);
+	testJobClass("?","no",0,0,-1,-1);
 }
 
 TEST_F(Term_Project_Test,JobClassEdgeTesting)
@@ -377,6 +427,176 @@ TEST_F(Term_Project_Test,PreviousClassEquivalenceClassTesting)
 {
 	testPreviousClass("0","no",1,0,0,0);
 	testPreviousClass("1","no",1,0,0,1);
+}
+
+//13 - poutcome: outcome of the previous marketing campaign (categorical: 'failure','nonexistent','success') 
+TEST_F(Term_Project_Test, POutcomeClassBoundaryValueTesting)
+{
+	testPOutcomeClass("-1","no",0,0,-1,-1);
+	testPOutcomeClass("failure","no",1,0,0,0);
+	testPOutcomeClass("nonexistent","no",1,0,0,1);
+	testPOutcomeClass("success","no",1,0,0,2);
+	testPOutcomeClass("999","no",0,0,-1,-1);
+}
+
+TEST_F(Term_Project_Test, POutcomeClassEquivalenceClassTesting)
+{
+	testPOutcomeClass("-1","no",0,0,-1,-1);
+	testPOutcomeClass("failure","no",1,0,0,0);
+	testPOutcomeClass("nonexistent","no",1,0,0,1);
+	testPOutcomeClass("success","no",1,0,0,2);
+	testPOutcomeClass("999","no",0,0,-1,-1);
+}
+
+TEST_F(Term_Project_Test, POutcomeClassEdgeTesting)
+{
+	testPOutcomeClass("-1","no",0,0,-1,-1);
+	testPOutcomeClass("failure","no",1,0,0,0);
+	testPOutcomeClass("nonexistent","no",1,0,0,1);
+	testPOutcomeClass("success","no",1,0,0,2);
+	testPOutcomeClass("999","no",0,0,-1,-1);
+}
+
+//15 - cons.price.idx: consumer price index - monthly indicator (numeric)
+//			- 3 intervals: (2000 > x>=94.45), (92.8 < x < 94.45), (0 <= x <= 92.8)
+//					- x = 92.7, 92.8, 93.0, 94.45, invalid
+TEST_F(Term_Project_Test, PriceClassBoundaryValueTesting)
+{
+	testPriceClass("-1","no",0,0,-1,-1);	
+	testPriceClass("94.45","no",1,0,0,0);
+	testPriceClass("94.44","no",1,0,0,1);
+	testPriceClass("92.9","no",1,0,0,1);
+	testPriceClass("92.8","no",1,0,0,2);
+}
+
+TEST_F(Term_Project_Test, PriceClassEquivalenceClassTesting)
+{
+	testPriceClass("-1","no",0,0,-1,-1);
+	testPriceClass("94.45","no",1,0,0,0);
+	testPriceClass("93.0","no",1,0,0,1);
+	testPriceClass("92.7","no",1,0,0,2);
+}
+
+TEST_F(Term_Project_Test, PriceClassEdgeTesting)
+{
+	testPriceClass("-1","no",0,0,-1,-1);
+	testPriceClass("94.45","no",1,0,0,0);
+	testPriceClass("94.44","no",1,0,0,1);
+	testPriceClass("93.0","no",1,0,0,1);
+	testPriceClass("92.8","no",1,0,0,2);
+	testPriceClass("92.7","no",1,0,0,2);
+	testPriceClass("91.9","no",1,0,0,2);
+}
+
+//17 - euribor3m: euribor 3 month rate - daily indicator (numeric) 
+//			- 4 intervals: (x >= 4.86), ( 4.0 <= x < 4.86), ( 1.0 <= x < 4.0), , ( 0 < x < 1.0)
+//					- x = 0.9, 1.0, 4.0, 4.6, 4.86, invalid
+TEST_F(Term_Project_Test, Euribor3mClassBoundaryValueTesting)
+{
+	testEuribor3mClass("-1","no",0,0,-1,-1);	
+	testEuribor3mClass("4.86","no",1,0,0,0);
+	testEuribor3mClass("4.85","no",1,0,0,1);
+	testEuribor3mClass("4.0","no",1,0,0,1);
+	testEuribor3mClass("3.9","no",1,0,0,2);
+	testEuribor3mClass("1.0","no",1,0,0,2);
+	testEuribor3mClass("0.99","no",1,0,0,3);
+}
+
+TEST_F(Term_Project_Test, Euribor3mClassEquivalenceClassTesting)
+{
+	testEuribor3mClass("-1","no",0,0,-1,-1);
+	testEuribor3mClass("-1","no",0,0,-1,-1);
+	testEuribor3mClass("4.87","no",1,0,0,0);
+	testEuribor3mClass("4.86","no",1,0,0,0);
+	testEuribor3mClass("4.6","no",1,0,0,1);
+	testEuribor3mClass("3.9","no",1,0,0,2);
+	testEuribor3mClass("1.0","no",1,0,0,2);
+	testEuribor3mClass("0.99","no",1,0,0,3);
+}
+
+TEST_F(Term_Project_Test, Euribor3mClassEdgeTesting)
+{
+	testEuribor3mClass("-1","no",0,0,-1,-1);
+	testEuribor3mClass("4.87","no",1,0,0,0);
+	testEuribor3mClass("4.86","no",1,0,0,0);
+	testEuribor3mClass("4.85","no",1,0,0,1);
+	testEuribor3mClass("4.6","no",1,0,0,1);
+	testEuribor3mClass("4.0","no",1,0,0,1);
+	testEuribor3mClass("3.9","no",1,0,0,2);
+	testEuribor3mClass("1.5","no",1,0,0,2);
+	testEuribor3mClass("1.0","no",1,0,0,2);
+	testEuribor3mClass("0.99","no",1,0,0,3);
+	testEuribor3mClass("0.9","no",1,0,0,3);
+}
+
+//19 - y - has the client subscribed a term deposit? (binary: 'no','yes') 
+TEST_F(Term_Project_Test, OutputClassBoundaryValueTesting)
+{
+	char attribute[20][30] = {0};
+	int numPerOutput[2];
+	strcpy(attribute[19],"yes");
+	memset(numPerOutput,0,sizeof(numPerOutput));
+	numPerOutputClass(attribute, numPerOutput);
+	EXPECT_EQ(1,numPerOutput[1]);
+	
+	strcpy(attribute[19],"no");
+	memset(numPerOutput,0,sizeof(numPerOutput));
+	numPerOutputClass(attribute, numPerOutput);
+	EXPECT_EQ(1,numPerOutput[0]);
+	
+	//invalid input
+	strcpy(attribute[19],"??");
+	memset(numPerOutput,0,sizeof(numPerOutput));
+	numPerOutputClass(attribute, numPerOutput);
+	EXPECT_EQ(0,numPerOutput[0]);
+	EXPECT_EQ(0,numPerOutput[1]);
+}
+
+TEST_F(Term_Project_Test, OutputClassEquivalenceClassTesting)
+{
+	char attribute[20][30] = {0};
+	int numPerOutput[2];
+	strcpy(attribute[19],"yes");
+	memset(numPerOutput,0,sizeof(numPerOutput));
+	numPerOutputClass(attribute, numPerOutput);
+	EXPECT_EQ(0,numPerOutput[0]);
+	EXPECT_EQ(1,numPerOutput[1]);
+	
+	
+	strcpy(attribute[19],"no");
+	memset(numPerOutput,0,sizeof(numPerOutput));
+	numPerOutputClass(attribute, numPerOutput);
+	EXPECT_EQ(1,numPerOutput[0]);
+	EXPECT_EQ(0,numPerOutput[1]);
+	
+	//invalid input
+	strcpy(attribute[19],"?!!?");
+	memset(numPerOutput,0,sizeof(numPerOutput));
+	numPerOutputClass(attribute, numPerOutput);
+	EXPECT_EQ(0,numPerOutput[0]);
+	EXPECT_EQ(0,numPerOutput[1]);
+}
+
+TEST_F(Term_Project_Test, OutputClassEdgeTesting)
+{
+	char attribute[20][30] = {0};
+	int numPerOutput[2];
+	strcpy(attribute[19],"yes");
+	memset(numPerOutput,0,sizeof(numPerOutput));
+	numPerOutputClass(attribute, numPerOutput);
+	EXPECT_EQ(1,numPerOutput[1]);
+	
+	strcpy(attribute[19],"no");
+	memset(numPerOutput,0,sizeof(numPerOutput));
+	numPerOutputClass(attribute, numPerOutput);
+	EXPECT_EQ(1,numPerOutput[0]);
+	
+	//invalid input
+	strcpy(attribute[19],"??");
+	memset(numPerOutput,0,sizeof(numPerOutput));
+	numPerOutputClass(attribute, numPerOutput);
+	EXPECT_EQ(0,numPerOutput[0]);
+	EXPECT_EQ(0,numPerOutput[1]);
 }
 
 void  Term_Project_Test::testAgeClass(char age[30],char attr[30],int Age0,int Age1,int CIndexi,int CIndexj)
@@ -700,3 +920,90 @@ void Term_Project_Test::testPreviousClass(char previous[30], char attr[30],int P
 			EXPECT_EQ(0,numPerPrevious[i][j]);
 		}
 }
+
+void Term_Project_Test::testPOutcomeClass(char POutcome[30],char attr[30],int POutcome0,int POutcome1,int CIndexi,int CIndexj)
+{
+	//void numPerPoutcomeClass(char tempAttribute[ ][30], int (&numPerPoutcome)[2][3], int &num_Poutcome0, int &num_Poutcome1){			
+	//int numPerPoutcome[2][3] = {0}, num_Poutcome0 = 0, num_Poutcome1 = 0;
+	//int num_poutcome0;
+	//int num_poutcome1;
+	//int numPerPOutcome[2][3];
+	num_poutcome0 = 0;
+	num_poutcome1 = 0;
+	memset(tempAttribute,0,sizeof(tempAttribute));
+	strcpy(tempAttribute[13],POutcome);
+	strcpy(tempAttribute[19],attr);
+	memset(numPerPOutcome,0,sizeof(numPerPOutcome));
+	numPerPoutcomeClass(tempAttribute, numPerPOutcome, num_poutcome0, num_poutcome1);
+	EXPECT_EQ(POutcome0,num_poutcome0);
+	EXPECT_EQ(POutcome1,num_poutcome1);
+	for(int i = 0;i<2;i++)
+		for(int j = 0;j<3;j++)
+		if(i==CIndexi&&j==CIndexj)
+		{
+			EXPECT_EQ(1,numPerPOutcome[i][j]);
+		}
+		else
+		{
+			EXPECT_EQ(0,numPerPOutcome[i][j]);
+		}
+}
+
+void Term_Project_Test::testPriceClass(char Price[30],char attr[30],int Price0,int Price1,int CIndexi,int CIndexj)
+{
+	//void tempPriceClass(char tempAttribute[ ][30], int (&numPerPrice)[2][3], int &num_Price0, int &num_Price1){
+	//float tempPrice; int numPerPrice[2][3] = {0}, num_Price0 = 0, num_Price1 = 0;
+	//int num_price0;
+	//int num_price1;
+	//int numPerPrice[2][3];
+	num_price0 = 0;
+	num_price1 = 0;
+	memset(tempAttribute,0,sizeof(tempAttribute));
+	strcpy(tempAttribute[15],Price);
+	strcpy(tempAttribute[19],attr);
+	memset(numPerPrice,0,sizeof(numPerPrice));
+	tempPriceClass(tempAttribute, numPerPrice, num_price0, num_price1);
+	EXPECT_EQ(Price0,num_price0);
+	EXPECT_EQ(Price1,num_price1);
+	for(int i = 0;i<2;i++)
+		for(int j = 0;j<3;j++)
+		if(i==CIndexi&&j==CIndexj)
+		{
+			EXPECT_EQ(1,numPerPrice[i][j]);
+		}
+		else
+		{
+			EXPECT_EQ(0,numPerPrice[i][j]);
+		}
+}
+
+void Term_Project_Test::testEuribor3mClass(char Euribor3m[30],char attr[30],int Euribor3m0,int Euribor3m1,int CIndexi,int CIndexj)
+{
+	//void tempEuribor3mClass(char tempAttribute[ ][30], int (&numPerEuribor3m)[2][4], int &num_Euribor3m0, int &num_Euribor3m1){
+	//float tempEuribor3m; int numPerEuribor3m[2][4] = {0}, num_Euribor3m0 = 0, num_Euribor3m1 = 0;
+	//int num_euribor3m0;
+	//int num_euribor3m1;
+	//int numPerEuribor3m[2][4];
+	num_euribor3m0 = 0;
+	num_euribor3m1 = 0;
+	memset(tempAttribute,0,sizeof(tempAttribute));
+	strcpy(tempAttribute[17],Euribor3m);
+	strcpy(tempAttribute[19],attr);
+	memset(numPerEuribor3m,0,sizeof(numPerEuribor3m));
+	tempEuribor3mClass(tempAttribute, numPerEuribor3m, num_euribor3m0, num_euribor3m1);
+	EXPECT_EQ(Euribor3m0,num_euribor3m0);
+	EXPECT_EQ(Euribor3m1,num_euribor3m1);
+	for(int i = 0;i<2;i++)
+		for(int j = 0;j<4;j++)
+		if(i==CIndexi&&j==CIndexj)
+		{
+			EXPECT_EQ(1,numPerEuribor3m[i][j]);
+		}
+		else
+		{
+			EXPECT_EQ(0,numPerEuribor3m[i][j]);
+		}
+}
+
+//void Term_Project_Test::testOutputClass(char Output[30],int expectedOutput)
+

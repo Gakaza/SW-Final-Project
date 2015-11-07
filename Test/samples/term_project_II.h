@@ -53,7 +53,7 @@ void tempEmpClass(char tempAttribute[ ][30], int (&numPerEmp)[2][6], int &num_Em
 
 //15 - cons.price.idx: consumer price index - monthly indicator (numeric)
 //			- 3 intervals: (x>=94.45), (92.8 <= x < 94.45), (x < 92.8)
-void tempPriceClass(char tempAttribute[ ][30], int (&numPerPrice)[2][5], int &num_Price0, int &num_Price1);
+void tempPriceClass(char tempAttribute[ ][30], int (&numPerPrice)[2][3], int &num_Price0, int &num_Price1);
 	
 	
 //16 - cons.conf.idx: consumer confidence index - monthly indicator (numeric) 

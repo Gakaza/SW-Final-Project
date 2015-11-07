@@ -40,13 +40,13 @@ Classification/Learning Boundary Test:
 					- 4 intervals: (x>=1.0), (-1.0<= x < 1.0) , (-2.0<= x <-1.0) , (x < -2.0)
 					- 	x = -2.1, 1.0
 				15 - cons.price.idx: consumer price index - monthly indicator (numeric)
-					- 3 intervals: (x>=94.45), (92.8 <= x < 94.45), (x < 92.8)
+					//			- 3 intervals: (2000 > x>=94.45), (92.8 < x < 94.45), (0 <= x <= 92.8)
 					- x = 92.7, 94.45
 				16 - cons.conf.idx: consumer confidence index - monthly indicator (numeric) 
 					- 4 intervals: (x>=-30.0), (-35.0<= x < -30.0), (-45.0< = x < -35.0), ( x < -45.0)
 					- x = -46.0, -30.0
 				17 - euribor3m: euribor 3 month rate - daily indicator (numeric) 
-					- 4 intervals: (x >= 4.86), ( 4.0 <= x < 4.86), ( 1.0 <= x < 4.0), , ( x < 1.0)
+					- 4 intervals: (x >= 4.86), ( 4.0 <= x < 4.86), ( 1.0 <= x < 4.0), , ( 0 < x < 1.0)
 					- x = 0.9, 4.86
 				18 - nr.employed: number of employees - quarterly indicator (numeric) 
 					- 2 intervals: (x > 5200.0), (x <= 5200.0)
@@ -86,7 +86,7 @@ Classification/Learning Eq. Classification Test:
 					- 3 intervals: (0 ~ 3), (4~6), (7+)
 					- x = -1, 0, 5, 7
 				11 - pdays: number of days that passed by after the client was last contacted from a previous campaign (numeric; 999 means client was not previously contacted) 
-					- 4 intervals: (0~11), (12~20), (20 ~ 27), (999) 
+					- 4 intervals: (0~11), (12~20), (21 ~ 28), (999) 
 					- x = -1, 0, 15, 27, 28, 999
 				12 - previous: number of contacts performed before this campaign and for this client (numeric) 
 					- intervals: 0, (not 0)
@@ -99,13 +99,13 @@ Classification/Learning Eq. Classification Test:
 					- 4 intervals: (x>=1.0), (-1.0<= x < 1.0) , (-2.0<= x <-1.0) , (x < -2.0)
 					- 	x = -2.1, -1.5, 0, 1.0, invalid
 				15 - cons.price.idx: consumer price index - monthly indicator (numeric)
-					- 3 intervals: (x>=94.45), (92.8 <= x < 94.45), (x < 92.8)
+					//			- 3 intervals: (2000 > x>=94.45), (92.8 < x < 94.45), (0 <= x <= 92.8)
 					- x = 92.7, 93.0, 94.45, invalid
 				16 - cons.conf.idx: consumer confidence index - monthly indicator (numeric) 
 					- 4 intervals: (x>=-30.0), (-35.0<= x < -30.0), (-45.0< = x < -35.0), ( x < -45.0)
 					- x = -46.0, -40.0, -32.0, -30.0, invalid
 				17 - euribor3m: euribor 3 month rate - daily indicator (numeric) 
-					- 4 intervals: (x >= 4.86), ( 4.0 <= x < 4.86), ( 1.0 <= x < 4.0), , ( x < 1.0)
+					- 4 intervals: (x >= 4.86), ( 4.0 <= x < 4.86), ( 1.0 <= x < 4.0), , ( 0 < x < 1.0)
 					- x = 0.9, 1.0, 4.6, 4.86, invalid
 				18 - nr.employed: number of employees - quarterly indicator (numeric) 
 					- 2 intervals: (x > 5200.0), (x <= 5200.0)
@@ -144,7 +144,7 @@ Classification/Learning Edge Test:
 					- 3 intervals: (0 ~ 3), (4~6), (7+)
 					- x = -1, 0, 3, 4, 5, 6, 7
 				11 - pdays: number of days that passed by after the client was last contacted from a previous campaign (numeric; 999 means client was not previously contacted) 
-					- 4 intervals: (0~11), (12~20), (20 ~ 27), (999) 
+					- 4 intervals: (0~11), (12~20), (21 ~ 28), (999) 
 					- x = -1, 0, 11, 12, 15, 20, 27, 28, 999
 				12 - previous: number of contacts performed before this campaign and for this client (numeric) 
 					- intervals: 0, (not 0)
@@ -157,13 +157,13 @@ Classification/Learning Edge Test:
 					- 4 intervals: (x>=1.0), (-1.0<= x < 1.0) , (-2.0<= x <-1.0) , (x < -2.0)
 					- 	x = -2.1, -2.0, -1.5, -1.0, 0, 1.0, invalid
 				15 - cons.price.idx: consumer price index - monthly indicator (numeric)
-					- 3 intervals: (x>=94.45), (92.8 <= x < 94.45), (x < 92.8)
+					//			- 3 intervals: (2000 > x>=94.45), (92.8 < x < 94.45), (0 <= x <= 92.8)
 					- x = 92.7, 92.8, 93.0, 94.45, invalid
 				16 - cons.conf.idx: consumer confidence index - monthly indicator (numeric) 
 					- 4 intervals: (x>=-30.0), (-35.0<= x < -30.0), (-45.0< = x < -35.0), ( x < -45.0)
 					- x = -46.0, -45, -40.0, -35, -32.0, -30.0, invalid
 				17 - euribor3m: euribor 3 month rate - daily indicator (numeric) 
-					- 4 intervals: (x >= 4.86), ( 4.0 <= x < 4.86), ( 1.0 <= x < 4.0), , ( x < 1.0)
+					- 4 intervals: (x >= 4.86), ( 4.0 <= x < 4.86), ( 1.0 <= x < 4.0), , ( 0 < x < 1.0)
 					- x = 0.9, 1.0, 4.0, 4.6, 4.86, invalid
 				18 - nr.employed: number of employees - quarterly indicator (numeric) 
 					- 2 intervals: (x > 5200.0), (x <= 5200.0)
@@ -190,7 +190,7 @@ Classification/Learning Decision table based test:
 				10 - campaign: number of contacts performed during this campaign and for this client (numeric, includes last contact) 
 					- 3 intervals: (0 ~ 3), (4~6), (7+)
 				11 - pdays: number of days that passed by after the client was last contacted from a previous campaign (numeric; 999 means client was not previously contacted) 
-						- 4 intervals: (0~11), (12~20), (20 ~ 27), (999) 
+						- 4 intervals: (0~11), (12~20), (21 ~ 28), (999) 
 				12 - previous: number of contacts performed before this campaign and for this client (numeric) 
 						- intervals: 0, (not 0)
 				13 - poutcome: outcome of the previous marketing campaign (categorical: 'failure','nonexistent','success') 
