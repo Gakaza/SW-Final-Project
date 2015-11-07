@@ -14,6 +14,8 @@ void testloanClass(char loan[30], char attr[30],int Loan0, int Loan1,int CIndexi
 void testmonthClass(char month[30], char attr[30],int Month0, int Month1,int CIndexi,int CIndexj);
 void testCampaignClass(char campaign[30], char attr[30],int Campaign0,int Campaign1,int CIndexi,int CIndexj);
 void testPreviousClass(char previous[30], char attr[30],int Previous0, int Previous1, int CIndexi, int CIndexj);
+void testEmpClass(char emp[30], char attr[30],int Emp0, int Emp1, int CIndexi, int CIndexj);
+
 
 char tempAttribute[20][30];
 int num_Age0;
@@ -51,6 +53,9 @@ int num_Previous1;
 int numPerPrevious[2][2];
 
 
+int num_Emp0;
+int num_Emp1;
+int numPerEmp[2][6];
 };
 
 
@@ -199,6 +204,32 @@ TEST_F(Term_Project_Test,PreviousClassEquivalenceClassTesting)
 	testPreviousClass("0","no",1,0,0,0);
 	testPreviousClass("1","no",1,0,0,1);
 }
+
+TEST_F(Term_Project_Test,EmpClassBoundaryValueTesting)
+{
+	testEmpClass("-2.1","no",1,0,0,3);
+	testEmpClass("-2","no",1,0,0,2);
+	testEmpClass("1.0","no",1,0,0,0);
+}
+
+TEST_F(Term_Project_Test,EmpClassEquivalenceClassTesting)
+{
+	testEmpClass("-2.1","no",1,0,0,3);
+	testEmpClass("-1.5","no",1,0,0,2);
+	testEmpClass("0.0","no",1,0,0,1);
+	testEmpClass("1.0","no",1,0,0,0);
+}
+TEST_F(Term_Project_Test,EmpClassEdgeTesting)
+{
+	testEmpClass("-2.1","no",1,0,0,3);
+	testEmpClass("-2.0","no",1,0,0,2);
+	testEmpClass("-1.5","no",1,0,0,2);
+	testEmpClass("-1.0","no",1,0,0,1);
+	testEmpClass("0","no",1,0,0,1);
+	testEmpClass("1.0","no",1,0,0,0);
+	
+}
+
 
 void  Term_Project_Test::testAgeClass(char age[30],char attr[30],int Age0,int Age1,int CIndexi,int CIndexj)
 {
@@ -400,5 +431,27 @@ void Term_Project_Test::testPreviousClass(char previous[30], char attr[30],int P
 }
 
 
-
+void Term_Project_Test::testEmpClass(char emp[30], char attr[30],int Emp0, int Emp1, int CIndexi, int CIndexj)
+{
+	
+	num_Emp0 = 0;
+	num_Emp1 = 0;
+	memset(tempAttribute,0,sizeof(tempAttribute));
+	strcpy(tempAttribute[14],emp);
+	strcpy(tempAttribute[19],attr);
+	memset(numPerEmp,0,sizeof(numPerEmp));
+	tempEmpClass(tempAttribute, numPerEmp, num_Emp0, num_Emp1);
+	EXPECT_EQ(Emp0,num_Emp0);
+	EXPECT_EQ(Emp1,num_Emp1);
+	for(int i = 0;i<2;i++)
+		for(int j = 0;j<6;j++)
+		if(i==CIndexi&&j==CIndexj)
+		{
+			EXPECT_EQ(1,numPerEmp[i][j]);
+		}
+		else
+		{
+			EXPECT_EQ(0,numPerEmp[i][j]);
+		}
+}
 
