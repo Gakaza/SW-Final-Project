@@ -68,7 +68,7 @@ int main1(){
 	float EmpPercentage[2][4] = {0}, tempEmp;
 	int num_Emp0 = 0, num_Emp1 = 0, numPerEmp[2][6] = {0};
 	float PricePercentage[2][3] = {0}, tempPrice;
-	int num_Price0 = 0, num_Price1 = 0, numPerPrice[2][3] = {0};
+	int num_Price0 = 0, num_Price1 = 0, numPerPrice[2][5] = {0};
 	float ConfPercentage[2][4] = {0}, tempConf;
 	int num_Conf0 = 0, num_Conf1 = 0, numPerConf[2][4] = {0};
 	float Euribor3mPercentage[2][4] = {0}, tempEuribor3m;
@@ -1086,7 +1086,7 @@ void tempCampaignClass(char tempAttribute[ ][30], int (&numPerCampaign)[2][3], i
 //11 - pdays: number of days that passed by after the client was last contacted from a previous campaign (numeric; 999 means client was not previously contacted) 
 //			- 4 intervals: (0~11), (12~20), (21 ~ 27), (999) 
 void tempPDaysClass(char tempAttribute[ ][30], int (&numPerPDays)[2][4], int &num_PDays0, int &num_PDays1){		
-	//int tempPDays, numPerPDays[2][4] = {0}, num_PDays0 = 0, num_PDays1 = 0;
+	//int tempPDays, numPerPDays[2][5] = {0}, num_PDays0 = 0, num_PDays1 = 0;
 	int tempPDays = atoi(tempAttribute[11]);
 	if(tempPDays <= 11 && tempPDays >= 0){
 		if(strcmp(tempAttribute[19],"no") == 0){
@@ -1219,11 +1219,11 @@ void tempEmpClass(char tempAttribute[ ][30], int (&numPerEmp)[2][6], int &num_Em
 }
 
 //15 - cons.price.idx: consumer price index - monthly indicator (numeric)
-//			- 3 intervals: (2000 > x>=94.45), (92.8 < x < 94.45), (0 <= x <= 92.8)
-void tempPriceClass(char tempAttribute[ ][30], int (&numPerPrice)[2][3], int &num_Price0, int &num_Price1){
-	//double tempPrice; int numPerPrice[2][3] = {0}, num_Price0 = 0, num_Price1 = 0;
-	double tempPrice = strtod(tempAttribute[15], NULL);
-	if(tempPrice >= 94.45 && tempPrice < 2000){
+//			- 3 intervals: (x>=94.45), (92.8 <= x < 94.45), (x < 92.8)
+void tempPriceClass(char tempAttribute[ ][30], int (&numPerPrice)[2][5], int &num_Price0, int &num_Price1){
+	//float tempPrice; int numPerPrice[2][5] = {0}, num_Price0 = 0, num_Price1 = 0;
+	float tempPrice = atof(tempAttribute[15]);
+	if(tempPrice >= 94.45){
 		if(strcmp(tempAttribute[19],"no") == 0){
 			numPerPrice[0][0]++;			
 			num_Price0++;
@@ -1239,7 +1239,7 @@ void tempPriceClass(char tempAttribute[ ][30], int (&numPerPrice)[2][3], int &nu
 			numPerPrice[1][1]++;			
 			num_Price1++;
 		}
-	}else if(tempPrice <= 92.8 && tempPrice >= 0){
+	}else if(tempPrice <= 92.8){
 		if(strcmp(tempAttribute[19],"no") == 0){
 			numPerPrice[0][2]++;			
 			num_Price0++;
@@ -1293,10 +1293,10 @@ void tempConfClass(char tempAttribute[ ][30], int (&numPerConf)[2][4], int &num_
 
 //May 30th.
 //17 - euribor3m: euribor 3 month rate - daily indicator (numeric) 
-//			- 4 intervals: (x >= 4.86), ( 4.0 <= x < 4.86), ( 1.0 <= x < 4.0), , ( 0 < x < 1.0)
+//			- 4 intervals: (x > 4.86), ( 4.0 <= x < 4.86), ( 1.0 <= x < 4.0), , ( x < 1.0)
 void tempEuribor3mClass(char tempAttribute[ ][30], int (&numPerEuribor3m)[2][4], int &num_Euribor3m0, int &num_Euribor3m1){
-	//float tempEuribor3m; int numPerEuribor3m[2][4] = {0}, num_Euribor3m0 = 0, num_Euribor3m1 = 0;
-	double tempEuribor3m = strtod(tempAttribute[17],NULL);
+	//float tempEuribor3m; int numPerEuribor3m[2][5] = {0}, num_Euribor3m0 = 0, num_Euribor3m1 = 0;
+	float tempEuribor3m = atof(tempAttribute[17]);
 	if(tempEuribor3m >= 4.86){
 		if(strcmp(tempAttribute[19],"no") == 0){
 			numPerEuribor3m[0][0]++;			
@@ -1321,7 +1321,7 @@ void tempEuribor3mClass(char tempAttribute[ ][30], int (&numPerEuribor3m)[2][4],
 			numPerEuribor3m[1][2]++;			
 			num_Euribor3m1++;
 		}
-	}else if(tempEuribor3m < 1.0 && tempEuribor3m >0){
+	}else if(tempEuribor3m < 1.0){
 		if(strcmp(tempAttribute[19],"no") == 0){
 			numPerEuribor3m[0][3]++;			
 			num_Euribor3m0++;
