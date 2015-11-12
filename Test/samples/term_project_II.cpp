@@ -621,7 +621,7 @@ void ageClass(char tempAttribute[ ][30], int (&numPerAge)[2][5], int &num_Age0, 
 			numPerAge[1][3]++;	//Label 8
 			num_Age1++;
 		}
-	}else if(tempAge >65 && tempAge < 140){
+	}else if(tempAge >=65 && tempAge < 140){
 		if(strcmp(tempAttribute[19],"no") == 0){
 			numPerAge[0][4]++;	//Label 9
 			num_Age0++;
