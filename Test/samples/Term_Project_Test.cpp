@@ -114,6 +114,42 @@ TEST_F(Term_Project_Test,AgeClassEdgeTesting)
 	
 }
 
+TEST_F(Term_Project_Test,AgeClassDecisionTableTesting)
+{
+	
+	testAgeClass("-1","no",0,0,-1,-1);
+	testAgeClass("15","no",1,0,0,0);
+	testAgeClass("29","no",1,0,0,0);
+	testAgeClass("30","no",1,0,0,1);
+	testAgeClass("35","no",1,0,0,1);
+	testAgeClass("39","no",1,0,0,1);
+	testAgeClass("40","no",1,0,0,2);
+	testAgeClass("45","no",1,0,0,2);
+	testAgeClass("49","no",1,0,0,2);
+	testAgeClass("50","no",1,0,0,3);
+	testAgeClass("55","no",1,0,0,3);
+	testAgeClass("64","no",1,0,0,3);
+	testAgeClass("65","no",1,0,0,4);
+	testAgeClass("80","no",1,0,0,4);
+	testAgeClass("140","no",0,0,-1,-1);
+	testAgeClass("-1","yes",0,0,-1,-1);
+	testAgeClass("15","yes",0,1,1,0);
+	testAgeClass("29","yes",0,1,1,0);
+	testAgeClass("30","yes",0,1,1,1);
+	testAgeClass("35","yes",0,1,1,1);
+	testAgeClass("39","yes",0,1,1,1);
+	testAgeClass("40","yes",0,1,1,2);
+	testAgeClass("45","yes",0,1,1,2);
+	testAgeClass("49","yes",0,1,1,2);
+	testAgeClass("50","yes",0,1,1,3);
+	testAgeClass("55","yes",0,1,1,3);
+	testAgeClass("64","yes",0,1,1,3);
+	testAgeClass("65","yes",0,1,1,4);
+	testAgeClass("80","yes",0,1,1,4);
+	testAgeClass("140","yes",0,0,-1,-1);
+	
+}
+
 //1 - job : type of job (categorical: 'admin.','blue-collar','entrepreneur','housemaid','management','retired','self-employed','services','student','technician','unemployed','?') 
 TEST_F(Term_Project_Test,JobClassBoundaryValueTesting)
 {
@@ -152,6 +188,18 @@ TEST_F(Term_Project_Test,maritalClassEquivalenceClassTesting)
 	
 }
 
+TEST_F(Term_Project_Test,maritalClassDecisionTableTesting)
+{
+	testmaritalClass("divorced","no",1,0,0,0);
+	testmaritalClass("married","no",1,0,0,1);
+	testmaritalClass("single","no",1,0,0,2);
+	testmaritalClass("divorced","yes",0,1,1,0);
+	testmaritalClass("married","yes",0,1,1,1);
+	testmaritalClass("single","yes",0,1,1,2);
+	
+	
+}
+
 TEST_F(Term_Project_Test,DefaultClassEquivalenceClassTesting)
 {
 	tessdefaultClass("no","no",1,0,0,0);
@@ -159,10 +207,28 @@ TEST_F(Term_Project_Test,DefaultClassEquivalenceClassTesting)
 	
 }
 
+TEST_F(Term_Project_Test,DefaultClassDecisionTableTesting)
+{
+	tessdefaultClass("no","no",1,0,0,0);
+	tessdefaultClass("yes","no",1,0,0,1);
+	tessdefaultClass("no","yes",0,1,1,0);
+	tessdefaultClass("yes","yes",0,1,1,1);
+	
+}
+
 TEST_F(Term_Project_Test,loanClassEquivalenceClassTesting)
 {
 	testloanClass("no","no",1,0,0,0);
 	testloanClass("yes","no",1,0,0,1);
+	
+}
+
+TEST_F(Term_Project_Test,loanClassDecisionTableTesting)
+{
+	testloanClass("no","no",1,0,0,0);
+	testloanClass("yes","no",1,0,0,1);
+	testloanClass("no","yes",0,1,1,0);
+	testloanClass("yes","yes",0,1,1,1);
 	
 }
 
@@ -182,6 +248,33 @@ TEST_F(Term_Project_Test,monthClassEquivalenceClassTesting)
 	testmonthClass("dec","no",1,0,0,11);
 }
 
+TEST_F(Term_Project_Test,monthClassDecisionTableTesting)
+{
+	testmonthClass("jan","no",1,0,0,0);
+	testmonthClass("feb","no",1,0,0,1);
+	testmonthClass("mar","no",1,0,0,2);
+	testmonthClass("apr","no",1,0,0,3);
+	testmonthClass("may","no",1,0,0,4);
+	testmonthClass("jun","no",1,0,0,5);
+	testmonthClass("jul","no",1,0,0,6);
+	testmonthClass("aug","no",1,0,0,7);
+	testmonthClass("sep","no",1,0,0,8);
+	testmonthClass("oct","no",1,0,0,9);
+	testmonthClass("nov","no",1,0,0,10);
+	testmonthClass("dec","no",1,0,0,11);
+	testmonthClass("jan","yes",0,1,1,0);
+	testmonthClass("feb","yes",0,1,1,1);
+	testmonthClass("mar","yes",0,1,1,2);
+	testmonthClass("apr","yes",0,1,1,3);
+	testmonthClass("may","yes",0,1,1,4);
+	testmonthClass("jun","yes",0,1,1,5);
+	testmonthClass("jul","yes",0,1,1,6);
+	testmonthClass("aug","yes",0,1,1,7);
+	testmonthClass("sep","yes",0,1,1,8);
+	testmonthClass("oct","yes",0,1,1,9);
+	testmonthClass("nov","yes",0,1,1,10);
+	testmonthClass("dec","yes",0,1,1,11);
+}
 
 
 TEST_F(Term_Project_Test,CampaignClassBoundaryValueTesting)
@@ -211,10 +304,30 @@ TEST_F(Term_Project_Test,CampaignClassEdgeTesting)
 	testCampaignClass("7","no",1,0,0,2);
 }
 
+TEST_F(Term_Project_Test,CampaignClassDecisionTableTesting)
+{
+	testCampaignClass("-1","no",0,0,-1,-1);
+	testCampaignClass("0","no",1,0,0,0);
+	testCampaignClass("5","no",1,0,0,1);
+	testCampaignClass("7","no",1,0,0,2);
+	testCampaignClass("-1","yes",0,0,-1,-1);
+	testCampaignClass("0","yes",0,1,1,0);
+	testCampaignClass("5","yes",0,1,1,1);
+	testCampaignClass("7","yes",0,1,1,2);
+}
+
 TEST_F(Term_Project_Test,PreviousClassEquivalenceClassTesting)
 {
 	testPreviousClass("0","no",1,0,0,0);
 	testPreviousClass("1","no",1,0,0,1);
+}
+
+TEST_F(Term_Project_Test,PreviousClassDecisionTableTesting)
+{
+	testPreviousClass("0","no",1,0,0,0);
+	testPreviousClass("1","no",1,0,0,1);
+	testPreviousClass("0","yes",0,1,1,0);
+	testPreviousClass("1","yes",0,1,1,1);
 }
 
 TEST_F(Term_Project_Test,EmpClassBoundaryValueTesting)
@@ -231,6 +344,7 @@ TEST_F(Term_Project_Test,EmpClassEquivalenceClassTesting)
 	testEmpClass("0.0","no",1,0,0,1);
 	testEmpClass("1.0","no",1,0,0,0);
 }
+
 TEST_F(Term_Project_Test,EmpClassEdgeTesting)
 {
 	testEmpClass("-2.1","no",1,0,0,3);
@@ -240,6 +354,18 @@ TEST_F(Term_Project_Test,EmpClassEdgeTesting)
 	testEmpClass("0","no",1,0,0,1);
 	testEmpClass("1.0","no",1,0,0,0);
 	
+}
+
+TEST_F(Term_Project_Test,EmpClassDecisionTableTesting)
+{
+	testEmpClass("-2.1","no",1,0,0,3);
+	testEmpClass("-1.5","no",1,0,0,2);
+	testEmpClass("0.0","no",1,0,0,1);
+	testEmpClass("1.0","no",1,0,0,0);
+	testEmpClass("-2.1","yes",0,1,1,3);
+	testEmpClass("-1.5","yes",0,1,1,2);
+	testEmpClass("0.0","yes",0,1,1,1);
+	testEmpClass("1.0","yes",0,1,1,0);
 }
 
 TEST_F(Term_Project_Test,ConfClassBoundaryValueTesting)
@@ -267,10 +393,31 @@ TEST_F(Term_Project_Test,ConfClassEdgeTesting)
 	testConfClass("-30.0","no",1,0,0,0);
 }
 
+TEST_F(Term_Project_Test,ConfClassDecisionTableTesting)
+{
+	testConfClass("-46.0","no",1,0,0,3);
+	testConfClass("-40.0","no",1,0,0,2);
+	testConfClass("-32.0","no",1,0,0,1);
+	testConfClass("-30.0","no",1,0,0,0);
+	testConfClass("-46.0","yes",0,1,1,3);
+	testConfClass("-40.0","yes",0,1,1,2);
+	testConfClass("-32.0","yes",0,1,1,1);
+	testConfClass("-30.0","yes",0,1,1,0);
+}
+
 TEST_F(Term_Project_Test,NrClassBoundaryValueTesting)
 {
 	testNrClass("5200","no",1,0,0,1);
 	testNrClass("5201","no",1,0,0,0);
+	
+}
+
+TEST_F(Term_Project_Test,NrClassDecisionTableTesting)
+{
+	testNrClass("5200","no",1,0,0,1);
+	testNrClass("5201","no",1,0,0,0);
+	testNrClass("5200","yes",0,1,1,1);
+	testNrClass("5201","yes",0,1,1,0);
 	
 }
 
