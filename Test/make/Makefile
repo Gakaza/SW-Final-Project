@@ -26,7 +26,7 @@ CPPFLAGS += -isystem $(GTEST_DIR)/include
 
 # Flags passed to the C++ compiler.
 CXXFLAGS += -g -Wall -Wextra -pthread
-
+CXXFLAGS1 += -g -Wall -Wextra -pthread -fprofile-arcs -ftest-coverage
 # All tests produced by this Makefile.  Remember to add new tests you
 # created to the list.
 TESTS = term_project_test
@@ -72,11 +72,11 @@ gtest_main.a : gtest-all.o gtest_main.o
 # function.
 
 term_project_II.o : $(USER_DIR)/term_project_II.cpp $(USER_DIR)/term_project_II.h $(GTEST_HEADERS)
-	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $(USER_DIR)/term_project_II.cpp
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS1) -c $(USER_DIR)/term_project_II.cpp
 
 Term_Project_Test.o : $(USER_DIR)/Term_Project_Test.cpp \
                      $(USER_DIR)/term_project_II.h $(GTEST_HEADERS)
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $(USER_DIR)/Term_Project_Test.cpp
 
 term_project_test : Term_Project_Test.o term_project_II.o gtest_main.a
-	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -lpthread $^ -o $@
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS1) -lpthread $^ -o $@

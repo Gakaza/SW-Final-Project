@@ -128,6 +128,11 @@ int numPerNr[2][2];
 //int numPerOutput[2];
 };
 
+TEST_F(Term_Project_Test,C0Testing)
+{
+	main1();
+}
+
 //0 - Age
 TEST_F(Term_Project_Test,AgeClassBoundaryValueTesting)
 {

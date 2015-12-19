@@ -1,0 +1,1976 @@
+        -:    0:Source:../samples/term_project_II.cpp
+        -:    0:Graph:term_project_II.gcno
+        -:    0:Data:term_project_II.gcda
+        -:    0:Runs:1
+        -:    0:Programs:1
+        -:    1:/*
+        -:    2:Project Name: A.I. Term Porject II. NAÏVE BAYES
+        -:    3:Name: 張書晧 Shu-Hao Chang
+        -:    4:Student ID: 9917276
+        -:    5:Goal: 
+        -:    6:	To predict the output by the given input using Naïve Bayes Algorithm.
+        -:    7:Requirement:
+        -:    8:	1.	You are required to implement Naïve Bayes to handle the given data sets, where the bank folder and adult folder are the two given data sets.
+        -:    9:	2.	The program MUST be written in C or C++ Language and can be compiled with Dev C++, Visual Studio  or Code Block.
+        -:   10:	3.	The program is required to handle missing values and continuous attributes.
+        -:   11:	4.	The output result MUST contain your prediction of each instance.
+        -:   12:	5.	You MUST output five results with each data set (i.e. totally 10 results)
+        -:   13:*/
+        -:   14:
+        -:   15:#include "term_project_II.h"
+        -:   16:#include <iostream>
+        -:   17:#include <fstream>
+        -:   18:#include <stdio.h>
+        -:   19:#include <stdlib.h>
+        -:   20:#include <string>
+        -:   21:#include <string.h>
+        -:   22:#include <math.h> 
+        -:   23:using namespace std;
+        -:   24:
+        -:   25:
+        -:   26:
+        -:   27:			
+        1:   28:int main1(){
+        1:   29:	int chooseData = 0;
+        -:   30:	FILE *pFile, *pTs, *pOutputFile;	//Tr, Ts, and Output text ptr. for bank
+        1:   31:	int numData = 0, col, row;
+        1:   32:	int CorrRate = 0;	//to test how many I predict correct.
+        -:   33:	char tempAttribute[20][30];	//tempAttribute stores the attribute value for the current line.
+        1:   34:	int numLine = 0; //for testing data.
+        1:   35:	int numDataSet = 0;
+        -:   36:	
+        -:   37:	//-------------------Start of "BANK" Attribute related variables-----------------------
+        1:   38:	float AgePercentage[2][5] = {0};	//the row is 0 = percentage base on output being 'no', 1 = output being 'yes'; 
+        -:   39:										//the col is 5 different age intervals.
+        1:   40:	int tempAge, numPerAge[2][5] = {0}, num_Age0=0, num_Age1=0; //five intervals: <30, >=30 && <40, >=40 && <50, >50 && <65, and >=65.
+        -:   41:									//num_Age0 = 0 means te number of output being zero, where as the opposite (num_Age1) will be output being 1.
+        1:   42:	float JobPercentage[2][11] = {0};
+        1:   43:	int numPerJob[2][11] = {0}, num_job0 = 0, num_job1 = 0;
+        1:   44:	float MaterialPercentage[2][3] = {0};
+        1:   45:	int numPerMat[2][3] = {0}, num_Mat0 = 0, num_Mat1 = 0;
+        1:   46:	float EducationPercentage[2][7] = {0};
+        1:   47:	int numPerEdu[2][7] = {0}, num_Edu0 = 0, num_Edu1 = 0;
+        1:   48:	float DefaultPercentage[2][2] = {0};
+        1:   49:	int numPerDefault[2][2] = {0}, num_Def0 = 0, num_Def1 = 0;
+        1:   50:	float HousePercentage[2][2] = {0};
+        1:   51:	int numPerHouse[2][2] = {0}, num_House0 = 0, num_House1 = 0;
+        1:   52:	float LoanPercentage[2][2] = {0};
+        1:   53:	int numPerLoan[2][2] = {0}, num_Loan0 = 0, num_Loan1 = 0;
+        1:   54:	float ContactPercentage[2][2] = {0};
+        1:   55:	int numPerCon[2][2] = {0}, num_Con0 = 0, num_Con1 = 0;
+        1:   56:	float MonthPercentage[2][12] = {0};
+        1:   57:	int numPerMonth[2][12] = {0}, num_Month0 = 0, num_Month1 = 0;
+        1:   58:	float DayPercentage[2][5] = {0};
+        1:   59:	int numPerDay[2][5] = {0}, num_Day0 = 0, num_Day1 = 0;
+        1:   60:	float CampaignPercentage[2][3] = {0};		//Numeric, need to decide what the intervals are...
+        1:   61:	int tempCampaign, numPerCampaign[2][3] = {0}, num_Campaign0 = 0, num_Campaign1 = 0;
+        1:   62:	float PDaysPercentage[2][4] = {0};			//Numeric, need to decide what the intervals are...
+        1:   63:	int tempPDays, numPerPDays[2][4] = {0}, num_PDays0 = 0, num_PDays1 = 0;
+        1:   64:	float PreviousPercentage[2][2] = {0};		
+        1:   65:	int tempPrevious, numPerPrevious[2][2] = {0}, num_Previous0 = 0, num_Previous1 = 0;
+        1:   66:	float PoutcomePercentage[2][3] = {0};
+        1:   67:	int numPerPoutcome[2][3] = {0}, num_Poutcome0 = 0, num_Poutcome1 = 0;
+        1:   68:	float EmpPercentage[2][4] = {0}, tempEmp;
+        1:   69:	int num_Emp0 = 0, num_Emp1 = 0, numPerEmp[2][6] = {0};
+        1:   70:	float PricePercentage[2][3] = {0}, tempPrice;
+        1:   71:	int num_Price0 = 0, num_Price1 = 0, numPerPrice[2][3] = {0};
+        1:   72:	float ConfPercentage[2][4] = {0}, tempConf;
+        1:   73:	int num_Conf0 = 0, num_Conf1 = 0, numPerConf[2][4] = {0};
+        1:   74:	float Euribor3mPercentage[2][4] = {0}, tempEuribor3m;
+        1:   75:	int num_Euribor3m0 = 0, num_Euribor3m1 = 0, numPerEuribor3m[2][4] = {0};
+        1:   76:	float NrPercentage[2][2] = {0}, tempNr;
+        1:   77:	int num_Nr0 = 0, num_Nr1 = 0, numPerNr[2][2] = {0};
+        -:   78:	
+        -:   79:	
+        1:   80:	float OutputPercentage[2] = {0};
+        1:   81:	int numPerOutput[2] = {0};
+        -:   82:	//-------------------End of BANK Attribute related variables-----------------------
+        -:   83:	
+        -:   84:	//The percentage of No output and the percentage of Yes output in the testing data.
+        1:   85:	double NoOutput_Percentage = 0, YesOutput_Percentage = 0;
+        1:   86:	float tempAttPercentage [2][20] = {0}; //row = 0 is percentage of output being zero
+        -:   87:          //with respect to each inteveral (the columns); similarly row = 1 is percentage of output being one.
+        1:   88:	float perdictedOutput = 0;
+        7:   89:	while(numDataSet < 5){
+        -:   90:		//----------------------------------------------------------
+        -:   91:		//-------------------Start of Bank Data base------------------
+        -:   92:		//----------------------------------------------------------
+        5:   93:		switch(numDataSet){
+        -:   94:			case 0:
+        1:   95:					pFile = fopen ("./bank/testing-training 01/training01.txt", "r");
+        1:   96:					pTs = fopen ("./bank/testing-training 01/testing01.txt", "r");
+        1:   97:					pOutputFile = fopen ("./bank/testing-training 01/OutputFile_01.txt","w");
+        1:   98:					break;
+        -:   99:			case 1:
+        1:  100:					pFile = fopen ("./bank/testing-training 02/training02.txt", "r");
+        1:  101:					pTs = fopen ("./bank/testing-training 02/testing02.txt", "r");
+        1:  102:					pOutputFile = fopen ("./bank/testing-training 02/OutputFile_02.txt","w");
+        1:  103:					break;		
+        -:  104:			case 2:
+        1:  105:					pFile = fopen ("./bank/testing-training 03/training03.txt", "r");
+        1:  106:					pTs = fopen ("./bank/testing-training 03/testing03.txt", "r");
+        1:  107:					pOutputFile = fopen ("./bank/testing-training 03/OutputFile_03.txt","w");
+        1:  108:					break;
+        -:  109:			case 3:
+        1:  110:					pFile = fopen ("./bank/testing-training 04/training04.txt", "r");
+        1:  111:					pTs = fopen ("./bank/testing-training 04/testing04.txt", "r");
+        1:  112:					pOutputFile = fopen ("./bank/testing-training 04/OutputFile_04.txt","w");
+        1:  113:					break;
+        -:  114:			case 4:
+        1:  115:					pFile = fopen ("./bank/testing-training 05/training05.txt", "r");
+        1:  116:					pTs = fopen ("./bank/testing-training 05/testing05.txt", "r");
+        1:  117:					pOutputFile = fopen ("./bank/testing-training 05/OutputFile_05.txt","w");
+        1:  118:					break;
+        -:  119:		};
+        -:  120:		
+        5:  121:		if(pFile == NULL){ 
+    #####:  122:		cout<<"Error opening the pFile txt file"<<endl;
+        -:  123:		//system("PAUSE");
+    #####:  124:		return 1;
+        -:  125:		}
+        5:  126:		if(pTs == NULL){ 
+    #####:  127:			cout<<"Error opening the pTs txt file"<<endl;
+        -:  128:			//system("PAUSE");
+    #####:  129:			return 1;
+        -:  130:		}
+        -:  131:		//check for not equal to EOF, Reading from Trainning Data
+        -:  132:		//a dumb way to read a line from files, total of 20 attributes to read per line.
+   164767:  133:		while(fscanf(pFile, "%[^,],%[^,],%[^,],%[^,],%[^,],%[^,],%[^,],%[^,],%[^,],%[^,],%[^,],%[^,],%[^,],%[^,],%[^,],%[^,], %[^,],%[^,],%[^,],%[^,\n]",
+        -:  134:							tempAttribute[0], tempAttribute[1], tempAttribute[2], tempAttribute[3], tempAttribute[4]
+        -:  135:						, tempAttribute[5], tempAttribute[6], tempAttribute[7], tempAttribute[8], tempAttribute[9], tempAttribute[10]
+        -:  136:						, tempAttribute[11], tempAttribute[12], tempAttribute[13], tempAttribute[14], tempAttribute[15], tempAttribute[16] 
+   164762:  137:						, tempAttribute[17], tempAttribute[18], tempAttribute[19]) != EOF)				
+        -:  138:		{
+   164757:  139:			numData++; //numData = numPerOutput[0] + numPerOutput[1]; which is the total number of output for "yes" and "no" combined.
+        -:  140:			/* With respect to the tempAttribute[i], row number.
+        -:  141:			# bank client data: 
+        -:  142:				0 - age (numeric) 
+        -:  143:				1 - job : type of job (categorical: 'admin.','blue-collar','entrepreneur','housemaid','management','retired','self-employed','services','student','technician','unemployed','?') 
+        -:  144:				2 - marital : marital status (categorical: 'divorced','married','single','?'; note: 'divorced' means divorced or widowed) 
+        -:  145:				3 - education (categorical: 'basic.4y','basic.6y','basic.9y','high.school','illiterate','professional.course','university.degree','?') 
+        -:  146:				4 - default: has credit in default? (categorical: 'no','yes','?') 
+        -:  147:				5 - housing: has housing loan? (categorical: 'no','yes','?') 
+        -:  148:				6 - loan: has personal loan? (categorical: 'no','yes','?') 
+        -:  149:			# related with the last contact of the current campaign: 
+        -:  150:				7 - contact: contact communication type (categorical: 'cellular','telephone') 
+        -:  151:				8 - month: last contact month of year (categorical: 'jan', 'feb', 'mar', ..., 'nov', 'dec') 
+        -:  152:				9 - day_of_week: last contact day of the week (categorical: 'mon','tue','wed','thu','fri') 
+        -:  153:			# other attributes: 
+        -:  154:				10 - campaign: number of contacts performed during this campaign and for this client (numeric, includes last contact) 
+        -:  155:					- 3 intervals: (0 ~ 3), (4~6), (7+)
+        -:  156:				11 - pdays: number of days that passed by after the client was last contacted from a previous campaign (numeric; 999 means client was not previously contacted) 
+        -:  157:						- 4 intervals: (0~11), (12~20), (20 ~ 27), (999) 
+        -:  158:				12 - previous: number of contacts performed before this campaign and for this client (numeric) 
+        -:  159:						- intervals: 0, (not 0)
+        -:  160:				13 - poutcome: outcome of the previous marketing campaign (categorical: 'failure','nonexistent','success') 
+        -:  161:						- intervals: shown as above.
+        -:  162:			# social and economic context attributes 
+        -:  163:				14 - emp.var.rate: employment variation rate - quarterly indicator (numeric) 
+        -:  164:						- 4 intervals: (x>1.0), (-1.0<= x < 1.0) , (-2.0<= x <-1.0) , (x < -2.0)
+        -:  165:				15 - cons.price.idx: consumer price index - monthly indicator (numeric)
+        -:  166:						- 3 intervals: (x>94.45), (92.8 <= x < 94.45), (x < 92.8)
+        -:  167:				16 - cons.conf.idx: consumer confidence index - monthly indicator (numeric) 
+        -:  168:						- 4 intervals: (x>-30.0), (-35.0<= x < -30.0), (-45.0< = x < -35.0), ( x < -45.0)
+        -:  169:				17 - euribor3m: euribor 3 month rate - daily indicator (numeric) 
+        -:  170:						- 4 intervals: (x > 4.86), ( 4.0 <= x < 4.86), ( 1.0 <= x < 4.0), , ( x < 1.0)
+        -:  171:				18 - nr.employed: number of employees - quarterly indicator (numeric) 
+        -:  172:						- 2 intervals: (x > 5200.0), (x <= 5200.0)
+        -:  173:				Output variable (desired target): 
+        -:  174:				19 - y - has the client subscribed a term deposit? (binary: 'no','yes') 
+        -:  175:						- 2 intervals: yes or no
+        -:  176:			*/
+        -:  177:			// 0 - age (numeric)
+   164757:  178:			ageClass(tempAttribute, numPerAge, num_Age0, num_Age1);
+        -:  179:			
+        -:  180:			//1 - job : type of job (categorical: 'admin.','blue-collar','entrepreneur','housemaid','management','retired','self-employed','services','student','technician','unemployed','?') 
+   164757:  181:			jobClass(tempAttribute, numPerJob, num_job0, num_job1);
+        -:  182:			
+        -:  183:			
+        -:  184:			//2 - marital : marital status (categorical: 'divorced','married','single','?'; note: 'divorced' means divorced or widowed) 
+        -:  185:			//int numPerMat[2][3] = {0}, num_Mat0 = 0, num_Mat1 = 0;
+   164757:  186:			maritalClass(tempAttribute, numPerMat, num_Mat0, num_Mat1);
+        -:  187:			
+        -:  188:			//3 - education (categorical: 'basic.4y','basic.6y','basic.9y','high.school','illiterate','professional.course','university.degree','?')
+   164757:  189:			eduClass(tempAttribute, numPerEdu, num_Edu0, num_Edu1);
+        -:  190:			
+        -:  191:			//4 - default: has credit in default? (categorical: 'no','yes','?') 
+        -:  192:			//int numPerDefault[2][2] = {0}, num_Def0 = 0, num_Def1 = 0;
+   164757:  193:			defaultClass(tempAttribute, numPerDefault, num_Def0, num_Def1);
+        -:  194:			
+        -:  195:			//5 - housing: has housing loan? (categorical: 'no','yes','?') 
+        -:  196:			//int numPerHouse[2][2] = {0}, num_House0 = 0, num_House1 = 0;
+   164757:  197:			houseClass(tempAttribute, numPerHouse, num_House0, num_House1);
+        -:  198:			
+        -:  199:			
+        -:  200:			//6 - loan: has personal loan? (categorical: 'no','yes','?') 
+        -:  201:			//int numPerLoan[2][2] = {0}, num_Loan0 = 0, num_Loan1 = 0;
+   164757:  202:			loanClass(tempAttribute, numPerLoan, num_Loan0, num_Loan1);
+        -:  203:			
+        -:  204:			//7 - contact: contact communication type (categorical: 'cellular','telephone') 
+        -:  205:			//int numPerCon[2][2] = {0}, num_Con0 = 0, num_Con1 = 0;
+   164757:  206:			contactClass(tempAttribute, numPerCon, num_Con0, num_Con1);
+        -:  207:			
+        -:  208:			//8 - month: last contact month of year (categorical: 'jan', 'feb', 'mar', ..., 'nov', 'dec') 
+        -:  209:			//int numPerMonth[2][12] = {0}, num_Month0 = 0, num_Month1 = 0;
+   164757:  210:			monthClass(tempAttribute, numPerMonth, num_Month0, num_Month1);
+        -:  211:			
+        -:  212:			
+        -:  213:			//9 - day_of_week: last contact day of the week (categorical: 'mon','tue','wed','thu','fri') 
+        -:  214:			//int numPerDay[2][5] = {0}, num_Day0 = 0, num_Day1 = 0;
+   164757:  215:			dayClass(tempAttribute, numPerDay, num_Day0, num_Day1);
+        -:  216:			
+        -:  217:			/*10 - campaign: number of contacts performed during this campaign and for this client (numeric, includes last contact) 
+        -:  218:					- 3 intervals: (0 ~ 3), (4~6), (7+)	*/
+        -:  219:			//int tempCampaign, numPerCampaign[2][3] = {0}, num_Campaign0 = 0, num_Campaign1 = 0;
+   164757:  220:			tempCampaignClass(tempAttribute, numPerCampaign, num_Campaign0, num_Campaign1);
+        -:  221:			
+        -:  222:			
+        -:  223:			//11 - pdays: number of days that passed by after the client was last contacted from a previous campaign (numeric; 999 means client was not previously contacted) 
+        -:  224:			//			- 4 intervals: (0~11), (12~20), (21 ~ 27), (999) 
+        -:  225:			//int tempPDays, numPerPDays[2][5] = {0}, num_PDays0 = 0, num_PDays1 = 0;
+   164757:  226:			tempPDaysClass(tempAttribute, numPerPDays, num_PDays0, num_PDays1);
+        -:  227:			
+        -:  228:			
+        -:  229:			//12 - previous: number of contacts performed before this campaign and for this client (numeric) 
+        -:  230:			//			- intervals: 0, (not 0)
+        -:  231:			//int tempPrevious, numPerPrevious[2][2] = {0}, num_Previous0 = 0, num_Previous1 = 0;
+   164757:  232:			tempPreviousClass(tempAttribute, numPerPrevious, num_Previous0, num_Previous1);
+        -:  233:						
+        -:  234:			//13 - poutcome: outcome of the previous marketing campaign (categorical: 'failure','nonexistent','success') 
+        -:  235:			//			- intervals: shown as above.
+        -:  236:			//int numPerPoutcome[2][3] = {0}, num_Poutcome0 = 0, num_Poutcome1 = 0;
+   164757:  237:			numPerPoutcomeClass(tempAttribute, numPerPoutcome, num_Poutcome0, num_Poutcome1);
+        -:  238:			
+        -:  239:			
+        -:  240:			//14 - emp.var.rate: employment variation rate - quarterly indicator (numeric) 
+        -:  241:			//			- 4 intervals: (x>1.0), (-1.0<= x < 1.0) , (-2.0<= x <-1.0) , (x < -2.0)
+        -:  242:			//float tempEmp; int numPerEmp[2][6] = {0}, num_Emp0 = 0, num_Emp1 = 0;
+   164757:  243:			tempEmpClass(tempAttribute, numPerEmp, num_Emp0, num_Emp1);
+        -:  244:			
+        -:  245:			//15 - cons.price.idx: consumer price index - monthly indicator (numeric)
+        -:  246:			//			- 3 intervals: (x>94.45), (92.8 <= x < 94.45), (x < 92.8)
+        -:  247:			//float tempPrice; int numPerPrice[2][5] = {0}, num_Price0 = 0, num_Price1 = 0;
+   164757:  248:			tempPriceClass(tempAttribute, numPerPrice, num_Price0, num_Price1);
+        -:  249:			
+        -:  250:			//16 - cons.conf.idx: consumer confidence index - monthly indicator (numeric) 
+        -:  251:			//			- 4 intervals: (x>-30.0), (-35.0<= x < -30.0), (-45.0< = x < -35.0), ( x < -45.0)
+        -:  252:			//float tempConf; int numPerConf[2][6] = {0}, num_Conf0 = 0, num_Conf1 = 0;
+   164757:  253:			tempConfClass(tempAttribute, numPerConf, num_Conf0, num_Conf1);
+        -:  254:			
+        -:  255:			//May 30th.
+        -:  256:			//17 - euribor3m: euribor 3 month rate - daily indicator (numeric) 
+        -:  257:			//			- 4 intervals: (x > 4.86), ( 4.0 <= x < 4.86), ( 1.0 <= x < 4.0), , ( x < 1.0)
+        -:  258:			//float tempEuribor3m; int numPerEuribor3m[2][5] = {0}, num_Euribor3m0 = 0, num_Euribor3m1 = 0;
+   164757:  259:			tempEuribor3mClass(tempAttribute, numPerEuribor3m, num_Euribor3m0, num_Euribor3m1);
+        -:  260:			
+        -:  261:			//18 - nr.employed: number of employees - quarterly indicator (numeric) 
+        -:  262:			//			- 2 intervals: (x > 5200.0), (x <= 5200.0)
+        -:  263:			//int tempNr, numPerNr[2][2] = {0}, num_Nr0 = 0, num_Nr1 = 0;
+   164757:  264:			tempNrClass(tempAttribute, numPerNr, num_Nr0, num_Nr1);
+        -:  265:			
+        -:  266:			//19 - y - has the client subscribed a term deposit? (binary: 'no','yes') 
+        -:  267:			//			- 2 intervals: yes or no
+        -:  268:			//int numPerOutput[2] = {0};
+   164757:  269:			numPerOutputClass(tempAttribute, numPerOutput);
+        -:  270:			
+        -:  271:			//----------------------Debug part--------------------------------------
+        -:  272:			//for(;;)
+        -:  273:		}
+        -:  274:		
+        -:  275:		//----------------------------------------------------------------
+        -:  276:		//----------------------Start of Calculation part-----------------
+        -:  277:		//----------------------------------------------------------------
+        -:  278:		//0- Calculating the Age percentage and store it in AgePercentag[row][col], with respect to numPerAge[row][col] and num_Age0 and num_Age1.
+       15:  279:		for(row = 0;row<2;row++){
+       60:  280:			for(col = 0;col<5;col++){
+       50:  281:				if(row==0)
+       25:  282:					AgePercentage[row][col] = (float) numPerAge[row][col] / num_job0;
+        -:  283:				else
+       25:  284:					AgePercentage[row][col] = (float) numPerAge[row][col] / num_job1;
+        -:  285:			}
+        -:  286:		}
+        -:  287:		
+        -:  288:		//1- Calculate the Job percentage
+       15:  289:		for(row = 0;row<2;row++){
+      120:  290:			for(col = 0;col<11;col++){
+      110:  291:				if(row==0)
+       55:  292:					JobPercentage[row][col] = (float) numPerJob[row][col] / num_Age0;
+        -:  293:				else
+       55:  294:					JobPercentage[row][col] = (float) numPerJob[row][col] / num_Age1;
+        -:  295:			}
+        -:  296:		}
+        -:  297:		
+        -:  298:		//2- Calculate the Material percentage
+       15:  299:		for(row = 0;row<2;row++){
+       40:  300:			for(col = 0;col<3;col++){
+       30:  301:				if(row==0)
+       15:  302:					MaterialPercentage[row][col] = (float) numPerMat[row][col] / num_Mat0;
+        -:  303:				else
+       15:  304:					MaterialPercentage[row][col] = (float) numPerMat[row][col] / num_Mat1;
+        -:  305:			}
+        -:  306:		}
+        -:  307:		
+        -:  308:		//3- Calculate the Education Percentage
+       15:  309:		for(row = 0;row<2;row++){
+       80:  310:			for(col = 0;col<7;col++){
+       70:  311:				if(row==0)
+       35:  312:					EducationPercentage[row][col] = (float) numPerEdu[row][col] / num_Edu0;
+        -:  313:				else
+       35:  314:					EducationPercentage[row][col] = (float) numPerEdu[row][col] / num_Edu1;
+        -:  315:			}
+        -:  316:		}
+        -:  317:
+        -:  318:		
+        -:  319:		//4- Calculate the Default percentage
+       15:  320:		for(row = 0;row<2;row++){
+       30:  321:			for(col = 0;col<2;col++){
+       20:  322:				if(row==0)
+       10:  323:					DefaultPercentage[row][col] = (float) numPerDefault[row][col] / num_Def0;
+        -:  324:				else
+       10:  325:					DefaultPercentage[row][col] = (float) numPerDefault[row][col] / num_Def1;
+        -:  326:			}
+        -:  327:		}
+        -:  328:		
+        -:  329:		//5- Calculate the housing percentage
+       15:  330:		for(row = 0;row<2;row++){
+       30:  331:			for(col = 0;col<2;col++){
+       20:  332:				if(row==0)
+       10:  333:					HousePercentage[row][col] = (float) numPerHouse[row][col] / num_House0;
+        -:  334:				else
+       10:  335:					HousePercentage[row][col] = (float) numPerHouse[row][col] / num_House1;
+        -:  336:			}
+        -:  337:		}
+        -:  338:		
+        -:  339:		//6- Calculate the loan percentage
+       15:  340:		for(row = 0;row<2;row++){
+       30:  341:			for(col = 0;col<2;col++){
+       20:  342:				if(row==0)
+       10:  343:					LoanPercentage[row][col] = (float) numPerLoan[row][col] / num_Loan0;
+        -:  344:				else
+       10:  345:					LoanPercentage[row][col] = (float) numPerLoan[row][col] / num_Loan1;
+        -:  346:			}
+        -:  347:		}
+        -:  348:		
+        -:  349:		//7- Calculate the ContactPercentage
+       15:  350:		for(row = 0;row<2;row++){
+       30:  351:			for(col = 0;col<2;col++){
+       20:  352:				if(row==0)
+       10:  353:					ContactPercentage[row][col] = (float) numPerCon[row][col] / num_Con0;
+        -:  354:				else
+       10:  355:					ContactPercentage[row][col] = (float) numPerCon[row][col] / num_Con1;
+        -:  356:			}
+        -:  357:		}
+        -:  358:		
+        -:  359:		//8- Calculate the MonthPercentage
+       15:  360:		for(row = 0;row<2;row++){
+      130:  361:			for(col = 0;col<12;col++){
+      120:  362:				if(row==0)
+       60:  363:					MonthPercentage[row][col] = (float) numPerMonth[row][col] / num_Month0;
+        -:  364:				else
+       60:  365:					MonthPercentage[row][col] = (float) numPerMonth[row][col] / num_Month1;
+        -:  366:			}
+        -:  367:		}
+        -:  368:		
+        -:  369:		//9- Calculate the DayPercentage
+       15:  370:		for(row = 0;row<2;row++){
+       60:  371:			for(col = 0;col<5;col++){
+       50:  372:				if(row==0)
+       25:  373:					DayPercentage[row][col] = (float) numPerDay[row][col] / num_Day0;
+        -:  374:				else
+       25:  375:					DayPercentage[row][col] = (float) numPerDay[row][col] / num_Day1;
+        -:  376:			}
+        -:  377:		}
+        -:  378:		
+        -:  379:		//10- Calculate the CampaignPercentage
+       15:  380:		for(row = 0;row<2;row++){
+       40:  381:			for(col = 0;col<3;col++){
+       30:  382:				if(row==0)
+       15:  383:					CampaignPercentage[row][col] = (float) numPerCampaign[row][col] / num_Campaign0;
+        -:  384:				else
+       15:  385:					CampaignPercentage[row][col] = (float) numPerCampaign[row][col] / num_Campaign1;
+        -:  386:			}
+        -:  387:		}
+        -:  388:		
+        -:  389:		//11- Calculate the PDaysPercentage
+       15:  390:		for(row = 0;row<2;row++){
+       50:  391:			for(col = 0;col<4;col++){
+       40:  392:				if(row==0)
+       20:  393:					PDaysPercentage[row][col] = (float) numPerPDays[row][col] / num_PDays0;
+        -:  394:				else
+       20:  395:					PDaysPercentage[row][col] = (float) numPerPDays[row][col] / num_PDays1;
+        -:  396:			}
+        -:  397:		}
+        -:  398:		
+        -:  399:		//12- Calculate the PreviousPercentage
+       15:  400:		for(row = 0;row<2;row++){
+       30:  401:			for(col = 0;col<2;col++){
+       20:  402:				if(row==0)
+       10:  403:					PreviousPercentage[row][col] = (float) numPerPrevious[row][col] / num_Previous0;
+        -:  404:				else
+       10:  405:					PreviousPercentage[row][col] = (float) numPerPrevious[row][col] / num_Previous1;
+        -:  406:			}
+        -:  407:		}
+        -:  408:		
+        -:  409:		//13- Calculate the PoutcomePercentage
+       15:  410:		for(row = 0;row<2;row++){
+       40:  411:			for(col = 0;col<3;col++){
+       30:  412:				if(row==0)
+       15:  413:					PoutcomePercentage[row][col] = (float) numPerPoutcome[row][col] / num_Poutcome0;
+        -:  414:				else
+       15:  415:					PoutcomePercentage[row][col] = (float) numPerPoutcome[row][col] / num_Poutcome1;
+        -:  416:			}
+        -:  417:		}
+        -:  418:
+        -:  419:		//14- Calculate the EmpPercentage
+       15:  420:		for(row = 0;row<2;row++){
+       50:  421:			for(col = 0;col<4;col++){
+       40:  422:				if(row==0)
+       20:  423:					EmpPercentage[row][col] = (float) numPerEmp[row][col] / num_Emp0;
+        -:  424:				else
+       20:  425:					EmpPercentage[row][col] = (float) numPerEmp[row][col] / num_Emp1;
+        -:  426:			}
+        -:  427:		}
+        -:  428:		
+        -:  429:		//15- Calculate the PricePercentage
+       15:  430:		for(row = 0;row<2;row++){
+       40:  431:			for(col = 0;col<3;col++){
+       30:  432:				if(row==0)
+       15:  433:					PricePercentage[row][col] = (float) numPerPrice[row][col] / num_Price0;
+        -:  434:				else
+       15:  435:					PricePercentage[row][col] = (float) numPerPrice[row][col] / num_Price1;
+        -:  436:			}
+        -:  437:		}
+        -:  438:		
+        -:  439:		//16- Calculate the ConfPercentage
+       15:  440:		for(row = 0;row<2;row++){
+       50:  441:			for(col = 0;col<4;col++){
+       40:  442:				if(row==0)
+       20:  443:					ConfPercentage[row][col] = (float) numPerConf[row][col] / num_Conf0;
+        -:  444:				else
+       20:  445:					ConfPercentage[row][col] = (float) numPerConf[row][col] / num_Conf1;
+        -:  446:			}
+        -:  447:		}
+        -:  448:		
+        -:  449:		//17- Calculate the Euribor3mPercentage
+       15:  450:		for(row = 0;row<2;row++){
+       50:  451:			for(col = 0;col<4;col++){
+       40:  452:				if(row==0)
+       20:  453:					Euribor3mPercentage[row][col] = (float) numPerEuribor3m[row][col] / num_Euribor3m0;
+        -:  454:				else
+       20:  455:					Euribor3mPercentage[row][col] = (float) numPerEuribor3m[row][col] / num_Euribor3m1;
+        -:  456:			}
+        -:  457:		}
+        -:  458:		
+        -:  459:		//18- Calculate the NrPercentage
+       15:  460:		for(row = 0;row<2;row++){
+       30:  461:			for(col = 0;col<2;col++){
+       20:  462:				if(row==0)
+       10:  463:					NrPercentage[row][col] = (float) numPerNr[row][col] / num_Nr0;
+        -:  464:				else
+       10:  465:					NrPercentage[row][col] = (float) numPerNr[row][col] / num_Nr1;
+        -:  466:			}
+        -:  467:		}
+        -:  468:		
+        -:  469:		
+        -:  470:		//19- Calculate the OutputPercentage
+        -:  471:		//cout<<"\nnumber of data: "<<numData<<"; "<<numPerOutput[0]<<"; "<<numPerOutput[1]<<endl;
+        5:  472:		OutputPercentage[0] =  (float) numPerOutput[0] / numData;
+        5:  473:		OutputPercentage[1] =  (float) numPerOutput[1] / numData;
+        -:  474:		
+        -:  475:		//---------------------------------------------------------------
+        -:  476:		//-----------------Start to read Testing data 01----------------------
+        -:  477:		//---------------------------------------------------------------
+        -:  478:		
+    41203:  479:		while(fscanf(pTs, "%[^,],%[^,],%[^,],%[^,],%[^,],%[^,],%[^,],%[^,],%[^,],%[^,],%[^,],%[^,],%[^,],%[^,],%[^,],%[^,], %[^,],%[^,],%[^,],%[^,\n]",
+        -:  480:							tempAttribute[0], tempAttribute[1], tempAttribute[2], tempAttribute[3], tempAttribute[4]
+        -:  481:						, tempAttribute[5], tempAttribute[6], tempAttribute[7], tempAttribute[8], tempAttribute[9], tempAttribute[10]
+        -:  482:						, tempAttribute[11], tempAttribute[12], tempAttribute[13], tempAttribute[14], tempAttribute[15], tempAttribute[16] 
+    41198:  483:						, tempAttribute[17], tempAttribute[18], tempAttribute[19]) != EOF /*&& numTest < 5 */)
+        -:  484:		{
+        -:  485:			//for testing a limited number of data set.
+    41193:  486:			numLine++;
+        -:  487:			
+        -:  488:			//0- Calculating the Age percentage and store it in AgePercentage[row][col], with respect to numPerAge[row][col] along with num_Age0 and num_Age1.
+    41193:  489:			ageReadClass(tempAttribute,tempAttPercentage,  AgePercentage);
+        -:  490:			
+        -:  491:			//1- Calculate the Job percentage
+    41193:  492:			jobReadClass(tempAttribute, tempAttPercentage, JobPercentage);
+        -:  493:			
+        -:  494:			//2- Calculate the Material percentage
+    41193:  495:			materialReadClass(tempAttribute, tempAttPercentage, MaterialPercentage);
+        -:  496:			
+        -:  497:			//3- Calculate the Education Percentage
+    41193:  498:			EduReadClass(tempAttribute, tempAttPercentage, EducationPercentage);
+        -:  499:	
+        -:  500:			
+        -:  501:			//4- Calculate the Default percentage
+    41193:  502:			DefaultReadClass(tempAttribute, tempAttPercentage, DefaultPercentage);
+        -:  503:			
+        -:  504:			//5- Calculate the housing percentage
+    41193:  505:			houseReadClass(tempAttribute, tempAttPercentage, HousePercentage);
+        -:  506:			
+        -:  507:			//6- Calculate the loan percentage
+    41193:  508:			loanReadClass(tempAttribute, tempAttPercentage, LoanPercentage);
+        -:  509:			
+        -:  510:			//7- Calculate the ContactPercentage
+    41193:  511:			contactReadClass(tempAttribute, tempAttPercentage, ContactPercentage);
+        -:  512:			
+        -:  513:			//8- Calculate the MonthPercentage
+    41193:  514:			monthReadClass(tempAttribute, tempAttPercentage, MonthPercentage);
+        -:  515:			
+        -:  516:			//9- Calculate the DayPercentage
+    41193:  517:			dayReadClass(tempAttribute, tempAttPercentage, DayPercentage);
+        -:  518:			
+        -:  519:			//10- Calculate the CampaignPercentage
+    41193:  520:			campaignReadClass(tempAttribute, tempAttPercentage, CampaignPercentage);
+        -:  521:			
+        -:  522:			//11- Calculate the PDaysPercentage
+    41193:  523:			pdaysReadClass(tempAttribute, tempAttPercentage, PDaysPercentage);
+        -:  524:			
+        -:  525:			//12- Calculate the PreviousPercentage
+    41193:  526:			previousReadClass(tempAttribute, tempAttPercentage, PreviousPercentage);
+        -:  527:			
+        -:  528:			//13- Calculate the PoutcomePercentage
+    41193:  529:			poutcomeReadClass(tempAttribute, tempAttPercentage, PoutcomePercentage);
+        -:  530:	
+        -:  531:			//14- Calculate the EmpPercentage
+    41193:  532:			empReadClass(tempAttribute, tempAttPercentage, EmpPercentage);
+        -:  533:			
+        -:  534:			//15- Calculate the PricePercentage
+    41193:  535:			priceReadClass(tempAttribute, tempAttPercentage, PricePercentage);
+        -:  536:			
+        -:  537:			//16- Calculate the ConfPercentage
+    41193:  538:			confReadClass(tempAttribute, tempAttPercentage, ConfPercentage);
+        -:  539:			
+        -:  540:			//17- Calculate the Euribor3mPercentage
+    41193:  541:			euribor3mReadClass(tempAttribute, tempAttPercentage, Euribor3mPercentage);
+        -:  542:			
+        -:  543:			//18- Calculate the NrPercentage
+    41193:  544:			nrReadClass(tempAttribute, tempAttPercentage, NrPercentage);
+        -:  545:		
+    41193:  546:			if(NoOutput_Percentage >= YesOutput_Percentage){
+    41193:  547:				if(strcmp(tempAttribute[19], "no") == 0)	
+    36553:  548:					CorrRate++;
+    41193:  549:				fprintf(pOutputFile, "no\n");
+        -:  550:			}else{
+    #####:  551:				if(strcmp(tempAttribute[19], "yes") == 0)	
+    #####:  552:					CorrRate++;
+    #####:  553:				fprintf(pOutputFile, "yes\n");
+        -:  554:			}
+        -:  555:			
+        -:  556:			
+        -:  557:			/*for dubugging
+        -:  558:			for(row = 0; row < 2; row ++){
+        -:  559:				for(col = 0; col < 18; col ++){
+        -:  560:					cout<< "The percentage of the tempAttPercentage table[" << row << "][" << col << "]: " << tempAttPercentage[row][col] <<endl;
+        -:  561:				}
+        -:  562:			}
+        -:  563:			cout<<endl;
+        -:  564:			cout<<"Predict No: " << NoOutput_Percentage << endl;
+        -:  565:			cout<<"Predict Yes: " << YesOutput_Percentage << endl;
+        -:  566:			cout<<endl;
+        -:  567:			*/
+        -:  568:			
+        -:  569:			
+        -:  570:		}
+        -:  571:		
+        -:  572:		//----------------------------------------------------------
+        -:  573:		//-------------------End of Bank Data base------------------
+        -:  574:		//----------------------------------------------------------
+        5:  575:		cout<< "Correct Rate For bank " << numDataSet+1 << " : " << CorrRate / numLine << endl;
+        5:  576:		numDataSet++;
+        5:  577:		fclose (pFile);
+        5:  578:		fclose (pTs);
+        5:  579:		fclose (pOutputFile);
+        -:  580:	}
+        -:  581:	
+        -:  582:	//system("PAUSE");
+        1:  583:	return 0;
+        -:  584:}
+        -:  585:
+        -:  586://---------------------------------------------------------------
+        -:  587://Start of classification (learning) funtions w.r.t the attributes 0 ~ 19
+        -:  588://---------------------------------------------------------------
+        -:  589:// 0 - age (numeric)
+   164814:  590:void ageClass(char tempAttribute[ ][30], int (&numPerAge)[2][5], int &num_Age0, int &num_Age1){
+   164814:  591:	int tempAge = atoi(tempAttribute[0]);
+   164814:  592:	if(tempAge < 30 && tempAge > 0){
+    45368:  593:		if(strcmp(tempAttribute[19],"no") == 0){	
+    18994:  594:			numPerAge[0][0]++;	//Label 1	
+    18994:  595:			num_Age0++;
+        -:  596:		}else{
+     3690:  597:			numPerAge[1][0]++;	//Label 2
+     3690:  598:			num_Age1++;
+        -:  599:		}
+   142130:  600:	}else if(tempAge >= 30 && tempAge < 40){
+   135526:  601:		if(strcmp(tempAttribute[19],"no") == 0){
+    60900:  602:			numPerAge[0][1]++;	//Label 3	
+    60900:  603:			num_Age0++;
+        -:  604:		}else{
+     6863:  605:			numPerAge[1][1]++;	//Label 4		
+     6863:  606:			num_Age1++;
+        -:  607:		}
+    74367:  608:	}else if(tempAge >=40 && tempAge <50){
+    84228:  609:		if(strcmp(tempAttribute[19],"no") == 0){
+    38775:  610:			numPerAge[0][2]++;	//Label 5		
+    38775:  611:			num_Age0++;
+        -:  612:		}else{
+     3339:  613:			numPerAge[1][2]++;	//Label 6		
+     3339:  614:			num_Age1++;
+        -:  615:		}
+    32253:  616:	}else if(tempAge >=50 && tempAge<65 ){
+    59156:  617:		if(strcmp(tempAttribute[19],"no") == 0){
+    26151:  618:			numPerAge[0][3]++;	//Label 7		
+    26151:  619:			num_Age0++;
+        -:  620:		}else{
+     3427:  621:			numPerAge[1][3]++;	//Label 8
+     3427:  622:			num_Age1++;
+        -:  623:		}
+     2675:  624:	}else if(tempAge >=65 && tempAge < 140){
+     2660:  625:		if(strcmp(tempAttribute[19],"no") == 0){
+     1406:  626:			numPerAge[0][4]++;	//Label 9
+     1406:  627:			num_Age0++;
+        -:  628:		}else{
+     1254:  629:			numPerAge[1][4]++;	//Label 10
+     1254:  630:			num_Age1++;
+        -:  631:		}
+        -:  632:	}
+   164814:  633:}	
+        -:  634:	
+        -:  635://1 - job : type of job (categorical: 'admin.','blue-collar','entrepreneur','housemaid','management','retired','self-employed','services','student','technician','unemployed','?') 
+   164817:  636:void jobClass(char tempAttribute[ ][30], int (&numPerJob)[2][11], int &num_job0, int &num_job1){
+   164817:  637:	if(strcmp(tempAttribute[1],"admin.") == 0){
+    41693:  638:		if(strcmp(tempAttribute[19],"no") == 0){
+    36284:  639:			numPerJob[0][0]++;			
+    36284:  640:			num_job0++;
+        -:  641:		}else{
+     5409:  642:			numPerJob[1][0]++;			
+     5409:  643:			num_job1++;
+        -:  644:		}
+   123124:  645:	}else if(strcmp(tempAttribute[1],"blue-collar") == 0){
+    37021:  646:		if(strcmp(tempAttribute[19],"no") == 0){
+    34468:  647:			numPerJob[0][1]++;			
+    34468:  648:			num_job0++;
+        -:  649:		}else{
+     2553:  650:			numPerJob[1][1]++;			
+     2553:  651:			num_job1++;
+        -:  652:		}
+    86103:  653:	}else if(strcmp(tempAttribute[1],"entrepreneur") == 0){
+     5830:  654:		if(strcmp(tempAttribute[19],"no") == 0){
+     5333:  655:			numPerJob[0][2]++;			
+     5333:  656:			num_job0++;
+        -:  657:		}else{
+      497:  658:			numPerJob[1][2]++;			
+      497:  659:			num_job1++;
+        -:  660:		}
+    80273:  661:	}else if(strcmp(tempAttribute[1],"housemaid") == 0){
+     4245:  662:		if(strcmp(tempAttribute[19],"no") == 0){
+     3820:  663:			numPerJob[0][3]++;			
+     3820:  664:			num_job0++;
+        -:  665:		}else{
+      425:  666:			numPerJob[1][3]++;
+      425:  667:			num_job1++;
+        -:  668:		}
+    76028:  669:	}else if(strcmp(tempAttribute[1],"management") == 0){
+    11701:  670:		if(strcmp(tempAttribute[19],"no") == 0){
+    10388:  671:			numPerJob[0][4]++;
+    10388:  672:			num_job0++;
+        -:  673:		}else{
+     1313:  674:			numPerJob[1][4]++;
+     1313:  675:			num_job1++;
+        -:  676:		}
+    64327:  677:	}else if(strcmp(tempAttribute[1],"retired") == 0){
+     6884:  678:		if(strcmp(tempAttribute[19],"no") == 0){
+     5147:  679:			numPerJob[0][5]++;
+     5147:  680:			num_job0++;
+        -:  681:		}else{
+     1737:  682:			numPerJob[1][5]++;
+     1737:  683:			num_job1++;
+        -:  684:		}
+    57443:  685:	}else if(strcmp(tempAttribute[1],"self-employed") == 0){
+     5688:  686:		if(strcmp(tempAttribute[19],"no") == 0){
+     5091:  687:			numPerJob[0][6]++;
+     5091:  688:			num_job0++;
+        -:  689:		}else{
+      597:  690:			numPerJob[1][6]++;
+      597:  691:			num_job1++;
+        -:  692:		}
+    51755:  693:	}else if(strcmp(tempAttribute[1],"services") == 0){
+    15884:  694:		if(strcmp(tempAttribute[19],"no") == 0){
+    14591:  695:			numPerJob[0][7]++;
+    14591:  696:			num_job0++;
+        -:  697:		}else{
+     1293:  698:			numPerJob[1][7]++;
+     1293:  699:			num_job1++;
+        -:  700:		}
+    35871:  701:	}else if(strcmp(tempAttribute[1],"student") == 0){
+     3504:  702:		if(strcmp(tempAttribute[19],"no") == 0){
+     2403:  703:			numPerJob[0][8]++;
+     2403:  704:			num_job0++;
+        -:  705:		}else{
+     1101:  706:			numPerJob[1][8]++;
+     1101:  707:			num_job1++;
+        -:  708:		}
+    32367:  709:	}else if(strcmp(tempAttribute[1],"technician") == 0){
+    26976:  710:		if(strcmp(tempAttribute[19],"no") == 0){
+    24055:  711:			numPerJob[0][9]++;
+    24055:  712:			num_job0++;
+        -:  713:		}else{
+     2921:  714:			numPerJob[1][9]++;
+     2921:  715:			num_job1++;
+        -:  716:		}
+     5391:  717:	}else if(strcmp(tempAttribute[1],"unemployed") == 0){
+     4060:  718:		if(strcmp(tempAttribute[19],"no") == 0){
+     3483:  719:			numPerJob[0][10]++;
+     3483:  720:			num_job0++;
+        -:  721:		}else{
+      577:  722:			numPerJob[1][10]++;
+      577:  723:			num_job1++;
+        -:  724:		}
+        -:  725:	}
+   164817:  726:}
+        -:  727:
+        -:  728://2 - marital : marital status (categorical: 'divorced','married','single','?'; note: 'divorced' means divorced or widowed) 
+   164766:  729:void maritalClass(char tempAttribute[ ][30], int (&numPerMat)[2][3], int &num_Mat0, int &num_Mat1){
+        -:  730:	//int numPerMat[2][3] = {0}, num_Mat0 = 0, num_Mat1 = 0;
+   164766:  731:	if(strcmp(tempAttribute[2],"divorced") == 0){
+    18451:  732:		if(strcmp(tempAttribute[19],"no") == 0){
+    16546:  733:			numPerMat[0][0]++;
+    16546:  734:			num_Mat0++;
+        -:  735:		}else{
+     1905:  736:			numPerMat[1][0]++;		
+     1905:  737:			num_Mat1++;
+        -:  738:		}
+   146315:  739:	}else if(strcmp(tempAttribute[2],"married") == 0){
+    99720:  740:		if(strcmp(tempAttribute[19],"no") == 0){
+    89591:  741:			numPerMat[0][1]++;			
+    89591:  742:			num_Mat0++;
+        -:  743:		}else{
+    10129:  744:			numPerMat[1][1]++;			
+    10129:  745:			num_Mat1++;
+        -:  746:		}
+    46595:  747:	}else if(strcmp(tempAttribute[2],"single") == 0){
+    46275:  748:		if(strcmp(tempAttribute[19],"no") == 0){
+    39794:  749:			numPerMat[0][2]++;			
+    39794:  750:			num_Mat0++;
+        -:  751:		}else{
+     6481:  752:			numPerMat[1][2]++;			
+     6481:  753:			num_Mat1++;
+        -:  754:		}
+        -:  755:	}
+   164766:  756:}	
+        -:  757:
+        -:  758://3 - education (categorical: 'basic.4y','basic.6y','basic.9y','high.school','illiterate','professional.course','university.degree','?')
+   164784:  759:void eduClass(char tempAttribute[ ][30], int (&numPerEdu)[2][7], int &num_Edu0, int &num_Edu1){
+   164784:  760:	if(strcmp(tempAttribute[3],"basic.4y") == 0){
+    16707:  761:		if(strcmp(tempAttribute[19],"no") == 0){
+    14994:  762:			numPerEdu[0][0]++;
+    14994:  763:			num_Edu0++;
+        -:  764:		}else{
+     1713:  765:			numPerEdu[1][0]++;		
+     1713:  766:			num_Edu1++;
+        -:  767:		}
+   148077:  768:	}else if(strcmp(tempAttribute[3],"basic.6y") == 0){
+     9171:  769:		if(strcmp(tempAttribute[19],"no") == 0){
+     8418:  770:			numPerEdu[0][1]++;			
+     8418:  771:			num_Edu0++;
+        -:  772:		}else{
+      753:  773:			numPerEdu[1][1]++;			
+      753:  774:			num_Edu1++;
+        -:  775:		}
+   138906:  776:	}else if(strcmp(tempAttribute[3],"basic.9y") == 0){
+    24183:  777:		if(strcmp(tempAttribute[19],"no") == 0){
+    22290:  778:			numPerEdu[0][2]++;			
+    22290:  779:			num_Edu0++;
+        -:  780:		}else{
+     1893:  781:			numPerEdu[1][2]++;			
+     1893:  782:			num_Edu1++;
+        -:  783:		}
+   114723:  784:	}else if(strcmp(tempAttribute[3],"high.school") == 0){
+    38067:  785:		if(strcmp(tempAttribute[19],"no") == 0){
+    33942:  786:			numPerEdu[0][3]++;			
+    33942:  787:			num_Edu0++;
+        -:  788:		}else{
+     4125:  789:			numPerEdu[1][3]++;
+     4125:  790:			num_Edu1++;
+        -:  791:		}
+    76656:  792:	}else if(strcmp(tempAttribute[3],"illiterate") == 0){
+       76:  793:		if(strcmp(tempAttribute[19],"no") == 0){
+       59:  794:			numPerEdu[0][4]++;
+       59:  795:			num_Edu0++;
+        -:  796:		}else{
+       17:  797:			numPerEdu[1][4]++;
+       17:  798:			num_Edu1++;
+        -:  799:		}
+    76580:  800:	}else if(strcmp(tempAttribute[3],"professional.course") == 0){
+    20976:  801:		if(strcmp(tempAttribute[19],"no") == 0){
+    18595:  802:			numPerEdu[0][5]++;
+    18595:  803:			num_Edu0++;
+        -:  804:		}else{
+     2381:  805:			numPerEdu[1][5]++;
+     2381:  806:			num_Edu1++;
+        -:  807:		}
+    55604:  808:	}else if(strcmp(tempAttribute[3],"university.degree") == 0){
+    48676:  809:		if(strcmp(tempAttribute[19],"no") == 0){
+    41995:  810:			numPerEdu[0][6]++;
+    41995:  811:			num_Edu0++;
+        -:  812:		}else{
+     6681:  813:			numPerEdu[1][6]++;
+     6681:  814:			num_Edu1++;
+        -:  815:		}
+        -:  816:	}
+   164784:  817:}	
+        -:  818:
+        -:  819://4 - default: has credit in default? (categorical: 'no','yes','?') 
+   164763:  820:void defaultClass(char tempAttribute[ ][30], int (&numPerDefault)[2][2], int &num_Def0, int &num_Def1){
+        -:  821:	//int numPerDefault[2][2] = {0}, num_Def0 = 0, num_Def1 = 0;
+   164763:  822:	if(strcmp(tempAttribute[4],"no") == 0){
+   130360:  823:		if(strcmp(tempAttribute[19],"no") == 0){
+   113571:  824:			numPerDefault[0][0]++;
+   113571:  825:			num_Def0++;
+        -:  826:		}else{
+    16789:  827:			numPerDefault[1][0]++;		
+    16789:  828:			num_Def1++;
+        -:  829:		}
+    34403:  830:	}else if(strcmp(tempAttribute[4],"yes") == 0){
+       15:  831:		if(strcmp(tempAttribute[19],"no") == 0){
+       14:  832:			numPerDefault[0][1]++;			
+       14:  833:			num_Def0++;
+        -:  834:		}else{
+        1:  835:			numPerDefault[1][1]++;			
+        1:  836:			num_Def1++;
+        -:  837:		}
+        -:  838:	}
+   164763:  839:}
+        -:  840:
+        -:  841://5 - housing: has housing loan? (categorical: 'no','yes','?')
+   164773:  842:void houseClass(char tempAttribute[ ][30], int (&numPerHouse)[2][2], int &num_House0, int &num_House1){
+        -:  843:	//int numPerHouse[2][2] = {0}, num_House0 = 0, num_House1 = 0;
+   164773:  844:	if(strcmp(tempAttribute[5],"no") == 0){
+    74497:  845:		if(strcmp(tempAttribute[19],"no") == 0){
+    66392:  846:			numPerHouse[0][0]++;
+    66392:  847:			num_House0++;
+        -:  848:		}else{
+     8105:  849:			numPerHouse[1][0]++;		
+     8105:  850:			num_House1++;
+        -:  851:		}
+    90276:  852:	}else if(strcmp(tempAttribute[5],"yes") == 0){
+    86310:  853:		if(strcmp(tempAttribute[19],"no") == 0){
+    76281:  854:			numPerHouse[0][1]++;			
+    76281:  855:			num_House0++;
+        -:  856:		}else{
+    10029:  857:			numPerHouse[1][1]++;			
+    10029:  858:			num_House1++;
+        -:  859:		}
+        -:  860:	}
+   164773:  861:}
+        -:  862:	
+        -:  863://6 - loan: has personal loan? (categorical: 'no','yes','?') 
+   164763:  864:void loanClass(char tempAttribute[ ][30], int (&numPerLoan)[2][2], int &num_Loan0, int &num_Loan1){
+        -:  865:	//int numPerLoan[2][2] = {0}, num_Loan0 = 0, num_Loan1 = 0;
+   164763:  866:	if(strcmp(tempAttribute[6],"no") == 0){
+   135808:  867:		if(strcmp(tempAttribute[19],"no") == 0){
+   120407:  868:			numPerLoan[0][0]++;
+   120407:  869:			num_Loan0++;
+        -:  870:		}else{
+    15401:  871:			numPerLoan[1][0]++;		
+    15401:  872:			num_Loan1++;
+        -:  873:		}
+    28955:  874:	}else if(strcmp(tempAttribute[6],"yes") == 0){
+    24995:  875:		if(strcmp(tempAttribute[19],"no") == 0){
+    22262:  876:			numPerLoan[0][1]++;			
+    22262:  877:			num_Loan0++;
+        -:  878:		}else{
+     2733:  879:			numPerLoan[1][1]++;			
+     2733:  880:			num_Loan1++;
+        -:  881:		}
+        -:  882:	}
+   164763:  883:}	
+        -:  884:
+        -:  885://7 - contact: contact communication type (categorical: 'cellular','telephone') 
+   164773:  886:void contactClass(char tempAttribute[ ][30], int (&numPerCon)[2][2], int &num_Con0, int &num_Con1){
+        -:  887:	//int numPerCon[2][2] = {0}, num_Con0 = 0, num_Con1 = 0;
+   164773:  888:	if(strcmp(tempAttribute[7],"cellular") == 0){
+   104586:  889:		if(strcmp(tempAttribute[19],"no") == 0){
+    89173:  890:			numPerCon[0][0]++;
+    89173:  891:			num_Con0++;
+        -:  892:		}else{
+    15413:  893:			numPerCon[1][0]++;		
+    15413:  894:			num_Con1++;
+        -:  895:		}
+    60187:  896:	}else if(strcmp(tempAttribute[7],"telephone") == 0){
+    60181:  897:		if(strcmp(tempAttribute[19],"no") == 0){
+    57032:  898:			numPerCon[0][1]++;			
+    57032:  899:			num_Con0++;
+        -:  900:		}else{
+     3149:  901:			numPerCon[1][1]++;			
+     3149:  902:			num_Con1++;
+        -:  903:		}
+        -:  904:	}
+   164773:  905:}	
+        -:  906://8 - month: last contact month of year (categorical: 'jan', 'feb', 'mar', ..., 'nov', 'dec')
+   164793:  907:void monthClass(char tempAttribute[ ][30], int (&numPerMonth)[2][12], int &num_Month0, int &num_Month1){
+        -:  908:	//int numPerMonth[2][12] = {0}, num_Month0 = 0, num_Month1 = 0;
+   164793:  909:	if(strcmp(tempAttribute[8],"jan") == 0){
+        3:  910:		if(strcmp(tempAttribute[19],"no") == 0){
+        2:  911:			numPerMonth[0][0]++;
+        2:  912:			num_Month0++;
+        -:  913:		}else{
+        1:  914:			numPerMonth[1][0]++;		
+        1:  915:			num_Month1++;
+        -:  916:		}
+   164790:  917:	}else if(strcmp(tempAttribute[8],"feb") == 0){
+        3:  918:		if(strcmp(tempAttribute[19],"no") == 0){
+        2:  919:			numPerMonth[0][1]++;			
+        2:  920:			num_Month0++;
+        -:  921:		}else{
+        1:  922:			numPerMonth[1][1]++;			
+        1:  923:			num_Month1++;
+        -:  924:		}
+   164787:  925:	}else if(strcmp(tempAttribute[8],"mar") == 0){
+     2187:  926:		if(strcmp(tempAttribute[19],"no") == 0){
+     1082:  927:			numPerMonth[0][2]++;			
+     1082:  928:			num_Month0++;
+        -:  929:		}else{
+     1105:  930:			numPerMonth[1][2]++;			
+     1105:  931:			num_Month1++;
+        -:  932:		}
+   162600:  933:	}else if(strcmp(tempAttribute[8],"apr") == 0){
+    10531:  934:		if(strcmp(tempAttribute[19],"no") == 0){
+     8374:  935:			numPerMonth[0][3]++;			
+     8374:  936:			num_Month0++;
+        -:  937:		}else{
+     2157:  938:			numPerMonth[1][3]++;
+     2157:  939:			num_Month1++;
+        -:  940:		}
+   152069:  941:	}else if(strcmp(tempAttribute[8],"may") == 0){
+    55083:  942:		if(strcmp(tempAttribute[19],"no") == 0){
+    51538:  943:			numPerMonth[0][4]++;
+    51538:  944:			num_Month0++;
+        -:  945:		}else{
+     3545:  946:			numPerMonth[1][4]++;
+     3545:  947:			num_Month1++;
+        -:  948:		}
+    96986:  949:	}else if(strcmp(tempAttribute[8],"jun") == 0){
+    21275:  950:		if(strcmp(tempAttribute[19],"no") == 0){
+    19038:  951:			numPerMonth[0][5]++;
+    19038:  952:			num_Month0++;
+        -:  953:		}else{
+     2237:  954:			numPerMonth[1][5]++;
+     2237:  955:			num_Month1++;
+        -:  956:		}
+    75711:  957:	}else if(strcmp(tempAttribute[8],"jul") == 0){
+    28699:  958:		if(strcmp(tempAttribute[19],"no") == 0){
+    26102:  959:			numPerMonth[0][6]++;
+    26102:  960:			num_Month0++;
+        -:  961:		}else{
+     2597:  962:			numPerMonth[1][6]++;
+     2597:  963:			num_Month1++;
+        -:  964:		}
+    47012:  965:	}else if(strcmp(tempAttribute[8],"aug") == 0){
+    24716:  966:		if(strcmp(tempAttribute[19],"no") == 0){
+    22095:  967:			numPerMonth[0][7]++;
+    22095:  968:			num_Month0++;
+        -:  969:		}else{
+     2621:  970:			numPerMonth[1][7]++;
+     2621:  971:			num_Month1++;
+        -:  972:		}
+    22296:  973:	}else if(strcmp(tempAttribute[8],"sep") == 0){
+     2283:  974:		if(strcmp(tempAttribute[19],"no") == 0){
+     1258:  975:			numPerMonth[0][8]++;
+     1258:  976:			num_Month0++;
+        -:  977:		}else{
+     1025:  978:			numPerMonth[1][8]++;
+     1025:  979:			num_Month1++;
+        -:  980:		}
+    20013:  981:	}else if(strcmp(tempAttribute[8],"oct") == 0){
+     2875:  982:		if(strcmp(tempAttribute[19],"no") == 0){
+     1614:  983:			numPerMonth[0][9]++;
+     1614:  984:			num_Month0++;
+        -:  985:		}else{
+     1261:  986:			numPerMonth[1][9]++;
+     1261:  987:			num_Month1++;
+        -:  988:		}
+    17138:  989:	}else if(strcmp(tempAttribute[8],"nov") == 0){
+    16407:  990:		if(strcmp(tempAttribute[19],"no") == 0){
+    14742:  991:			numPerMonth[0][10]++;
+    14742:  992:			num_Month0++;
+        -:  993:		}else{
+     1665:  994:			numPerMonth[1][10]++;
+     1665:  995:			num_Month1++;
+        -:  996:		}
+      731:  997:	}else if(strcmp(tempAttribute[8],"dec") == 0){
+      731:  998:		if(strcmp(tempAttribute[19],"no") == 0){
+      374:  999:			numPerMonth[0][11]++;
+      374: 1000:			num_Month0++;
+        -: 1001:		}else{
+      357: 1002:			numPerMonth[1][11]++;
+      357: 1003:			num_Month1++;
+        -: 1004:		}
+        -: 1005:	}
+   164793: 1006:}	
+        -: 1007:	
+        -: 1008://9 - day_of_week: last contact day of the week (categorical: 'mon','tue','wed','thu','fri') 
+   164787: 1009:void dayClass(char tempAttribute[ ][30], int (&numPerDay)[2][5], int &num_Day0, int &num_Day1){
+        -: 1010:	//int numPerDay[2][5] = {0}, num_Day0 = 0, num_Day1 = 0;
+   164787: 1011:	if(strcmp(tempAttribute[9],"mon") == 0){
+    34060: 1012:		if(strcmp(tempAttribute[19],"no") == 0){
+    30671: 1013:			numPerDay[0][0]++;
+    30671: 1014:			num_Day0++;
+        -: 1015:		}else{
+     3389: 1016:			numPerDay[1][0]++;		
+     3389: 1017:			num_Day1++;
+        -: 1018:		}
+   130727: 1019:	}else if(strcmp(tempAttribute[9],"tue") == 0){
+    32368: 1020:		if(strcmp(tempAttribute[19],"no") == 0){
+    28555: 1021:			numPerDay[0][1]++;			
+    28555: 1022:			num_Day0++;
+        -: 1023:		}else{
+     3813: 1024:			numPerDay[1][1]++;			
+     3813: 1025:			num_Day1++;
+        -: 1026:		}
+    98359: 1027:	}else if(strcmp(tempAttribute[9],"wed") == 0){
+    32542: 1028:		if(strcmp(tempAttribute[19],"no") == 0){
+    28745: 1029:			numPerDay[0][2]++;			
+    28745: 1030:			num_Day0++;
+        -: 1031:		}else{
+     3797: 1032:			numPerDay[1][2]++;			
+     3797: 1033:			num_Day1++;
+        -: 1034:		}
+    65817: 1035:	}else if(strcmp(tempAttribute[9],"thu") == 0){
+    34497: 1036:		if(strcmp(tempAttribute[19],"no") == 0){
+    30316: 1037:			numPerDay[0][3]++;			
+    30316: 1038:			num_Day0++;
+        -: 1039:		}else{
+     4181: 1040:			numPerDay[1][3]++;
+     4181: 1041:			num_Day1++;
+        -: 1042:		}
+    31320: 1043:	}else if(strcmp(tempAttribute[9],"fri") == 0){
+    31313: 1044:		if(strcmp(tempAttribute[19],"no") == 0){
+    27928: 1045:			numPerDay[0][4]++;
+    27928: 1046:			num_Day0++;
+        -: 1047:		}else{
+     3385: 1048:			numPerDay[1][4]++;
+     3385: 1049:			num_Day1++;
+        -: 1050:		}
+        -: 1051:	}
+   164787: 1052:}
+        -: 1053:
+        -: 1054:/*10 - campaign: number of contacts performed during this campaign and for this client (numeric, includes last contact) 
+        -: 1055:			- 3 intervals: (0 ~ 3), (4~6), (7+)	*/
+   164780: 1056:void tempCampaignClass(char tempAttribute[ ][30], int (&numPerCampaign)[2][3], int &num_Campaign0, int &num_Campaign1){	
+        -: 1057:	//int tempCampaign, numPerCampaign[2][3] = {0}, num_Campaign0 = 0, num_Campaign1 = 0;
+   164780: 1058:	int tempCampaign = atoi(tempAttribute[10]);
+   164780: 1059:	if(tempCampaign <= 3 && tempCampaign >= 0){
+   268438: 1060:		if(strcmp(tempAttribute[19],"no") == 0){
+   117878: 1061:			numPerCampaign[0][0]++;			
+   117878: 1062:			num_Campaign0++;
+        -: 1063:		}else{
+    16341: 1064:			numPerCampaign[1][0]++;			
+    16341: 1065:			num_Campaign1++;
+        -: 1066:		}
+    30561: 1067:	}else if(tempCampaign >= 4 && tempCampaign <= 6){
+    41852: 1068:		if(strcmp(tempAttribute[19],"no") == 0){
+    19149: 1069:			numPerCampaign[0][1]++;			
+    19149: 1070:			num_Campaign0++;
+        -: 1071:		}else{
+     1777: 1072:			numPerCampaign[1][1]++;			
+     1777: 1073:			num_Campaign1++;
+        -: 1074:		}
+     9635: 1075:	}else if(tempCampaign >= 7){
+     9630: 1076:		if(strcmp(tempAttribute[19],"no") == 0){
+     9185: 1077:			numPerCampaign[0][2]++;			
+     9185: 1078:			num_Campaign0++;
+        -: 1079:		}else{
+      445: 1080:			numPerCampaign[1][2]++;			
+      445: 1081:			num_Campaign1++;
+        -: 1082:		}
+        -: 1083:	}
+   164780: 1084:}	
+        -: 1085:	
+        -: 1086://11 - pdays: number of days that passed by after the client was last contacted from a previous campaign (numeric; 999 means client was not previously contacted) 
+        -: 1087://			- 4 intervals: (0~11), (12~20), (21 ~ 27), (999) 
+   164805: 1088:void tempPDaysClass(char tempAttribute[ ][30], int (&numPerPDays)[2][4], int &num_PDays0, int &num_PDays1){		
+        -: 1089:	//int tempPDays, numPerPDays[2][4] = {0}, num_PDays0 = 0, num_PDays1 = 0;
+   164805: 1090:	int tempPDays = atoi(tempAttribute[11]);
+   164805: 1091:	if(tempPDays <= 11 && tempPDays >= 0){
+    10738: 1092:		if(strcmp(tempAttribute[19],"no") == 0){
+     1902: 1093:			numPerPDays[0][0]++;			
+     1902: 1094:			num_PDays0++;
+        -: 1095:		}else{
+     3467: 1096:			numPerPDays[1][0]++;			
+     3467: 1097:			num_PDays1++;
+        -: 1098:		}
+   159436: 1099:	}else if(tempPDays >= 12 && tempPDays <= 20){
+     1370: 1100:		if(strcmp(tempAttribute[19],"no") == 0){
+      306: 1101:			numPerPDays[0][1]++;			
+      306: 1102:			num_PDays0++;
+        -: 1103:		}else{
+      379: 1104:			numPerPDays[1][1]++;			
+      379: 1105:			num_PDays1++;
+        -: 1106:		}
+   158751: 1107:	}else if(tempPDays >= 21 && tempPDays <= 28){
+       84: 1108:		if(strcmp(tempAttribute[19],"no") == 0){
+       11: 1109:			numPerPDays[0][2]++;			
+       11: 1110:			num_PDays0++;
+        -: 1111:		}else{
+       31: 1112:			numPerPDays[1][2]++;			
+       31: 1113:			num_PDays1++;
+        -: 1114:		}
+   158709: 1115:	}else if(tempPDays == 999){
+   158701: 1116:		if(strcmp(tempAttribute[19],"no") == 0){
+   144008: 1117:			numPerPDays[0][3]++;			
+   144008: 1118:			num_PDays0++;
+        -: 1119:		}else{
+    14693: 1120:			numPerPDays[1][3]++;			
+    14693: 1121:			num_PDays1++;
+        -: 1122:		}
+        -: 1123:	}
+   164805: 1124:}	
+        -: 1125:	
+        -: 1126://12 - previous: number of contacts performed before this campaign and for this client (numeric) 
+        -: 1127://			- intervals: 0, (not 0)
+   164763: 1128:void tempPreviousClass(char tempAttribute[ ][30], int (&numPerPrevious)[2][2], int &num_Previous0, int &num_Previous1){			
+        -: 1129:	//int tempPrevious, numPerPrevious[2][2] = {0}, num_Previous0 = 0, num_Previous1 = 0;
+   164763: 1130:	int tempPrevious = atoi(tempAttribute[12]);
+   164763: 1131:	if(tempPrevious == 0){
+   142256: 1132:		if(strcmp(tempAttribute[19],"no") == 0){
+   129691: 1133:			numPerPrevious[0][0]++;			
+   129691: 1134:			num_Previous0++;
+        -: 1135:		}else{
+    12565: 1136:			numPerPrevious[1][0]++;			
+    12565: 1137:			num_Previous1++;
+        -: 1138:		}
+    22507: 1139:	}else if(tempPrevious != 0){
+    22507: 1140:		if(strcmp(tempAttribute[19],"no") == 0){
+    16510: 1141:			numPerPrevious[0][1]++;			
+    16510: 1142:			num_Previous0++;
+        -: 1143:		}else{
+     5997: 1144:			numPerPrevious[1][1]++;			
+     5997: 1145:			num_Previous1++;
+        -: 1146:		}
+        -: 1147:	}
+   164763: 1148:}	
+        -: 1149:	
+        -: 1150://13 - poutcome: outcome of the previous marketing campaign (categorical: 'failure','nonexistent','success') 
+        -: 1151://			- intervals: shown as above.
+   164782: 1152:void numPerPoutcomeClass(char tempAttribute[ ][30], int (&numPerPoutcome)[2][3], int &num_Poutcome0, int &num_Poutcome1){			
+        -: 1153:	//int numPerPoutcome[2][3] = {0}, num_Poutcome0 = 0, num_Poutcome1 = 0;
+   164782: 1154:	if(strcmp(tempAttribute[13],"failure") == 0){
+    17017: 1155:		if(strcmp(tempAttribute[19],"no") == 0){
+    14596: 1156:			numPerPoutcome[0][0]++;
+    14596: 1157:			num_Poutcome0++;
+        -: 1158:		}else{
+     2421: 1159:			numPerPoutcome[1][0]++;		
+     2421: 1160:			num_Poutcome1++;
+        -: 1161:		}
+   147765: 1162:	}else if(strcmp(tempAttribute[13],"nonexistent") == 0){
+   142258: 1163:		if(strcmp(tempAttribute[19],"no") == 0){
+   129693: 1164:			numPerPoutcome[0][1]++;			
+   129693: 1165:			num_Poutcome0++;
+        -: 1166:		}else{
+    12565: 1167:			numPerPoutcome[1][1]++;			
+    12565: 1168:			num_Poutcome1++;
+        -: 1169:		}
+     5507: 1170:	}else if(strcmp(tempAttribute[13],"success") == 0){
+     5497: 1171:		if(strcmp(tempAttribute[19],"no") == 0){
+     1920: 1172:			numPerPoutcome[0][2]++;			
+     1920: 1173:			num_Poutcome0++;
+        -: 1174:		}else{
+     3577: 1175:			numPerPoutcome[1][2]++;			
+     3577: 1176:			num_Poutcome1++;
+        -: 1177:		}
+        -: 1178:	}
+   164782: 1179:}	
+        -: 1180:	
+        -: 1181://14 - emp.var.rate: employment variation rate - quarterly indicator (numeric) 
+        -: 1182://			- 4 intervals: (x>=1.0), (-1.0<= x < 1.0) , (-2.0<= x <-1.0) , (x < -2.0)
+   164778: 1183:void tempEmpClass(char tempAttribute[ ][30], int (&numPerEmp)[2][6], int &num_Emp0, int &num_Emp1){			
+        -: 1184:	//float tempEmp; int numPerEmp[2][6] = {0}, num_Emp0 = 0, num_Emp1 = 0;
+   164778: 1185:	float tempEmp = atof(tempAttribute[14]);
+   164778: 1186:	if(tempEmp >= 1.00){
+    95994: 1187:		if(strcmp(tempAttribute[19],"no") == 0){
+    91569: 1188:			numPerEmp[0][0]++;			
+    91569: 1189:			num_Emp0++;
+        -: 1190:		}else{
+     4425: 1191:			numPerEmp[1][0]++;			
+     4425: 1192:			num_Emp1++;
+        -: 1193:		}
+    68784: 1194:	}else if(tempEmp >= -1.0 && tempEmp < 1.0){
+    29554: 1195:		if(strcmp(tempAttribute[19],"no") == 0){
+    13844: 1196:			numPerEmp[0][1]++;			
+    13844: 1197:			num_Emp0++;
+        -: 1198:		}else{
+      933: 1199:			numPerEmp[1][1]++;			
+      933: 1200:			num_Emp1++;
+        -: 1201:		}
+    54007: 1202:	}else if(tempEmp >= -2.0 && tempEmp < -1.0){
+    84756: 1203:		if(strcmp(tempAttribute[19],"no") == 0){
+    33717: 1204:			numPerEmp[0][2]++;			
+    33717: 1205:			num_Emp0++;
+        -: 1206:		}else{
+     8661: 1207:			numPerEmp[1][2]++;			
+     8661: 1208:			num_Emp1++;
+        -: 1209:		}
+    11629: 1210:	}else if(tempEmp < -2.0){
+    11629: 1211:		if(strcmp(tempAttribute[19],"no") == 0){
+     7084: 1212:			numPerEmp[0][3]++;			
+     7084: 1213:			num_Emp0++;
+        -: 1214:		}else{
+     4545: 1215:			numPerEmp[1][3]++;			
+     4545: 1216:			num_Emp1++;
+        -: 1217:		}
+        -: 1218:	}
+   164778: 1219:}
+        -: 1220:
+        -: 1221://15 - cons.price.idx: consumer price index - monthly indicator (numeric)
+        -: 1222://			- 3 intervals: (2000 > x>=94.45), (92.8 < x < 94.45), (0 <= x <= 92.8)
+   164787: 1223:void tempPriceClass(char tempAttribute[ ][30], int (&numPerPrice)[2][3], int &num_Price0, int &num_Price1){
+        -: 1224:	//double tempPrice; int numPerPrice[2][3] = {0}, num_Price0 = 0, num_Price1 = 0;
+   164787: 1225:	double tempPrice = strtod(tempAttribute[15], NULL);
+   164787: 1226:	if(tempPrice >= 94.45 && tempPrice < 2000){
+    37658: 1227:		if(strcmp(tempAttribute[19],"no") == 0){
+    17472: 1228:			numPerPrice[0][0]++;			
+    17472: 1229:			num_Price0++;
+        -: 1230:		}else{
+     1357: 1231:			numPerPrice[1][0]++;			
+     1357: 1232:			num_Price1++;
+        -: 1233:		}
+   145958: 1234:	}else if(tempPrice > 92.8 && tempPrice < 94.45){
+   274276: 1235:		if(strcmp(tempAttribute[19],"no") == 0){
+   123424: 1236:			numPerPrice[0][1]++;			
+   123424: 1237:			num_Price0++;
+        -: 1238:		}else{
+    13714: 1239:			numPerPrice[1][1]++;			
+    13714: 1240:			num_Price1++;
+        -: 1241:		}
+     8820: 1242:	}else if(tempPrice <= 92.8 && tempPrice >= 0){
+     8815: 1243:		if(strcmp(tempAttribute[19],"no") == 0){
+     5320: 1244:			numPerPrice[0][2]++;			
+     5320: 1245:			num_Price0++;
+        -: 1246:		}else{
+     3495: 1247:			numPerPrice[1][2]++;			
+     3495: 1248:			num_Price1++;
+        -: 1249:		}
+        -: 1250:	}
+   164787: 1251:}	
+        -: 1252:	
+        -: 1253:	
+        -: 1254://16 - cons.conf.idx: consumer confidence index - monthly indicator (numeric) 
+        -: 1255://			- 4 intervals: (x>-30.0), (-35.0<= x < -30.0), (-45.0< = x < -35.0), ( x < -45.0)
+   164778: 1256:void tempConfClass(char tempAttribute[ ][30], int (&numPerConf)[2][4], int &num_Conf0, int &num_Conf1){
+        -: 1257:	//float tempConf; int numPerConf[2][6] = {0}, num_Conf0 = 0, num_Conf1 = 0;
+   164778: 1258:	float tempConf = atof(tempAttribute[16]);
+   164778: 1259:	if(tempConf >= -30.0){
+     2861: 1260:		if(strcmp(tempAttribute[19],"no") == 0){
+     1716: 1261:			numPerConf[0][0]++;			
+     1716: 1262:			num_Conf0++;
+        -: 1263:		}else{
+     1145: 1264:			numPerConf[1][0]++;			
+     1145: 1265:			num_Conf1++;
+        -: 1266:		}
+   161917: 1267:	}else if(tempConf >= -35.0 && tempConf < -30.0){
+    15330: 1268:		if(strcmp(tempAttribute[19],"no") == 0){
+     4332: 1269:			numPerConf[0][1]++;			
+     4332: 1270:			num_Conf0++;
+        -: 1271:		}else{
+     3333: 1272:			numPerConf[1][1]++;			
+     3333: 1273:			num_Conf1++;
+        -: 1274:		}
+   154252: 1275:	}else if(tempConf >= -45.0 && tempConf < -35.0){
+   237478: 1276:		if(strcmp(tempAttribute[19],"no") == 0){
+   109630: 1277:			numPerConf[0][2]++;			
+   109630: 1278:			num_Conf0++;
+        -: 1279:		}else{
+     9109: 1280:			numPerConf[1][2]++;			
+     9109: 1281:			num_Conf1++;
+        -: 1282:		}
+    35513: 1283:	}else if(tempConf < -45.0){
+    35513: 1284:		if(strcmp(tempAttribute[19],"no") == 0){
+    30536: 1285:			numPerConf[0][3]++;			
+    30536: 1286:			num_Conf0++;
+        -: 1287:		}else{
+     4977: 1288:			numPerConf[1][3]++;			
+     4977: 1289:			num_Conf1++;
+        -: 1290:		}
+        -: 1291:	}
+   164778: 1292:}
+        -: 1293:
+        -: 1294://May 30th.
+        -: 1295://17 - euribor3m: euribor 3 month rate - daily indicator (numeric) 
+        -: 1296://			- 4 intervals: (x >= 4.86), ( 4.0 <= x < 4.86), ( 1.0 <= x < 4.0), , ( 0 < x < 1.0)
+   164805: 1297:void tempEuribor3mClass(char tempAttribute[ ][30], int (&numPerEuribor3m)[2][4], int &num_Euribor3m0, int &num_Euribor3m1){
+        -: 1298:	//float tempEuribor3m; int numPerEuribor3m[2][4] = {0}, num_Euribor3m0 = 0, num_Euribor3m1 = 0;
+   164805: 1299:	double tempEuribor3m = strtod(tempAttribute[17],NULL);
+   164805: 1300:	if(tempEuribor3m >= 4.86){
+    70458: 1301:		if(strcmp(tempAttribute[19],"no") == 0){
+    66636: 1302:			numPerEuribor3m[0][0]++;			
+    66636: 1303:			num_Euribor3m0++;
+        -: 1304:		}else{
+     3822: 1305:			numPerEuribor3m[1][0]++;			
+     3822: 1306:			num_Euribor3m1++;
+        -: 1307:		}
+    94347: 1308:	}else if(tempEuribor3m >= 4.0 && tempEuribor3m < 4.86){
+    80536: 1309:		if(strcmp(tempAttribute[19],"no") == 0){
+    38733: 1310:			numPerEuribor3m[0][1]++;			
+    38733: 1311:			num_Euribor3m0++;
+        -: 1312:		}else{
+     1535: 1313:			numPerEuribor3m[1][1]++;			
+     1535: 1314:			num_Euribor3m1++;
+        -: 1315:		}
+    54079: 1316:	}else if(tempEuribor3m >= 1.0 && tempEuribor3m < 4.0){
+    77010: 1317:		if(strcmp(tempAttribute[19],"no") == 0){
+    32406: 1318:			numPerEuribor3m[0][2]++;			
+    32406: 1319:			num_Euribor3m0++;
+        -: 1320:		}else{
+     6099: 1321:			numPerEuribor3m[1][2]++;			
+     6099: 1322:			num_Euribor3m1++;
+        -: 1323:		}
+    15574: 1324:	}else if(tempEuribor3m < 1.0 && tempEuribor3m >0){
+    15568: 1325:		if(strcmp(tempAttribute[19],"no") == 0){
+     8454: 1326:			numPerEuribor3m[0][3]++;			
+     8454: 1327:			num_Euribor3m0++;
+        -: 1328:		}else{
+     7114: 1329:			numPerEuribor3m[1][3]++;			
+     7114: 1330:			num_Euribor3m1++;
+        -: 1331:		}
+        -: 1332:	}
+   164805: 1333:}
+        -: 1334:
+        -: 1335://18 - nr.employed: number of employees - quarterly indicator (numeric) 
+        -: 1336://			- 2 intervals: (x > 5200.0), (x <= 5200.0)
+   164763: 1337:void tempNrClass(char tempAttribute[ ][30], int (&numPerNr)[2][2], int &num_Nr0, int &num_Nr1){
+        -: 1338:	//int tempNr, numPerNr[2][2] = {0}, num_Nr0 = 0, num_Nr1 = 0;
+   164763: 1339:	float tempNr = atof(tempAttribute[18]);
+   164763: 1340:	if(tempNr > 5200.0){
+    64940: 1341:		if(strcmp(tempAttribute[19],"no") == 0){
+    61475: 1342:			numPerNr[0][0]++;			
+    61475: 1343:			num_Nr0++;
+        -: 1344:		}else{
+     3465: 1345:			numPerNr[1][0]++;			
+     3465: 1346:			num_Nr1++;
+        -: 1347:		}
+    99823: 1348:	}else if(tempNr <= 5200.0){
+    99823: 1349:		if(strcmp(tempAttribute[19],"no") == 0){
+    84726: 1350:			numPerNr[0][1]++;			
+    84726: 1351:			num_Nr0++;
+        -: 1352:		}else{
+    15097: 1353:			numPerNr[1][1]++;			
+    15097: 1354:			num_Nr1++;
+        -: 1355:		}
+        -: 1356:	}
+   164763: 1357:}
+        -: 1358:	
+        -: 1359://19 - y - has the client subscribed a term deposit? (binary: 'no','yes') 
+        -: 1360://			- 2 intervals: yes or no
+   164769: 1361:void numPerOutputClass(char tempAttribute[ ][30], int (&numPerOutput)[2]){	
+        -: 1362:	//int numPerOutput[2] = {0};
+   164769: 1363:	if(strcmp(tempAttribute[19],"no") == 0){
+   146201: 1364:		numPerOutput[0]++;			
+    18568: 1365:	}else if(strcmp(tempAttribute[19],"yes") == 0){
+    18564: 1366:		numPerOutput[1]++;
+        -: 1367:	}
+   164769: 1368:}	
+        -: 1369://---------------------------------------------------------------
+        -: 1370://End of classification (learning) funtions w.r.t the attributes 0 ~ 19
+        -: 1371://---------------------------------------------------------------
+        -: 1372://---------------------------------------------------------------
+        -: 1373://Start of calculation for training data 
+        -: 1374://---------------------------------------------------------------
+        -: 1375:/*
+        -: 1376:	//0- Calculating the Age percentage and store it in AgePercentage[row][col], with respect to numPerAge[row][col] along with num_Age0 and num_Age1.
+        -: 1377:	for(row = 0;row<2;row++){
+        -: 1378:		for(col = 0;col<5;col++){
+        -: 1379:			if(row==0)
+        -: 1380:				AgePercentage[row][col] = (float) numPerAge[row][col] / num_job0;
+        -: 1381:			else
+        -: 1382:				AgePercentage[row][col] = (float) numPerAge[row][col] / num_job1;
+        -: 1383:		}
+        -: 1384:	}
+        -: 1385:	
+        -: 1386:	//1- Calculate the Job percentage
+        -: 1387:	for(row = 0;row<2;row++){
+        -: 1388:		for(col = 0;col<11;col++){
+        -: 1389:			if(row==0)
+        -: 1390:				JobPercentage[row][col] = (float) numPerJob[row][col] / num_Age0;
+        -: 1391:			else
+        -: 1392:				JobPercentage[row][col] = (float) numPerJob[row][col] / num_Age1;
+        -: 1393:		}
+        -: 1394:	}
+        -: 1395:	
+        -: 1396:	//2- Calculate the Material percentage
+        -: 1397:	for(row = 0;row<2;row++){
+        -: 1398:		for(col = 0;col<3;col++){
+        -: 1399:			if(row==0)
+        -: 1400:				MaterialPercentage[row][col] = (float) numPerMat[row][col] / num_Mat0;
+        -: 1401:			else
+        -: 1402:				MaterialPercentage[row][col] = (float) numPerMat[row][col] / num_Mat1;
+        -: 1403:		}
+        -: 1404:	}
+        -: 1405:	
+        -: 1406:	//3- Calculate the Education Percentage
+        -: 1407:	for(row = 0;row<2;row++){
+        -: 1408:		for(col = 0;col<7;col++){
+        -: 1409:			if(row==0)
+        -: 1410:				EducationPercentage[row][col] = (float) numPerEdu[row][col] / num_Edu0;
+        -: 1411:			else
+        -: 1412:				EducationPercentage[row][col] = (float) numPerEdu[row][col] / num_Edu1;
+        -: 1413:		}
+        -: 1414:	}
+        -: 1415:
+        -: 1416:	
+        -: 1417:	//4- Calculate the Default percentage
+        -: 1418:	for(row = 0;row<2;row++){
+        -: 1419:		for(col = 0;col<2;col++){
+        -: 1420:			if(row==0)
+        -: 1421:				DefaultPercentage[row][col] = (float) numPerDefault[row][col] / num_Def0;
+        -: 1422:			else
+        -: 1423:				DefaultPercentage[row][col] = (float) numPerDefault[row][col] / num_Def1;
+        -: 1424:		}
+        -: 1425:	}
+        -: 1426:	
+        -: 1427:	//5- Calculate the housing percentage
+        -: 1428:	for(row = 0;row<2;row++){
+        -: 1429:		for(col = 0;col<2;col++){
+        -: 1430:			if(row==0)
+        -: 1431:				HousePercentage[row][col] = (float) numPerHouse[row][col] / num_House0;
+        -: 1432:			else
+        -: 1433:				HousePercentage[row][col] = (float) numPerHouse[row][col] / num_House1;
+        -: 1434:		}
+        -: 1435:	}
+        -: 1436:	
+        -: 1437:	//6- Calculate the loan percentage
+        -: 1438:	for(row = 0;row<2;row++){
+        -: 1439:		for(col = 0;col<2;col++){
+        -: 1440:			if(row==0)
+        -: 1441:				LoanPercentage[row][col] = (float) numPerLoan[row][col] / num_Loan0;
+        -: 1442:			else
+        -: 1443:				LoanPercentage[row][col] = (float) numPerLoan[row][col] / num_Loan1;
+        -: 1444:		}
+        -: 1445:	}
+        -: 1446:	
+        -: 1447:	//7- Calculate the ContactPercentage
+        -: 1448:	for(row = 0;row<2;row++){
+        -: 1449:		for(col = 0;col<2;col++){
+        -: 1450:			if(row==0)
+        -: 1451:				ContactPercentage[row][col] = (float) numPerCon[row][col] / num_Con0;
+        -: 1452:			else
+        -: 1453:				ContactPercentage[row][col] = (float) numPerCon[row][col] / num_Con1;
+        -: 1454:		}
+        -: 1455:	}
+        -: 1456:	
+        -: 1457:	//8- Calculate the MonthPercentage
+        -: 1458:	for(row = 0;row<2;row++){
+        -: 1459:		for(col = 0;col<12;col++){
+        -: 1460:			if(row==0)
+        -: 1461:				MonthPercentage[row][col] = (float) numPerMonth[row][col] / num_Month0;
+        -: 1462:			else
+        -: 1463:				MonthPercentage[row][col] = (float) numPerMonth[row][col] / num_Month1;
+        -: 1464:		}
+        -: 1465:	}
+        -: 1466:	
+        -: 1467:	//9- Calculate the DayPercentage
+        -: 1468:	for(row = 0;row<2;row++){
+        -: 1469:		for(col = 0;col<5;col++){
+        -: 1470:			if(row==0)
+        -: 1471:				DayPercentage[row][col] = (float) numPerDay[row][col] / num_Day0;
+        -: 1472:			else
+        -: 1473:				DayPercentage[row][col] = (float) numPerDay[row][col] / num_Day1;
+        -: 1474:		}
+        -: 1475:	}
+        -: 1476:	
+        -: 1477:	//10- Calculate the CampaignPercentage
+        -: 1478:	for(row = 0;row<2;row++){
+        -: 1479:		for(col = 0;col<3;col++){
+        -: 1480:			if(row==0)
+        -: 1481:				CampaignPercentage[row][col] = (float) numPerCampaign[row][col] / num_Campaign0;
+        -: 1482:			else
+        -: 1483:				CampaignPercentage[row][col] = (float) numPerCampaign[row][col] / num_Campaign1;
+        -: 1484:		}
+        -: 1485:	}
+        -: 1486:	
+        -: 1487:	//11- Calculate the PDaysPercentage
+        -: 1488:	for(row = 0;row<2;row++){
+        -: 1489:		for(col = 0;col<4;col++){
+        -: 1490:			if(row==0)
+        -: 1491:				PDaysPercentage[row][col] = (float) numPerPDays[row][col] / num_PDays0;
+        -: 1492:			else
+        -: 1493:				PDaysPercentage[row][col] = (float) numPerPDays[row][col] / num_PDays1;
+        -: 1494:		}
+        -: 1495:	}
+        -: 1496:	
+        -: 1497:	//12- Calculate the PreviousPercentage
+        -: 1498:	for(row = 0;row<2;row++){
+        -: 1499:		for(col = 0;col<2;col++){
+        -: 1500:			if(row==0)
+        -: 1501:				PreviousPercentage[row][col] = (float) numPerPrevious[row][col] / num_Previous0;
+        -: 1502:			else
+        -: 1503:				PreviousPercentage[row][col] = (float) numPerPrevious[row][col] / num_Previous1;
+        -: 1504:		}
+        -: 1505:	}
+        -: 1506:	
+        -: 1507:	//13- Calculate the PoutcomePercentage
+        -: 1508:	for(row = 0;row<2;row++){
+        -: 1509:		for(col = 0;col<3;col++){
+        -: 1510:			if(row==0)
+        -: 1511:				PoutcomePercentage[row][col] = (float) numPerPoutcome[row][col] / num_Poutcome0;
+        -: 1512:			else
+        -: 1513:				PoutcomePercentage[row][col] = (float) numPerPoutcome[row][col] / num_Poutcome1;
+        -: 1514:		}
+        -: 1515:	}
+        -: 1516:
+        -: 1517:	//14- Calculate the EmpPercentage
+        -: 1518:	for(row = 0;row<2;row++){
+        -: 1519:		for(col = 0;col<4;col++){
+        -: 1520:			if(row==0)
+        -: 1521:				EmpPercentage[row][col] = (float) numPerEmp[row][col] / num_Emp0;
+        -: 1522:			else
+        -: 1523:				EmpPercentage[row][col] = (float) numPerEmp[row][col] / num_Emp1;
+        -: 1524:		}
+        -: 1525:	}
+        -: 1526:	
+        -: 1527:	//15- Calculate the PricePercentage
+        -: 1528:	for(row = 0;row<2;row++){
+        -: 1529:		for(col = 0;col<3;col++){
+        -: 1530:			if(row==0)
+        -: 1531:				PricePercentage[row][col] = (float) numPerPrice[row][col] / num_Price0;
+        -: 1532:			else
+        -: 1533:				PricePercentage[row][col] = (float) numPerPrice[row][col] / num_Price1;
+        -: 1534:		}
+        -: 1535:	}
+        -: 1536:	
+        -: 1537:	//16- Calculate the ConfPercentage
+        -: 1538:	for(row = 0;row<2;row++){
+        -: 1539:		for(col = 0;col<4;col++){
+        -: 1540:			if(row==0)
+        -: 1541:				ConfPercentage[row][col] = (float) numPerConf[row][col] / num_Conf0;
+        -: 1542:			else
+        -: 1543:				ConfPercentage[row][col] = (float) numPerConf[row][col] / num_Conf1;
+        -: 1544:		}
+        -: 1545:	}
+        -: 1546:	
+        -: 1547:	//17- Calculate the Euribor3mPercentage
+        -: 1548:	for(row = 0;row<2;row++){
+        -: 1549:		for(col = 0;col<4;col++){
+        -: 1550:			if(row==0)
+        -: 1551:				Euribor3mPercentage[row][col] = (float) numPerEuribor3m[row][col] / num_Euribor3m0;
+        -: 1552:			else
+        -: 1553:				Euribor3mPercentage[row][col] = (float) numPerEuribor3m[row][col] / num_Euribor3m1;
+        -: 1554:		}
+        -: 1555:	}
+        -: 1556:	
+        -: 1557:	//18- Calculate the NrPercentage
+        -: 1558:	for(row = 0;row<2;row++){
+        -: 1559:		for(col = 0;col<2;col++){
+        -: 1560:			if(row==0)
+        -: 1561:				NrPercentage[row][col] = (float) numPerNr[row][col] / num_Nr0;
+        -: 1562:			else
+        -: 1563:				NrPercentage[row][col] = (float) numPerNr[row][col] / num_Nr1;
+        -: 1564:		}
+        -: 1565:	}
+        -: 1566:	
+        -: 1567:	//19- Calculate the OutputPercentage
+        -: 1568:	//cout<<"\nnumber of data: "<<numData<<"; "<<numPerOutput[0]<<"; "<<numPerOutput[1]<<endl;
+        -: 1569:	OutputPercentage[0] =  (float) numPerOutput[0] / numData;
+        -: 1570:	OutputPercentage[1] =  (float) numPerOutput[1] / numData;
+        -: 1571:*/
+        -: 1572://---------------------------------------------------------------
+        -: 1573://End of calculation for training data 
+        -: 1574://---------------------------------------------------------------
+        -: 1575://---------------------------------------------------------------
+        -: 1576://Start of reading test data from the database
+        -: 1577://---------------------------------------------------------------
+    41193: 1578:void  ageReadClass(char tempAttribute[][30], float (&tempAttPercentage)[2][20], float AgePercentage[][5]){
+    41193: 1579:	int tempAge = atoi(tempAttribute[0]);
+    41193: 1580:	if(tempAge < 30){
+     5674: 1581:		tempAttPercentage[0][0] = AgePercentage[0][0];
+     5674: 1582:		tempAttPercentage[1][0] = AgePercentage[1][0];
+    35519: 1583:	}else if(tempAge >= 30 && tempAge < 40){
+    16938: 1584:		tempAttPercentage[0][0] = AgePercentage[0][1];
+    16938: 1585:		tempAttPercentage[1][0] = AgePercentage[1][1];
+    18581: 1586:	}else if(tempAge >=40 && tempAge <50){
+    10526: 1587:		tempAttPercentage[0][0] = AgePercentage[0][2];
+    10526: 1588:		tempAttPercentage[1][0] = AgePercentage[1][2];
+     8055: 1589:	}else if(tempAge >=50 && tempAge<65 ){
+     7392: 1590:		tempAttPercentage[0][0] = AgePercentage[0][3];
+     7392: 1591:		tempAttPercentage[1][0] = AgePercentage[1][3];
+      663: 1592:	}else if(tempAge >65){
+      619: 1593:		tempAttPercentage[0][0] = AgePercentage[0][4];
+      619: 1594:		tempAttPercentage[1][0] = AgePercentage[1][4];
+        -: 1595:	}
+    41193: 1596:}	
+        -: 1597:	
+    41193: 1598:void  jobReadClass(char tempAttribute[][30], float (&tempAttPercentage)[2][20], float JobPercentage[][11]){
+        -: 1599:	//1 - job : type of job (categorical: 'admin.','blue-collar','entrepreneur','housemaid','management','retired','self-employed','services','student','technician','unemployed','?') 
+    41193: 1600:	if(strcmp(tempAttribute[1],"admin.") == 0){
+    10423: 1601:		tempAttPercentage[0][1] = JobPercentage[0][0];
+    10423: 1602:		tempAttPercentage[1][1] = JobPercentage[1][0];
+    30770: 1603:	}else if(strcmp(tempAttribute[1],"blue-collar") == 0){
+     9256: 1604:		tempAttPercentage[0][1] = JobPercentage[0][1];
+     9256: 1605:		tempAttPercentage[1][1] = JobPercentage[1][1];
+    21514: 1606:	}else if(strcmp(tempAttribute[1],"entrepreneur") == 0){
+     1457: 1607:		tempAttPercentage[0][1] = JobPercentage[0][2];
+     1457: 1608:		tempAttPercentage[1][1] = JobPercentage[1][2];
+    20057: 1609:	}else if(strcmp(tempAttribute[1],"housemaid") == 0){
+     1060: 1610:		tempAttPercentage[0][1] = JobPercentage[0][3];
+     1060: 1611:		tempAttPercentage[1][1] = JobPercentage[1][3];
+    18997: 1612:	}else if(strcmp(tempAttribute[1],"management") == 0){
+     2924: 1613:		tempAttPercentage[0][1] = JobPercentage[0][4];
+     2924: 1614:		tempAttPercentage[1][1] = JobPercentage[1][4];
+        -: 1615:	}
+    16073: 1616:	else if(strcmp(tempAttribute[1],"retired") == 0){
+     1720: 1617:		tempAttPercentage[0][1] = JobPercentage[0][5];
+     1720: 1618:		tempAttPercentage[1][1] = JobPercentage[1][5];
+        -: 1619:	}
+    14353: 1620:	else if(strcmp(tempAttribute[1],"self-employed") == 0){
+     1421: 1621:		tempAttPercentage[0][1] = JobPercentage[0][6];
+     1421: 1622:		tempAttPercentage[1][1] = JobPercentage[1][6];
+        -: 1623:	}
+    12932: 1624:	else if(strcmp(tempAttribute[1],"services") == 0){
+     3970: 1625:		tempAttPercentage[0][1] = JobPercentage[0][7];
+     3970: 1626:		tempAttPercentage[1][1] = JobPercentage[1][7];
+        -: 1627:	}
+     8962: 1628:	else if(strcmp(tempAttribute[1],"student") == 0){
+      875: 1629:		tempAttPercentage[0][1] = JobPercentage[0][8];
+      875: 1630:		tempAttPercentage[1][1] = JobPercentage[1][8];
+        -: 1631:	}
+     8087: 1632:	else if(strcmp(tempAttribute[1],"technician") == 0){
+     6743: 1633:		tempAttPercentage[0][1] = JobPercentage[0][9];
+     6743: 1634:		tempAttPercentage[1][1] = JobPercentage[1][9];
+        -: 1635:	}
+     1344: 1636:	else if(strcmp(tempAttribute[1],"unemployed") == 0){
+     1014: 1637:		tempAttPercentage[0][1] = JobPercentage[0][10];
+     1014: 1638:		tempAttPercentage[1][1] = JobPercentage[1][10];
+        -: 1639:	}
+    41193: 1640:}	
+        -: 1641:
+    41193: 1642:void  materialReadClass(char tempAttribute[][30], float (&tempAttPercentage)[2][20], float MaterialPercentage[][3]){
+        -: 1643:	//2 - marital : marital status (categorical: 'divorced','married','single','?'; note: 'divorced' means divorced or widowed) 
+        -: 1644:	//int numPerMat[2][3] = {0}, num_Mat0 = 0, num_Mat1 = 0;
+    41193: 1645:	if(strcmp(tempAttribute[2],"divorced") == 0){
+     4612: 1646:		tempAttPercentage[0][2] = MaterialPercentage[0][0];
+     4612: 1647:		tempAttPercentage[1][2] = MaterialPercentage[1][0];
+    36581: 1648:	}else if(strcmp(tempAttribute[2],"married") == 0){
+    24932: 1649:		tempAttPercentage[0][2] = MaterialPercentage[0][1];
+    24932: 1650:		tempAttPercentage[1][2] = MaterialPercentage[1][1];
+    11649: 1651:	}else if(strcmp(tempAttribute[2],"single") == 0){
+    11569: 1652:		tempAttPercentage[0][2] = MaterialPercentage[0][2];
+    11569: 1653:		tempAttPercentage[1][2] = MaterialPercentage[1][2];
+        -: 1654:	}
+    41193: 1655:}	
+        -: 1656:
+    41193: 1657:void  EduReadClass(char tempAttribute[][30], float (&tempAttPercentage)[2][20], float EducationPercentage[][7]){
+        -: 1658:	//3 - education (categorical: 'basic.4y','basic.6y','basic.9y','high.school','illiterate','professional.course','university.degree','?')
+    41193: 1659:	if(strcmp(tempAttribute[3],"basic.4y") == 0){
+     4176: 1660:		tempAttPercentage[0][3] = EducationPercentage[0][0];
+     4176: 1661:		tempAttPercentage[1][3] = EducationPercentage[1][0];
+    37017: 1662:	}else if(strcmp(tempAttribute[3],"basic.6y") == 0){
+     2294: 1663:		tempAttPercentage[0][3] = EducationPercentage[0][1];
+     2294: 1664:		tempAttPercentage[1][3] = EducationPercentage[1][1];
+    34723: 1665:	}else if(strcmp(tempAttribute[3],"basic.9y") == 0){
+     6045: 1666:		tempAttPercentage[0][3] = EducationPercentage[0][2];
+     6045: 1667:		tempAttPercentage[1][3] = EducationPercentage[1][2];
+    28678: 1668:	}else if(strcmp(tempAttribute[3],"high.school") == 0){
+     9516: 1669:		tempAttPercentage[0][3] = EducationPercentage[0][3];
+     9516: 1670:		tempAttPercentage[1][3] = EducationPercentage[1][3];
+    19162: 1671:	}else if(strcmp(tempAttribute[3],"illiterate") == 0){
+       18: 1672:		tempAttPercentage[0][3] = EducationPercentage[0][4];
+       18: 1673:		tempAttPercentage[1][3] = EducationPercentage[1][4];
+        -: 1674:	}
+    19144: 1675:	else if(strcmp(tempAttribute[3],"professional.course") == 0){
+     5243: 1676:		tempAttPercentage[0][3] = EducationPercentage[0][5];
+     5243: 1677:		tempAttPercentage[1][3] = EducationPercentage[1][5];
+        -: 1678:	}
+    13901: 1679:	else if(strcmp(tempAttribute[3],"university.degree") == 0){
+    12169: 1680:		tempAttPercentage[0][3] = EducationPercentage[0][6];
+    12169: 1681:		tempAttPercentage[1][3] = EducationPercentage[1][6];
+        -: 1682:	}
+    41193: 1683:}
+        -: 1684:
+    41193: 1685:void  DefaultReadClass(char tempAttribute[][30], float (&tempAttPercentage)[2][20], float DefaultPercentage[][2]){
+        -: 1686:	//4 - default: has credit in default? (categorical: 'no','yes','?') 
+        -: 1687:	//int numPerDefault[2][2] = {0}, num_Def0 = 0, num_Def1 = 0;
+    41193: 1688:	if(strcmp(tempAttribute[4],"no") == 0){
+    32590: 1689:		tempAttPercentage[0][4] = DefaultPercentage[0][0];
+    32590: 1690:		tempAttPercentage[1][4] = DefaultPercentage[1][0];
+     8603: 1691:	}else if(strcmp(tempAttribute[4],"yes") == 0){
+        3: 1692:		tempAttPercentage[0][4] = DefaultPercentage[0][1];
+        3: 1693:		tempAttPercentage[1][4] = DefaultPercentage[1][1];
+        -: 1694:	}
+    41193: 1695:}
+        -: 1696:
+    41193: 1697:void  houseReadClass(char tempAttribute[][30], float (&tempAttPercentage)[2][20], float HousePercentage[][2]){
+        -: 1698:	//5 - housing: has housing loan? (categorical: 'no','yes','?') 
+        -: 1699:	//int numPerHouse[2][2] = {0}, num_House0 = 0, num_House1 = 0;
+    41193: 1700:	if(strcmp(tempAttribute[5],"no") == 0){
+    18625: 1701:		tempAttPercentage[0][5] = HousePercentage[0][0];
+    18625: 1702:		tempAttPercentage[1][5] = HousePercentage[1][0];
+    22568: 1703:	}else if(strcmp(tempAttribute[5],"yes") == 0){
+    21578: 1704:		tempAttPercentage[0][5] = HousePercentage[0][1];
+    21578: 1705:		tempAttPercentage[1][5] = HousePercentage[1][1];
+        -: 1706:	}
+    41193: 1707:}
+        -: 1708:	
+    41193: 1709:void  loanReadClass(char tempAttribute[][30], float (&tempAttPercentage)[2][20], float LoanPercentage[][2]){	
+        -: 1710:	//6 - loan: has personal loan? (categorical: 'no','yes','?') 
+        -: 1711:	//int numPerLoan[2][2] = {0}, num_Loan0 = 0, num_Loan1 = 0;
+    41193: 1712:	if(strcmp(tempAttribute[6],"no") == 0){
+    33954: 1713:		tempAttPercentage[0][6] = LoanPercentage[0][0];
+    33954: 1714:		tempAttPercentage[1][6] = LoanPercentage[1][0];
+     7239: 1715:	}else if(strcmp(tempAttribute[6],"yes") == 0){
+     6249: 1716:		tempAttPercentage[0][6] = LoanPercentage[0][1];
+     6249: 1717:		tempAttPercentage[1][6] = LoanPercentage[1][1];
+        -: 1718:	}
+    41193: 1719:}
+        -: 1720:
+    41193: 1721:void  contactReadClass(char tempAttribute[][30], float (&tempAttPercentage)[2][20], float ContactPercentage[][2]){		
+        -: 1722:	//7 - contact: contact communication type (categorical: 'cellular','telephone') 
+        -: 1723:	//int numPerCon[2][2] = {0}, num_Con0 = 0, num_Con1 = 0;
+    41193: 1724:	if(strcmp(tempAttribute[7],"cellular") == 0){
+    26148: 1725:		tempAttPercentage[0][7] = ContactPercentage[0][0];
+    26148: 1726:		tempAttPercentage[1][7] = ContactPercentage[1][0];
+    15045: 1727:	}else if(strcmp(tempAttribute[7],"telephone") == 0){
+    15045: 1728:		tempAttPercentage[0][7] = ContactPercentage[0][1];
+    15045: 1729:		tempAttPercentage[1][7] = ContactPercentage[1][1];
+        -: 1730:	}
+    41193: 1731:}
+        -: 1732:
+    41193: 1733:void  monthReadClass(char tempAttribute[][30], float (&tempAttPercentage)[2][20], float MonthPercentage[][12]){		
+        -: 1734:	//8 - month: last contact month of year (categorical: 'jan', 'feb', 'mar', ..., 'nov', 'dec') 
+        -: 1735:	//int numPerMonth[2][12] = {0}, num_Month0 = 0, num_Month1 = 0;
+    41193: 1736:	if(strcmp(tempAttribute[8],"jan") == 0){
+    #####: 1737:		tempAttPercentage[0][8] = MonthPercentage[0][0];
+    #####: 1738:		tempAttPercentage[1][8] = MonthPercentage[1][0];
+    41193: 1739:	}else if(strcmp(tempAttribute[8],"feb") == 0){
+    #####: 1740:		tempAttPercentage[0][8] = MonthPercentage[0][1];
+    #####: 1741:		tempAttPercentage[1][8] = MonthPercentage[1][1];
+    41193: 1742:	}else if(strcmp(tempAttribute[8],"mar") == 0){
+      546: 1743:		tempAttPercentage[0][8] = MonthPercentage[0][2];
+      546: 1744:		tempAttPercentage[1][8] = MonthPercentage[1][2];
+    40647: 1745:	}else if(strcmp(tempAttribute[8],"apr") == 0){
+     2632: 1746:		tempAttPercentage[0][8] = MonthPercentage[0][3];
+     2632: 1747:		tempAttPercentage[1][8] = MonthPercentage[1][3];
+    38015: 1748:	}else if(strcmp(tempAttribute[8],"may") == 0){
+    13771: 1749:		tempAttPercentage[0][8] = MonthPercentage[0][4];
+    13771: 1750:		tempAttPercentage[1][8] = MonthPercentage[1][4];
+    24244: 1751:	}else if(strcmp(tempAttribute[8],"jun") == 0){
+     5319: 1752:		tempAttPercentage[0][8] = MonthPercentage[0][5];
+     5319: 1753:		tempAttPercentage[1][8] = MonthPercentage[1][5];
+    18925: 1754:	}else if(strcmp(tempAttribute[8],"jul") == 0){
+     7174: 1755:		tempAttPercentage[0][8] = MonthPercentage[0][6];
+     7174: 1756:		tempAttPercentage[1][8] = MonthPercentage[1][6];
+    11751: 1757:	}else if(strcmp(tempAttribute[8],"aug") == 0){
+     6180: 1758:		tempAttPercentage[0][8] = MonthPercentage[0][7];
+     6180: 1759:		tempAttPercentage[1][8] = MonthPercentage[1][7];
+     5571: 1760:	}else if(strcmp(tempAttribute[8],"sep") == 0){
+      570: 1761:		tempAttPercentage[0][8] = MonthPercentage[0][8];
+      570: 1762:		tempAttPercentage[1][8] = MonthPercentage[1][8];
+     5001: 1763:	}else if(strcmp(tempAttribute[8],"oct") == 0){
+      718: 1764:		tempAttPercentage[0][8] = MonthPercentage[0][9];
+      718: 1765:		tempAttPercentage[1][8] = MonthPercentage[1][9];
+     4283: 1766:	}else if(strcmp(tempAttribute[8],"nov") == 0){
+     4101: 1767:		tempAttPercentage[0][8] = MonthPercentage[0][10];
+     4101: 1768:		tempAttPercentage[1][8] = MonthPercentage[1][10];
+      182: 1769:	}else if(strcmp(tempAttribute[8],"dec") == 0){
+      182: 1770:		tempAttPercentage[0][8] = MonthPercentage[0][11];
+      182: 1771:		tempAttPercentage[1][8] = MonthPercentage[1][11];
+        -: 1772:	}
+    41193: 1773:}	
+        -: 1774:
+        -: 1775:
+    41193: 1776:void  dayReadClass(char tempAttribute[][30], float (&tempAttPercentage)[2][20], float DayPercentage[][5]){		
+        -: 1777:	//9 - day_of_week: last contact day of the week (categorical: 'mon','tue','wed','thu','fri') 
+        -: 1778:	//int numPerDay[2][5] = {0}, num_Day0 = 0, num_Day1 = 0;
+    41193: 1779:	if(strcmp(tempAttribute[9],"mon") == 0){
+     8515: 1780:		tempAttPercentage[0][9] = DayPercentage[0][0];
+     8515: 1781:		tempAttPercentage[1][9] = DayPercentage[1][0];
+    32678: 1782:	}else if(strcmp(tempAttribute[9],"tue") == 0){
+     8092: 1783:		tempAttPercentage[0][9] = DayPercentage[0][1];
+     8092: 1784:		tempAttPercentage[1][9] = DayPercentage[1][1];
+    24586: 1785:	}else if(strcmp(tempAttribute[9],"wed") == 0){
+     8135: 1786:		tempAttPercentage[0][9] = DayPercentage[0][2];
+     8135: 1787:		tempAttPercentage[1][9] = DayPercentage[1][2];
+    16451: 1788:	}else if(strcmp(tempAttribute[9],"thu") == 0){
+     8623: 1789:		tempAttPercentage[0][9] = DayPercentage[0][3];
+     8623: 1790:		tempAttPercentage[1][9] = DayPercentage[1][3];
+     7828: 1791:	}else if(strcmp(tempAttribute[9],"fri") == 0){
+     7828: 1792:		tempAttPercentage[0][9] = DayPercentage[0][4];
+     7828: 1793:		tempAttPercentage[1][9] = DayPercentage[1][4];
+        -: 1794:	}
+    41193: 1795:}
+        -: 1796:
+    41193: 1797:void  campaignReadClass(char tempAttribute[][30], float (&tempAttPercentage)[2][20], float CampaignPercentage[][3]){		
+        -: 1798:	/*10 - campaign: number of contacts performed during this campaign and for this client (numeric, includes last contact) 
+        -: 1799:			- 3 intervals: (0 ~ 3), (4~6), (7+)	*/
+        -: 1800:	//int tempCampaign, numPerCampaign[2][3] = {0}, num_Campaign0 = 0, num_Campaign1 = 0;
+    41193: 1801:	int tempCampaign = atoi(tempAttribute[10]);
+    41193: 1802:	if(tempCampaign <= 3 && tempCampaign >= 0){
+    33557: 1803:		tempAttPercentage[0][10] = CampaignPercentage[0][0];
+    33557: 1804:		tempAttPercentage[1][10] = CampaignPercentage[1][0];
+     7636: 1805:	}else if(tempCampaign >= 4 && tempCampaign <= 6){
+     5230: 1806:		tempAttPercentage[0][10] = CampaignPercentage[0][1];
+     5230: 1807:		tempAttPercentage[1][10] = CampaignPercentage[1][1];
+     2406: 1808:	}else if(tempCampaign >= 7){
+     2406: 1809:		tempAttPercentage[0][10] = CampaignPercentage[0][2];
+     2406: 1810:		tempAttPercentage[1][10] = CampaignPercentage[1][2];
+        -: 1811:	}
+    41193: 1812:}
+        -: 1813:
+    41193: 1814:void  pdaysReadClass(char tempAttribute[][30], float (&tempAttPercentage)[2][20], float PDaysPercentage[][4]){	
+        -: 1815:	//11 - pdays: number of days that passed by after the client was last contacted from a previous campaign (numeric; 999 means client was not previously contacted) 
+        -: 1816:	//			- 4 intervals: (0~11), (12~20), (20 ~ 27), (999) 
+        -: 1817:	//int tempPDays, numPerPDays[2][5] = {0}, num_PDays0 = 0, num_PDays1 = 0;
+    41193: 1818:	int tempPDays = atoi(tempAttribute[11]);
+    41193: 1819:	if(tempPDays <= 11 && tempPDays >= 0){
+     1339: 1820:		tempAttPercentage[0][11] = PDaysPercentage[0][0];
+     1339: 1821:		tempAttPercentage[1][11] = PDaysPercentage[1][0];
+    39854: 1822:	}else if(tempPDays >= 12 && tempPDays <= 20){
+      168: 1823:		tempAttPercentage[0][11] = PDaysPercentage[0][1];
+      168: 1824:		tempAttPercentage[1][11] = PDaysPercentage[1][1];
+    39686: 1825:	}else if(tempPDays >= 20 && tempPDays <= 27){
+        8: 1826:		tempAttPercentage[0][11] = PDaysPercentage[0][2];
+        8: 1827:		tempAttPercentage[1][11] = PDaysPercentage[1][2];
+    39678: 1828:	}else if(tempPDays == 999){
+    39678: 1829:		tempAttPercentage[0][11] = PDaysPercentage[0][3];
+    39678: 1830:		tempAttPercentage[1][11] = PDaysPercentage[1][3];
+        -: 1831:	}
+    41193: 1832:}	
+        -: 1833:
+    41193: 1834:void  previousReadClass(char tempAttribute[][30], float (&tempAttPercentage)[2][20], float PreviousPercentage[][2]){	
+        -: 1835:	//12 - previous: number of contacts performed before this campaign and for this client (numeric) 
+        -: 1836:	//			- intervals: 0, (not 0)
+        -: 1837:	//int tempPrevious, numPerPrevious[2][2] = {0}, num_Previous0 = 0, num_Previous1 = 0;
+    41193: 1838:	int tempPrevious = atoi(tempAttribute[12]);
+    41193: 1839:	if(tempPrevious == 0){
+    35567: 1840:		tempAttPercentage[0][12] = PreviousPercentage[0][0];
+    35567: 1841:		tempAttPercentage[1][12] = PreviousPercentage[1][0];
+     5626: 1842:	}else if(tempPrevious != 0){
+     5626: 1843:		tempAttPercentage[0][12] = PreviousPercentage[0][1];
+     5626: 1844:		tempAttPercentage[1][12] = PreviousPercentage[1][1];
+        -: 1845:	}
+    41193: 1846:}	
+        -: 1847:
+    41193: 1848:void  poutcomeReadClass(char tempAttribute[][30], float (&tempAttPercentage)[2][20], float PoutcomePercentage[][3]){		
+        -: 1849:	//13 - poutcome: outcome of the previous marketing campaign (categorical: 'failure','nonexistent','success') 
+        -: 1850:	//			- intervals: shown as above.
+        -: 1851:	//int numPerPoutcome[2][3] = {0}, num_Poutcome0 = 0, num_Poutcome1 = 0;
+    41193: 1852:	if(strcmp(tempAttribute[13],"failure") == 0){
+     4253: 1853:		tempAttPercentage[0][13] = PoutcomePercentage[0][0];
+     4253: 1854:		tempAttPercentage[1][13] = PoutcomePercentage[1][0];
+    36940: 1855:	}else if(strcmp(tempAttribute[13],"nonexistent") == 0){
+    35567: 1856:		tempAttPercentage[0][13] = PoutcomePercentage[0][1];
+    35567: 1857:		tempAttPercentage[1][13] = PoutcomePercentage[1][1];
+     1373: 1858:	}else if(strcmp(tempAttribute[13],"success") == 0){
+     1373: 1859:		tempAttPercentage[0][13] = PoutcomePercentage[0][2];
+     1373: 1860:		tempAttPercentage[1][13] = PoutcomePercentage[1][2];
+        -: 1861:	}
+    41193: 1862:}	
+        -: 1863:
+        -: 1864:
+    41193: 1865:void empReadClass(char tempAttribute[][30], float (&tempAttPercentage)[2][20], float EmpPercentage[][4]){		
+        -: 1866:	//14 - emp.var.rate: employment variation rate - quarterly indicator (numeric) 
+        -: 1867:	//			- 4 intervals: (x>1.0), (-1.0<= x < 1.0) , (-2.0<= x <-1.0) , (x < -2.0)
+        -: 1868:	//float tempEmp; int numPerEmp[2][6] = {0}, num_Emp0 = 0, num_Emp1 = 0;
+    41193: 1869:	float tempEmp = atof(tempAttribute[14]);
+    41193: 1870:	if(tempEmp >= 1.00){
+    24000: 1871:		tempAttPercentage[0][14] = EmpPercentage[0][0];
+    24000: 1872:		tempAttPercentage[1][14] = EmpPercentage[1][0];
+    17193: 1873:	}else if(tempEmp >= -1.0 && tempEmp < 1.0){
+     3693: 1874:		tempAttPercentage[0][14] = EmpPercentage[0][1];
+     3693: 1875:		tempAttPercentage[1][14] = EmpPercentage[1][1];
+    13500: 1876:	}else if(tempEmp >= -2.0 && tempEmp < -1.0){
+    10594: 1877:		tempAttPercentage[0][14] = EmpPercentage[0][2];
+    10594: 1878:		tempAttPercentage[1][14] = EmpPercentage[1][2];
+     2906: 1879:	}else if(tempEmp < -2.0){
+     2906: 1880:		tempAttPercentage[0][14] = EmpPercentage[0][3];
+     2906: 1881:		tempAttPercentage[1][14] = EmpPercentage[1][3];
+        -: 1882:	}
+    41193: 1883:}
+        -: 1884:
+    41193: 1885:void  priceReadClass(char tempAttribute[][30], float (&tempAttPercentage)[2][20], float PricePercentage[][3]){			
+        -: 1886:	//15 - cons.price.idx: consumer price index - monthly indicator (numeric)
+        -: 1887:	//			- 3 intervals: (x>94.45), (92.8 <= x < 94.45), (x < 92.8)
+        -: 1888:	//float tempPrice; int numPerPrice[2][5] = {0}, num_Price0 = 0, num_Price1 = 0;
+    41193: 1889:	float tempPrice = atof(tempAttribute[15]);
+    41193: 1890:	if(tempPrice >= 94.45){
+     4707: 1891:		tempAttPercentage[0][15] = PricePercentage[0][0];
+     4707: 1892:		tempAttPercentage[1][15] = PricePercentage[1][0];
+    36486: 1893:	}else if(tempPrice >= 92.8 && tempPrice < 94.45){
+    34285: 1894:		tempAttPercentage[0][15] = PricePercentage[0][1];
+    34285: 1895:		tempAttPercentage[1][15] = PricePercentage[1][1];
+     2201: 1896:	}else if(tempPrice < 92.8){
+     2201: 1897:		tempAttPercentage[0][15] = PricePercentage[0][2];
+     2201: 1898:		tempAttPercentage[1][15] = PricePercentage[1][2];
+        -: 1899:	}
+    41193: 1900:}
+        -: 1901:	
+    41193: 1902:void  confReadClass(char tempAttribute[][30], float (&tempAttPercentage)[2][20], float ConfPercentage[][4]){				
+        -: 1903:	//16 - cons.conf.idx: consumer confidence index - monthly indicator (numeric) 
+        -: 1904:	//			- 4 intervals: (x>-30.0), (-35.0<= x < -30.0), (-45.0< = x < -35.0), ( x < -45.0)
+        -: 1905:	//float tempConf; int numPerConf[2][6] = {0}, num_Conf0 = 0, num_Conf1 = 0;
+    41193: 1906:	float tempConf = atof(tempAttribute[16]);
+    41193: 1907:	if(tempConf >= -30.0){
+      714: 1908:		tempAttPercentage[0][16] = ConfPercentage[0][0];
+      714: 1909:		tempAttPercentage[1][16] = ConfPercentage[1][0];
+    40479: 1910:	}else if(tempConf >= -35.0 && tempConf < -30.0){
+     1915: 1911:		tempAttPercentage[0][16] = ConfPercentage[0][1];
+     1915: 1912:		tempAttPercentage[1][16] = ConfPercentage[1][1];
+    38564: 1913:	}else if(tempConf >= -45.0 && tempConf < -35.0){
+    29686: 1914:		tempAttPercentage[0][16] = ConfPercentage[0][2];
+    29686: 1915:		tempAttPercentage[1][16] = ConfPercentage[1][2];
+     8878: 1916:	}else if(tempConf < -45.0){
+     8878: 1917:		tempAttPercentage[0][16] = ConfPercentage[0][3];
+     8878: 1918:		tempAttPercentage[1][16] = ConfPercentage[1][3];
+        -: 1919:	}
+    41193: 1920:}
+        -: 1921:
+    41193: 1922:void  euribor3mReadClass(char tempAttribute[][30], float (&tempAttPercentage)[2][20], float Euribor3mPercentage[][4]){				
+        -: 1923:	//17 - euribor3m: euribor 3 month rate - daily indicator (numeric) 
+        -: 1924:	//			- 4 intervals: (x > 4.86), ( 4.0 <= x < 4.86), ( 1.0 <= x < 4.0), , ( x < 1.0)
+        -: 1925:	//float tempEuribor3m; int numPerEuribor3m[2][5] = {0}, num_Euribor3m0 = 0, num_Euribor3m1 = 0;
+    41193: 1926:	float tempEuribor3m = atof(tempAttribute[17]);
+    41193: 1927:	if(tempEuribor3m >= 4.86){
+    17615: 1928:		tempAttPercentage[0][17] = Euribor3mPercentage[0][0];
+    17615: 1929:		tempAttPercentage[1][17] = Euribor3mPercentage[1][0];
+    23578: 1930:	}else if(tempEuribor3m >= 4.0 && tempEuribor3m < 4.86){
+    10064: 1931:		tempAttPercentage[0][17] = Euribor3mPercentage[0][1];
+    10064: 1932:		tempAttPercentage[1][17] = Euribor3mPercentage[1][1];
+    13514: 1933:	}else if(tempEuribor3m >= 1.0 && tempEuribor3m < 4.0){
+     9624: 1934:		tempAttPercentage[0][17] = Euribor3mPercentage[0][2];
+     9624: 1935:		tempAttPercentage[1][17] = Euribor3mPercentage[1][2];
+     3890: 1936:	}else if(tempEuribor3m < 1.0){
+     3890: 1937:		tempAttPercentage[0][17] = Euribor3mPercentage[0][3];
+     3890: 1938:		tempAttPercentage[1][17] = Euribor3mPercentage[1][3];
+        -: 1939:	}
+    41193: 1940:}
+    41193: 1941:void  nrReadClass(char tempAttribute[][30], float (&tempAttPercentage)[2][20], float NrPercentage[][2]){	
+        -: 1942:	//18 - nr.employed: number of employees - quarterly indicator (numeric) 
+        -: 1943:	//			- 2 intervals: (x > 5200.0), (x <= 5200.0)
+        -: 1944:	//int tempNr, numPerNr[2][2] = {0}, num_Nr0 = 0, num_Nr1 = 0;
+    41193: 1945:	float tempNr = atof(tempAttribute[18]);
+    41193: 1946:	if(tempNr > 5200.0){
+    16237: 1947:		tempAttPercentage[0][18] = NrPercentage[0][0];
+    16237: 1948:		tempAttPercentage[1][18] = NrPercentage[1][0];
+    24956: 1949:	}else if(tempNr <= 5200.0){
+    24956: 1950:		tempAttPercentage[0][18] = NrPercentage[0][1];
+    24956: 1951:		tempAttPercentage[1][18] = NrPercentage[1][1];
+        -: 1952:	}
+    41193: 1953:}
+        -: 1954:
+    #####: 1955:void finalPercentageCalculation(float tempAttPercentage[][20], double &NoOutput_Percentage, double &YesOutput_Percentage){
+        -: 1956:	int col;
+    #####: 1957:	for(col = 0; col < 18; col ++){
+    #####: 1958:		if(tempAttPercentage[0][col] != 0){
+        -: 1959:			//cout<<"NO percentage: "<<tempAttPercentage[0][col]<<endl;
+    #####: 1960:			NoOutput_Percentage += log(tempAttPercentage[0][col]);
+        -: 1961:		}
+    #####: 1962:		if(tempAttPercentage[1][col] != 0){
+        -: 1963:			//cout<<"Yes percentage: "<<tempAttPercentage[1][col]<<endl;
+    #####: 1964:			YesOutput_Percentage += log(tempAttPercentage[1][col]);
+        -: 1965:		}
+        -: 1966:	}
+        3: 1967:}
+        -: 1968:
+        -: 1969://---------------------------------------------------------------
+        -: 1970://End of reading test data from the database
+        -: 1971://---------------------------------------------------------------

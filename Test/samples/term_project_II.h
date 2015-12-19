@@ -3,7 +3,12 @@
 //---------------------------------------------------------------
 //Start of classification (learning) funtions w.r.t the attributes 0 ~ 19
 //---------------------------------------------------------------
+//Main funciton of TERM_POJECT
+int main1(void);
+
 // 0 - age (numeric)
+
+
 void ageClass(char tempAttribute[ ][30], int (&numPerAge)[2][5], int &num_Age0, int &num_Age1);
 	
 //1 - job : type of job (categorical: 'admin.','blue-collar','entrepreneur','housemaid','management','retired','self-employed','services','student','technician','unemployed','?') 
