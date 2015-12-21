@@ -574,7 +574,7 @@ int main1(){
 		//----------------------------------------------------------
 		//-------------------End of Bank Data base------------------
 		//----------------------------------------------------------
-		cout<< "Correct Rate For bank " << numDataSet+1 << " : " << CorrRate / numLine << endl;
+		cout<< "Correct Rate For bank " << numDataSet+1 << " : " << (float)CorrRate / (float)numLine << endl;
 		numDataSet++;
 		fclose (pFile);
 		fclose (pTs);
