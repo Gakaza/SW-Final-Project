@@ -129,8 +129,28 @@ int numPerNr[2][2];
 };
 
 TEST_F(Term_Project_Test,C0Testing)
-{
+{	
+	float tempAtttPercentage[2][20];
+	float MonthPercentage[2][12];
+	memset(tempAtttPercentage,0,sizeof(tempAtttPercentage));
+	memset(MonthPercentage,0,sizeof(MonthPercentage));
+	strcpy(tempAttribute[8],"jan");
+	MonthPercentage[0][0] = 1;
+	MonthPercentage[1][0] = 2;
+	MonthPercentage[0][1] = 3;
+	MonthPercentage[1][1] = 4;
+	
+	monthReadClass(tempAttribute,tempAtttPercentage,MonthPercentage);\
+	EXPECT_EQ(MonthPercentage[0][0],tempAtttPercentage[0][8]);
+	EXPECT_EQ(MonthPercentage[1][0],tempAtttPercentage[1][8]);
+	
+	strcpy(tempAttribute[8],"feb");
+	monthReadClass(tempAttribute,tempAtttPercentage,MonthPercentage);
+	EXPECT_EQ(MonthPercentage[0][1],tempAtttPercentage[0][8]);
+	EXPECT_EQ(MonthPercentage[1][1],tempAtttPercentage[1][8]);
+	
 	main1();
+
 }
 
 //0 - Age

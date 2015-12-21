@@ -542,7 +542,9 @@ int main1(){
 			
 			//18- Calculate the NrPercentage
 			nrReadClass(tempAttribute, tempAttPercentage, NrPercentage);
-		
+			
+			finalPercentageCalculation(tempAttPercentage,NoOutput_Percentage,YesOutput_Percentage);	
+			
 			if(NoOutput_Percentage >= YesOutput_Percentage){
 				if(strcmp(tempAttribute[19], "no") == 0)	
 					CorrRate++;
