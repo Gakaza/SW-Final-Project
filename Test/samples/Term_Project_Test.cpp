@@ -153,6 +153,75 @@ TEST_F(Term_Project_Test,C0Testing)
 
 }
 
+TEST_F(Term_Project_Test,MCDCTest)
+{
+	//ageClss
+	//1
+	testAgeClass("15","no",1,0,0,0);
+	testAgeClass("30","no",1,0,0,1);
+	//2
+	testAgeClass("35","no",1,0,0,1);
+	testAgeClass("40","no",1,0,0,2);
+	//3
+	testAgeClass("45","no",1,0,0,2);
+	testAgeClass("50","no",1,0,0,3);
+	//4
+	testAgeClass("55","no",1,0,0,3);
+	testAgeClass("80","no",1,0,0,4);
+	//5
+	testAgeClass("95","no",1,0,0,4);
+	testAgeClass("150","no",0,0,-1,-1);
+	
+	//tempCampaignClass
+	//1
+	testCampaignClass("3","no",1,0,0,0);
+	testCampaignClass("4","no",1,0,0,1);
+	//2	
+	testCampaignClass("5","no",1,0,0,1);
+	testCampaignClass("7","no",1,0,0,2);
+
+	//tempPDaysClass	
+	//1
+	testPDaysClass("5","no",1,0,0,0);
+	testPDaysClass("12","no",1,0,0,1);
+	//2
+	testPDaysClass("15","no",1,0,0,1);
+	testPDaysClass("23","no",1,0,0,2);
+	//3
+	testPDaysClass("27","no",1,0,0,2);
+	testPDaysClass("999","no",1,0,0,3);
+	
+	//tempEmpClass
+	//1
+	testEmpClass("0.0","no",1,0,0,1);
+	testEmpClass("-1.5","no",1,0,0,2);
+	//2
+	testEmpClass("-1.8","no",1,0,0,2);
+	testEmpClass("-2.5","no",1,0,0,3);
+	
+	//tempPriceClass
+	//1
+	testPriceClass("100.0","no",1,0,0,0);
+	testPriceClass("93","no",1,0,0,1);
+	//2
+	testPriceClass("94.3","no",1,0,0,1);
+	testPriceClass("90","no",1,0,0,2);
+	//3
+	testPriceClass("90.0","no",1,0,0,2);
+	testPriceClass("93.6","no",1,0,0,1);
+	
+	//tempEuribor3mClass
+	//1
+	testEuribor3mClass("4.1","no",1,0,0,1);
+	testEuribor3mClass("3.5","no",1,0,0,2);
+	//2
+	testEuribor3mClass("2.1","no",1,0,0,2);
+	testEuribor3mClass("0.5","no",1,0,0,3);
+	//3
+	testEuribor3mClass("0.3","no",1,0,0,3);
+	testEuribor3mClass("-1.0","no",0,0,-1,-1);
+	
+}
 //0 - Age
 TEST_F(Term_Project_Test,AgeClassBoundaryValueTesting)
 {
