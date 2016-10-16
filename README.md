@@ -14,3 +14,5 @@ The feature code/project is a machine learning project with the following goals 
 	- The output is to predict whether a person is making more than $ 50k or not
 	- The input is a database consists of people with their personal information like education degree, age, gender, ...etc.
 
+The main code is located in:
+/Test/samples/Term_Project_Test.cpp
